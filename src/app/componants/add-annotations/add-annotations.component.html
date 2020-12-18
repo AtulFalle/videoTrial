@@ -1,0 +1,62 @@
+
+<div class="container">
+
+
+<form class="basic-container" [formGroup]="annotationForm">
+  <div formArrayName="annotation">
+    <div
+      class="row"
+      *ngFor="let email of getControls(); let i = index"
+      [formGroupName]="i"
+    >
+      <div class="col-1">
+        <mat-icon class="mt-3">Time</mat-icon>
+      </div>
+
+      <mat-form-field class="col-3">
+        <input matInput formControlName="time" placeholder="time" />
+      </mat-form-field>
+      <div class="col-1">
+        <mat-icon class="mt-3">description</mat-icon>
+      </div>
+
+      <mat-form-field class="col-3">
+        <input matInput formControlName="comments" placeholder="description" />
+      </mat-form-field>
+
+      <div class="col-4">
+        <button
+          class="float-left"
+          mat-icon-button
+          color="primary"
+          aria-label="Remove/clear"
+          (click)="removeOrClearEmail(i)"
+          matTooltip="Remove"
+        >
+          <mat-icon>highlight_off</mat-icon>
+        </button>
+        <button
+          class="float-left"
+          mat-icon-button
+          color="primary"
+          aria-label="Add"
+          (click)="addAnnotationToGroup()"
+          matTooltip="Add"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="row">
+  <div class="col-6"></div>
+  <div class="col-3">
+    <button mat-raised-button color="primary" (click)="saveAnnotations()">Save</button>
+  </div>
+  <div class="col-3">
+    <button mat-raised-button color="accent">Cancel</button>
+
+  </div>
+</div>
+</div>

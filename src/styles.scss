@@ -1,1 +1,131 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+html, body { height: 100%; user-select: none; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.container{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+}
+
+.col-12{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+.col-6{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+}
+
+.col-5{
+  display: flex;
+  flex-direction: column;
+  width: 41.66%;
+  height: 100%;
+}
+.col-4{
+  display: flex;
+  flex-direction: column;
+  width: 33.33%;
+  height: 100%;
+}
+
+.col-3{
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  height: 100%;
+}
+
+.col-2{
+  display: flex;
+  flex-direction: column;
+  width: 16.66%;
+  height: 100%;
+}
+.col-1{
+  display: flex;
+  flex-direction: column;
+  width: 8.5%;
+  height: 100%;
+}
+
+
+.m-0{
+  margin: 0 !important;
+}
+
+.p-0{
+  padding: 0;
+}
+
+.p-1{
+  padding: 0.5rem;
+}
+
+.p-2{
+  padding: 1rem;
+}
+
+.m-1{
+  margin: 0.5rem;
+}
+
+.m-2{
+  margin: 1rem;
+}
+
+.m-3{
+  margin: 1.5rem;
+}
+
+.m-4{
+  margin: 2rem;
+}
+
+.m-5{
+  margin: 2.5rem;
+}
+
+
+.justify-center{
+  justify-content: center;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.border{
+  border: 1px solid #afa8a8;
+}
+
+.w-auto{
+  width: inherit !important;
+}
+
+.text-left{
+  text-align: left;
+}
+
+.text-right{
+  text-align: right;
+}
+
+.justify-center{
+  justify-content: center;
+}

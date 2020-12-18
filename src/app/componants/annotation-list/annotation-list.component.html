@@ -1,0 +1,151 @@
+<div class="container">
+  <div class="row">
+    <div class="col-4 m-1">
+      <button
+        mat-button
+        mat-raised-button
+        *ngIf="!showSaveOption"
+        color="primary"
+        class="add-btn"
+        (click)="addAnnotation()"
+      >
+        Add Annotations
+      </button>
+      <div class="row">
+        <div class="col-6 m-2">
+          <button
+            mat-button
+            mat-raised-button
+            *ngIf="showSaveOption"
+            color="primary"
+            (click)="save()"
+          >
+            Save
+          </button>
+        </div>
+        <div class="col-6 m-2">
+          <button
+            mat-button
+            mat-raised-button
+            *ngIf="showSaveOption"
+            color="secondary"
+            (click)="cancle()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 m-1">
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Time"
+          name="time"
+          [(ngModel)]="currentTime"
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-4 m-1">
+      <mat-form-field>
+        <input
+          #comment
+          matInput
+          placeholder="Description"
+          name="comments"
+          [(ngModel)]="comments"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+  <!-- <div class="row ">
+    <div class="col-2 border p-1 header">#</div>
+    <div class="col-4 border p-1 header">Time</div>
+    <div class="col-4 border p-1 header">Description</div>
+    <div class="col-2 border p-1 header">Actions</div>
+  </div>
+  <div class="row " *ngFor="let item of annotationList | async; let i = index">
+    <div class="col-2 border p-1" (click)="jumpToAnnotaion(item)">{{ i+1 }}</div>
+    <div class="col-4 border p-1" (click)="jumpToAnnotaion(item)">{{ item.time }}</div>
+    <div class="col-4 border p-1" (click)="jumpToAnnotaion(item)">{{ item.comments }}</div>
+    <div class="col-2 border p-1">
+      <div class="row">
+        <div class="col-6">
+          <button
+          mat-icon-button
+          color="primary"
+          aria-label="Add"
+          matTooltip="jump"
+          (click)="jumpToAnnotaion(item)"
+        >
+          <mat-icon class="mat-icon skip">play_arrow</mat-icon>
+        </button>
+        </div>
+        <div class="col-6">
+          <button
+          mat-icon-button
+          color="danger"
+          aria-label="Add"
+          matTooltip="delete"
+          (click)="deleteAnnotation(item.id)"
+        >
+        <mat-icon class="mat-icon delete">delete</mat-icon>
+        </button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- table -->
+
+  <div class="row">
+<div class="col-12 table-container">
+  <table>
+    <thead>
+
+    <tr >
+      <th class="sr-no border">#</th>
+      <th class="time border">Time</th>
+      <th class="comment border"> Description</th>
+      <th class="actions border">Actions</th>
+    </tr>
+  </thead>
+<tbody class="table-body">
+
+    <tr *ngFor="let item of annotationList | async; let i = index">
+      <td class="sr-no border">{{ i+1 }}</td>
+      <td class="time border" > {{ item.time }}</td>
+      <td class="comment border">{{ item.comments }}</td>
+      <td class="actions border" >
+        <div class="row">
+          <div class="col-6">
+            <button
+            mat-icon-button
+            color="primary"
+            aria-label="Add"
+            matTooltip="jump"
+            (click)="jumpToAnnotaion(item)"
+          >
+            <mat-icon class="mat-icon skip">play_arrow</mat-icon>
+          </button>
+          </div>
+          <div class="col-6">
+            <button
+            mat-icon-button
+            color="danger"
+            aria-label="Add"
+            matTooltip="delete"
+            (click)="deleteAnnotation(item.id)"
+          >
+          <mat-icon class="mat-icon delete">delete</mat-icon>
+          </button>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  </table>
+</div>
+  </div>
+
+</div>

@@ -31,6 +31,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -94,6 +95,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -127,5 +129,9 @@
       }
     }
   },
-  "defaultProject": "videoTrial"
+  "defaultProject": "videoTrial",
+  "cli": {
+    "analytics": "01a9559c-ef99-404b-9cc1-f5a24bbd69a9",
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

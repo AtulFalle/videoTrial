@@ -1,0 +1,48 @@
+
+button.mat-focus-indicator.mat-icon-button.mat-button-base {
+  height: 20px !important;
+}
+
+.mat-icon{
+  line-height: 5px !important;
+}
+.delete{
+
+  color: red !important;
+}
+
+.header{
+  font-weight:  bold;
+}
+.add-btn{
+max-width: 10rem;
+}
+
+.sr-no{
+width: 10%;
+}
+.time{
+  width: 20%;
+}
+.comment{
+  width: 45%;
+}
+.actions{
+  width: 25%;
+}
+th{
+  text-align: inherit;
+}
+th, td {
+  padding: 15px;
+}
+
+table{
+  border-collapse: collapse;
+}
+
+.table-container{
+  max-height: 40vh;
+  overflow-y: auto;
+  min-height: 20rem;
+}

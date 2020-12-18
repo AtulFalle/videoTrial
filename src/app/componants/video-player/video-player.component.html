@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="video">
+    <video
+      #videoPlayer
+      [src]="url"
+      height="400"
+      (timeupdate)="getCurrentTime($event)"
+      (loadeddata)="getCurrentTime($event)"
+    >
+      <track
+        label="English subtitles"
+        kind="descriptions"
+        srclang="en"
+        src="../../../assets/text-track/track.vtt"
+        default=""
+      />
+    </video>
+    <div class="row controls p-0">
+
+      <div class="col-5 justify-center" (dblclick)="backward(10)">
+        <mat-icon class="m-3 video-controls text-right" (click)="backward(10)"
+        >replay_10</mat-icon
+      >
+      </div>
+      <div class="col-2 justify-center">
+        <mat-icon
+        class="m-3 video-controls"
+        *ngIf="!videoStatus"
+        (click)="play()"
+      >
+        play_arrow</mat-icon
+      >
+      <mat-icon class="m-3 video-controls" *ngIf="videoStatus" (click)="pause()"
+        >pause</mat-icon
+      >
+      </div>
+      <div class="col-5 justify-center" (dblclick)="forward(10)">
+        <mat-icon class="m-3 video-controls text-left" (click)="forward(10)"
+        >forward_10</mat-icon
+      >
+      </div>
+    </div>
+
+    <div class="timeline">
+
+
+      <mat-slider
+        min="0"
+        max="100"
+        class="slider"
+        [value]="getProgressValue(time)"
+        (input)="timelineDragged($event)"
+      ></mat-slider>
+      <div class="markerList">
+        <div class="marker" [style.margin-left]="getProgressValue(time)">
+        </div>
+      </div>
+      <div class="time">
+        {{ toTimeFormat(time) }}/ {{ toTimeFormat(duration) }}
+      </div>
+    </div>
+  </div>
+</div>

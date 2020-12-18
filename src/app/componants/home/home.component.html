@@ -1,0 +1,50 @@
+<mat-horizontal-stepper #stepper>
+  <mat-step>
+    <ng-template matStepLabel>Select video to upload</ng-template>
+    <app-video-uploader (videoUploaded)="goToNext($event)"></app-video-uploader>
+    <div class="m-5">
+      <button
+        mat-button
+        matStepperNext
+        mat-raised-button
+        matStepperPrevious
+        class="m-5"
+
+        color="primary"
+      >
+        Next
+      </button>
+    </div>
+  </mat-step>
+  <mat-step label="add anotations">
+    <mat-card>
+      <div class="container w-auto" *ngIf="showVideoPlayer">
+        <div class="row">
+          <div class="col-6">
+            <mat-card>
+              <app-video-player [videoId]="videoId"></app-video-player>
+            </mat-card>
+          </div>
+          <div class="col-6 p-2">
+            <app-annotation-list [videoId]="videoId"></app-annotation-list>
+            <!-- <mat-card>
+          </mat-card> -->
+            <!-- <app-add-annotations [videoId]="videoId" (annotaionAdded)="annotationAdded()"></app-add-annotations> -->
+          </div>
+        </div>
+      </div>
+    </mat-card>
+
+    <div class="m-5">
+      <button
+        mat-button
+        mat-raised-button
+        matStepperPrevious
+        (click)="resetPlayer()"
+        color="secondary"
+      >
+        Back
+      </button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
