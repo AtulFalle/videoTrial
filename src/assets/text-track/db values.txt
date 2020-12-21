@@ -1,0 +1,52 @@
+
+
+patient
+=> id
+date
+procedure id
+site
+status
+length
+conduccting surgen
+device liaison
+
+
+
+
+annotation 
+id
+time
+comment
+
+
+
+
+procedure
+patient id
+date
+DOB
+study
+site
+surgeon
+procedure type
+total no of videos
+
+
+
+
+
+
+view procedures
+id
+patient id
+type
+refill
+site
+conducting surgon
+surgical date
+status
+procedure date
+created
+srubbed date
+completed date
+videoList:

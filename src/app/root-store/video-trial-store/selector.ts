@@ -1,4 +1,3 @@
-
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { State } from './state';
 
@@ -9,4 +8,9 @@ export const getVideoList = createSelector(selectVideoState, (state: State) => {
   return state.video;
 });
 
-
+export const getCurrentVideo = createSelector(
+  selectVideoState,
+  (state: State) => {
+    return state.currentVideo;
+  }
+);

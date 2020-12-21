@@ -9,9 +9,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  @ViewChild('stepper', { static: true }) stepper!: MatStepper;
-  videoId!: string;
-  showVideoPlayer = false;
+  // @ViewChild('stepper', { static: true }) stepper!: MatStepper;
+  videoId = 'test';
+  showVideoPlayer = true;
 
   private _jumpLocation = new BehaviorSubject<number>(0);
 
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
 
   goToNext(videoId: string): void {
     this.videoId = videoId;
-    this.stepper.next();
+    // this.stepper.next();
     this.showVideoPlayer = true;
   }
 
@@ -36,8 +36,6 @@ export class HomeComponent implements OnInit {
   }
 
   annotationAdded(): void {
-    // this.stepper.next();
-    this.stepper.reset();
     this.redirectToHome();
   }
 

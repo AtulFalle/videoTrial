@@ -16,5 +16,5 @@ export interface Metadata {
 export interface TrialVideo {
   video: Video;
   annotations: Annotation[];
-  metadata: Metadata
+  metadata: Metadata;
 }

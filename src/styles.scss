@@ -1,6 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+html, body{
+  box-sizing: border-box;
+  display: block;
+  height: 100%;
+  contain: content;
+}
 html, body { height: 100%; user-select: none; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
@@ -101,6 +107,25 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin: 2.5rem;
 }
 
+.mt-1{
+  margin-top: 0.5rem;
+}
+.mt-2{
+  margin-top: 1rem;
+}
+
+.mt-3{
+  margin-top: 1.5rem;
+}
+
+.mt-4 {
+  margin-top: 2rem;
+}
+
+.mt-5{
+  margin-top: 2.5rem;
+}
+
 
 .justify-center{
   justify-content: center;
@@ -128,4 +153,23 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .justify-center{
   justify-content: center;
+}
+
+
+.mat-tab-label, .mat-tab-link{
+  font-weight: 600 !important;
+  font-size: 1.3rem !important;
+}
+
+.bg-grey{
+  background-color: #e8e8e8cc;
+}
+
+.responsive-height{
+  height: max(90%, 90vh);
+}
+.text-page-title{
+  font-weight: 550;
+  font-size: 26px;
+  line-height: 1;
 }

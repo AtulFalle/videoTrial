@@ -27,7 +27,8 @@ import { AnnotationListComponent } from './componants/annotation-list/annotation
 import {MatCardModule} from '@angular/material/card';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatTableModule} from '@angular/material/table';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { AngularMaterialModule } from './angular-material/angular-material.module';
 
 @NgModule({
   declarations: [
@@ -46,19 +47,8 @@ import {MatTableModule} from '@angular/material/table';
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
     VideoTrialStoreModule,
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatStepperModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatProgressBarModule,
-    MatCardModule,
-    MatSliderModule,
-    MatTableModule
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !environment.production }),
+    AngularMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

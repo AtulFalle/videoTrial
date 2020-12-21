@@ -1,5 +1,6 @@
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SharedService } from './../../service/shared.service';
-import { TrialVideo } from './../../core/models/annotations.model';
+import { TrialVideo, Annotation } from './../../core/models/annotations.model';
 import {
   Component,
   ElementRef,
@@ -41,7 +42,10 @@ export class VideoPlayerComponent implements OnInit {
   time = '0';
   duration = '0';
 
+  // tslint:disable-next-line: variable-name
   private _subscription = [new Subscription()];
+  annotationMarkerList$!: Observable<TrialVideo>;
+  annotationMarkerList: Annotation[] = [];
 
   set subscription(sub: Subscription) {
     this._subscription.push(sub);
@@ -50,10 +54,16 @@ export class VideoPlayerComponent implements OnInit {
   constructor(
     private store$: Store<VideoTrialStoreState.State>,
     private router: Router,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private domSanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
+    this.store$
+      .select(VideoTrialStoreSelectors.getCurrentVideo)
+      .subscribe((res) => {
+        this.annotationMarkerList = res.annotations;
+      });
     this.subscription = this.sharedService.jumpToAnnotationTime.subscribe(
       (res) => {
         if (res) {
@@ -113,25 +123,16 @@ export class VideoPlayerComponent implements OnInit {
     player.play();
   }
 
-  resetPlayer(): void {}
-
-  addAnnotation(): void {
-
-    this.addAnnotationDesc.emit(true);
-
-  }
-
   getTime(): string {
     const player = this.videoPlayer.nativeElement as HTMLVideoElement;
     return '' + player.duration;
   }
 
   getProgressValue(time: string): number {
-    const percentage = (parseInt(time, 10) / parseInt(this.duration)) * 100;
+    const percentage = (parseInt(time, 10) / parseInt(this.duration, 10)) * 100;
     return Math.floor(percentage);
   }
-  getCurrentTime(ev: any) {
-
+  getCurrentTime(ev: any): void {
     const player = this.videoPlayer.nativeElement as HTMLVideoElement;
     this.duration = '' + player.duration;
     this.time = '' + player.currentTime;
@@ -139,17 +140,15 @@ export class VideoPlayerComponent implements OnInit {
       time: this.toTimeFormat(this.time),
       videoPlayerTime: this.time,
     };
-    if(player.paused) {
+    if (player.paused) {
       this.videoStatus = false;
     } else {
       this.videoStatus = true;
-
     }
     this.sharedService.currentTimeObs$.next(playerTime);
   }
 
-
-  videoLoaded(ev: any) {
+  videoLoaded(ev: any): void {
     const player = this.videoPlayer.nativeElement as HTMLVideoElement;
     this.duration = '' + player.duration;
     this.time = '' + player.currentTime;
@@ -157,11 +156,10 @@ export class VideoPlayerComponent implements OnInit {
       time: this.toTimeFormat(this.time),
       videoPlayerTime: this.time,
     };
-    if(player.paused) {
+    if (player.paused) {
       this.videoStatus = false;
     } else {
       this.videoStatus = true;
-
     }
 
     this.sharedService.currentTimeObs$.next(playerTime);
@@ -186,11 +184,28 @@ export class VideoPlayerComponent implements OnInit {
 
     const percentage = value / 100;
 
-    const currentTime = percentage * parseInt(this.duration);
+    const currentTime = percentage * parseInt(this.duration, 10);
 
     console.log(currentTime);
 
     const player = this.videoPlayer.nativeElement;
     player.currentTime = currentTime;
+  }
+  calculateMargin(time: string): string {
+    const value = this.getProgressValue(time);
+    return '' + value + '%';
+  }
+
+  jumpToAnnotation(time: string): void {
+    const player = this.videoPlayer.nativeElement;
+    player.currentTime = time;
+    this.time = '' + player.currentTime;
+  }
+
+  getSafeURL(): SafeResourceUrl {
+
+    const url = 'http://localhost:3000/annotation.vtt';
+    return this.domSanitizer.bypassSecurityTrustUrl(url);
+
   }
 }
