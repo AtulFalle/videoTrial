@@ -1,8 +1,9 @@
-import { HomeComponent } from './componants/home/home.component';
-import { VideoListComponent } from './componants/video-list/video-list.component';
+import { HomeComponent } from './components/home/home.component';
+import { VideoListComponent } from './components/video-list/video-list.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { VideoPlayerComponent } from './componants/video-player/video-player.component';
+import { VideoPlayerComponent } from './components/video-player/video-player.component';
+import { DropVideoComponent } from './components/drop-video/drop-video.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'add-video',
     component: HomeComponent,
+  },
+  {
+    path: 'drop-video',
+    component: DropVideoComponent,
   },
   {
     path: '',
