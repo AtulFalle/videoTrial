@@ -30,6 +30,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { DropVideoComponent } from './components/drop-video/drop-video.component';
+import { ProcedureDetailsComponent } from './components/procedure-details/procedure-details.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { DropVideoComponent } from './components/drop-video/drop-video.component
     VideoUploaderComponent,
     AddAnnotationsComponent,
     AnnotationListComponent,
-    DropVideoComponent
+    DropVideoComponent,
+    ProcedureDetailsComponent
   ],
   imports: [
     BrowserModule,
