@@ -12,9 +12,12 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [],
@@ -33,7 +36,11 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatSliderModule,
     MatTableModule,
     MatTooltipModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatSelectModule,
   ],
   exports: [
     MatToolbarModule,
@@ -49,7 +56,12 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatSliderModule,
     MatTableModule,
     MatTooltipModule,
-    MatTabsModule
-  ]
+    MatTabsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatSelectModule,
+  ],
+  providers: [MatNativeDateModule],
 })
-export class AngularMaterialModule { }
+export class AngularMaterialModule {}
