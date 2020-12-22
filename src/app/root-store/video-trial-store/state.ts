@@ -1,3 +1,4 @@
+import { Procedure } from 'src/app/core/models/procedure.model';
 import { TrialVideo } from './../../core/models/annotations.model';
 
 export interface State {
@@ -5,6 +6,7 @@ export interface State {
   error?: any;
   video: TrialVideo[];
   currentVideo: TrialVideo;
+  procedure: Procedure;
 }
 
 export const initialState: State = {
@@ -34,4 +36,5 @@ export const initialState: State = {
       duration: '0',
     },
   },
+  procedure: null
 };

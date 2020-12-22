@@ -32,6 +32,8 @@ import { AngularMaterialModule } from './angular-material/angular-material.modul
 import { DropVideoComponent } from './components/drop-video/drop-video.component';
 import { ProcedureDetailsComponent } from './components/procedure-details/procedure-details.component';
 import { MatNativeDateModule } from '@angular/material/core';
+import { HttpClientModule } from '@angular/common/http';
+import { PatientVideoListComponent } from './components/patient-video-list/patient-video-list.component';
 
 
 @NgModule({
@@ -44,11 +46,13 @@ import { MatNativeDateModule } from '@angular/material/core';
     AddAnnotationsComponent,
     AnnotationListComponent,
     DropVideoComponent,
-    ProcedureDetailsComponent
+    ProcedureDetailsComponent,
+    PatientVideoListComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),

@@ -46,21 +46,13 @@ export class AnnotationListComponent implements OnInit {
 
   ngOnInit(): void {
     this.annotationList = this.store$
-      .select(VideoTrialStoreSelectors.getVideoList)
+      .select(VideoTrialStoreSelectors.getCurrentVideo)
       .pipe(
-        map((videoList: TrialVideo[]) => {
-          for (const iterator of videoList) {
-            if (iterator.video.videoId === this.videoId) {
-              return iterator.annotations;
-            } else {
-              return [];
-            }
-          }
-          return [];
+        map((video: TrialVideo) => {
+          return video.annotations;
         })
       );
   }
-
 
   addAnnotation(): void {
     this.showSaveOption = true;
@@ -89,7 +81,7 @@ export class AnnotationListComponent implements OnInit {
     this.store$.dispatch(
       VideoTrialStoreActions.addAnnotations({
         annotationsList: [userResponse],
-        videoId: 'test',
+        videoId: this.videoId,
       })
     );
     this.currentTime = '';

@@ -21,7 +21,8 @@ const featureReducer = createReducer(
   on(
     videoTrialActions.addAnnotations,
     (state, { annotationsList, videoId }) => {
-      const temp = [...new Set(state.video)];
+      const tempProcedure = { ...state.procedure };
+      const temp = [...tempProcedure.videoList];
       const annotations = [];
       let currentVideo = { ...state.currentVideo };
       for (const iterator of temp) {
@@ -39,13 +40,16 @@ const featureReducer = createReducer(
           temp[index] = videoObject;
         }
       }
+      tempProcedure.videoList = temp;
+
       console.log(temp);
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: null,
         video: temp,
         currentVideo,
+        procedure: tempProcedure,
       };
     }
   ),
@@ -91,6 +95,28 @@ const featureReducer = createReducer(
       ...state,
       video: temp,
       currentVideo,
+    };
+  }),
+  on(videoTrialActions.getProcedure, (state) => {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  }),
+  on(videoTrialActions.getProcedureSuccess, (state, { procedure }) => {
+    const currentVideo = { ...procedure.videoList[0] };
+
+    return {
+      ...state,
+      procedure,
+      isLoading: false,
+      currentVideo,
+    };
+  }),
+  on(videoTrialActions.setCurrentVideo, (state, { video }) => {
+    return {
+      ...state,
+      currentVideo: video,
     };
   })
 );

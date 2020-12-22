@@ -37,10 +37,13 @@ export class VideoPlayerComponent implements OnInit {
   @Output()
   addAnnotationDesc: EventEmitter<boolean> = new EventEmitter(true);
 
-  url!: string | ArrayBuffer | null;
+  url: string | ArrayBuffer | null = '';
+  subtitle = '';
   videoStatus = false;
   time = '0';
   duration = '0';
+
+  isDataLoaded = false;
 
   // tslint:disable-next-line: variable-name
   private _subscription = [new Subscription()];
@@ -60,8 +63,11 @@ export class VideoPlayerComponent implements OnInit {
   ngOnInit(): void {
     this.store$
       .select(VideoTrialStoreSelectors.getCurrentVideo)
-      .subscribe((res) => {
-        this.annotationMarkerList = res.annotations;
+      .subscribe((res: TrialVideo) => {
+        this.annotationMarkerList = [...res.annotations];
+        this.url = res.video.data;
+        this.subtitle = res.video.subtitle;
+        this.isDataLoaded = true;
       });
     this.subscription = this.sharedService.jumpToAnnotationTime.subscribe(
       (res) => {
@@ -79,18 +85,6 @@ export class VideoPlayerComponent implements OnInit {
         this.pause();
       }
     });
-    this.subscription = this.store$
-      .select(VideoTrialStoreSelectors.getVideoList)
-      .pipe(take(1))
-      .subscribe((video: TrialVideo[]) => {
-        console.log(video, this.videoId);
-
-        for (const iterator of video) {
-          if (this.videoId === iterator.video.videoId) {
-            this.url = iterator.video.data;
-          }
-        }
-      });
   }
 
   play(): void {
@@ -203,9 +197,7 @@ export class VideoPlayerComponent implements OnInit {
   }
 
   getSafeURL(): SafeResourceUrl {
-
     const url = 'http://localhost:3000/annotation.vtt';
     return this.domSanitizer.bypassSecurityTrustUrl(url);
-
   }
 }

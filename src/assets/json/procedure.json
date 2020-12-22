@@ -1,14 +1,42 @@
 {
-
-    "patiantId": "1234456",
-    "procedureId": "#345",
-    "site": "Kaleidoscope",
-    "status": "Scrubbed on 01/01/2020",
-    "procedureLength": "00:20",
-    "conductingSurgeon": "Surgeon Not Listed",
-    "SurgicalDeviceLiaison": "No SDL Present",
-    "videoList": [{
-
-    }]
-
+  "implant": "Archway",
+  "patiantId": "1234456",
+  "procedureId": "#345",
+  "site": "Kaleidoscope",
+  "status": "Scrubbed on 01/01/2020",
+  "procedureLength": "00:20",
+  "conductingSurgeon": "Surgeon Not Listed",
+  "SurgicalDeviceLiaison": "No SDL Present",
+  "videoList": [
+    {
+      "video": {
+        "videoId": "test",
+        "data": "http://localhost:3000/big_buck_bunny_720p_10mb.mp4",
+        "subtitle": "http://localhost:3000/annotation.vtt"
+      },
+      "annotations": [
+        {
+          "id": "annotationId-1.300306673920204",
+          "time": "00:25",
+          "comments": "this is annotation",
+          "videoPlayerTime": "25.674763"
+        }
+      ]
+    },
+    {
+      "video": {
+        "videoId": "test2",
+        "data": "http://localhost:3000/big_buck_bunny_720p_10mb.mp4",
+        "subtitle": "http://localhost:3000/annotation.vtt"
+      },
+      "annotations": [
+        {
+          "id": "annotationId-2.300306673920204",
+          "time": "00:5",
+          "comments": "this is annotation",
+          "videoPlayerTime": "5.674763"
+        }
+      ]
+    }
+  ]
 }

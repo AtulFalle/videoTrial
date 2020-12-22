@@ -14,3 +14,12 @@ export const getCurrentVideo = createSelector(
     return state.currentVideo;
   }
 );
+
+export const getProcedure = createSelector(selectVideoState, (state: State) => {
+  return state.procedure;
+});
+
+export const isLoading = createSelector(
+  selectVideoState,
+  (state: State) => state.isLoading
+);

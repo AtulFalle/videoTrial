@@ -1,3 +1,4 @@
+import { Procedure } from './../../core/models/procedure.model';
 import { TrialVideo, Annotation } from './../../core/models/annotations.model';
 
 import { createAction, props } from '@ngrx/store';
@@ -14,7 +15,15 @@ export enum VideoTrialActionType {
 
   // update video values actions
   UPDATE_CURRENT_TIME = '[video current time] update current time of video',
-  UPDATE_DURATION = '[video duration] update video duration'
+  UPDATE_DURATION = '[video duration] update video duration',
+
+  // procedure Actions
+  GET_PROCEDURE = '[Procedure GET] get procedure Details',
+  GET_PROCEDURE_SUCCESS = '[Procedure success] get procedure Details successfully',
+
+  // Current video update
+  SET_CURRENT_VIDEO = '[Trial video current video] set current video',
+  UPDATE_CURRENT_VIDEO = '[Trial viceo update] update metadata for current video',
 }
 
 export const uploadVideo = createAction(
@@ -40,13 +49,29 @@ export const deleteAnnotation = createAction(
   props<{ videoId: string; id: string }>()
 );
 
-
 export const updateCurrentTime = createAction(
   VideoTrialActionType.UPDATE_CURRENT_TIME,
-  props<{time: string, videoId: string}>()
+  props<{ time: string; videoId: string }>()
 );
 
 export const updateDuration = createAction(
   VideoTrialActionType.UPDATE_DURATION,
-  props<{time: string, videoId: string}>()
+  props<{ time: string; videoId: string }>()
+);
+
+export const getProcedure = createAction(VideoTrialActionType.GET_PROCEDURE);
+
+export const getProcedureSuccess = createAction(
+  VideoTrialActionType.GET_PROCEDURE_SUCCESS,
+  props<{ procedure: Procedure }>()
+);
+
+export const setCurrentVideo = createAction(
+  VideoTrialActionType.SET_CURRENT_VIDEO,
+  props<{ video: TrialVideo }>()
+);
+
+export const updateCurrentVideo = createAction(
+  VideoTrialActionType.UPDATE_CURRENT_VIDEO,
+  props<{ video: TrialVideo }>()
 );

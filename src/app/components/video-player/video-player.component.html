@@ -1,9 +1,9 @@
-<div class="container mt-2">
+<div class="container mt-2" *ngIf="isDataLoaded">
   <div class="video">
     <video
-    crossorigin="anonymous"
+      crossorigin="anonymous"
       #videoPlayer
-      src="http://localhost:3000/big_buck_bunny_720p_10mb.mp4"
+      src="{{ url }}"
       height="400"
       (timeupdate)="getCurrentTime($event)"
       (loadeddata)="getCurrentTime($event)"
@@ -12,7 +12,7 @@
         label="English subtitles"
         kind="subtitles"
         srclang="en"
-        src="http://localhost:3000/annotation.vtt"
+        src="{{ subtitle }}"
         default=""
       />
     </video>
@@ -66,4 +66,10 @@
       </div>
     </div>
   </div>
+  <div class="row m-2 align-end border-bottom p-1 w-auto">
+    <div class="align-end label">
+      Quality : <span class="bold-2"> 480P 720P RAW</span>
+    </div>
+  </div>
+
 </div>

@@ -1,21 +1,10 @@
-<!-- <mat-step>
-    <ng-template matStepLabel>Select video to upload</ng-template>
-    <app-video-uploader (videoUploaded)="goToNext($event)"></app-video-uploader>
-    <div class="m-5">
-      <button
-        mat-button
-        matStepperNext
-        mat-raised-button
-        matStepperPrevious
-        class="m-5"
-        color="primary"
-      >
-        Next
-      </button>
-    </div>
-  </mat-step> -->
-<!-- <mat-step label="add anotations"> -->
-<div class="container w-auto bg-grey" *ngIf="showVideoPlayer">
+<mat-progress-bar
+  mode="indeterminate"
+  color="accent"
+  *ngIf="isLoading"
+></mat-progress-bar>
+
+<div class="container w-auto bg-grey h-inherti" *ngIf="showVideoPlayer && !isLoading">
   <div class="row m-3 mt-4 text-page-title">
     <h1>Procedure Details</h1>
   </div>
@@ -23,7 +12,12 @@
     <div class="col-6 p-1">
       <mat-tab-group mat-align-tabs="start" dynamicHeight>
         <mat-tab label="Scrubbed">
+          <div class="col-12">
+
           <app-video-player [videoId]="videoId"></app-video-player>
+          <app-patient-video-list [procedure]= "procedure |async"></app-patient-video-list>
+        </div>
+
         </mat-tab>
         <mat-tab label="Unscrubbed">
           <app-video-player [videoId]="videoId"></app-video-player>
