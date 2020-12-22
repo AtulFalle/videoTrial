@@ -24,9 +24,11 @@ import { AddAnnotationsComponent } from './components/add-annotations/add-annota
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AnnotationListComponent } from './components/annotation-list/annotation-list.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatTableModule } from '@angular/material/table';
+import {MatCardModule} from '@angular/material/card';
+import {MatSliderModule} from '@angular/material/slider';
+import {MatTableModule} from '@angular/material/table';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { DropVideoComponent } from './components/drop-video/drop-video.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -70,6 +72,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatNativeDateModule,
     MatCheckboxModule,
     MatSelectModule,
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !environment.production }),
+    AngularMaterialModule
   ],
   providers: [MatNativeDateModule],
   bootstrap: [AppComponent],

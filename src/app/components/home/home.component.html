@@ -1,5 +1,4 @@
-<mat-horizontal-stepper #stepper>
-  <mat-step>
+<!-- <mat-step>
     <ng-template matStepLabel>Select video to upload</ng-template>
     <app-video-uploader (videoUploaded)="goToNext($event)"></app-video-uploader>
     <div class="m-5">
@@ -9,42 +8,52 @@
         mat-raised-button
         matStepperPrevious
         class="m-5"
-
         color="primary"
       >
         Next
       </button>
     </div>
-  </mat-step>
-  <mat-step label="add anotations">
-    <mat-card>
-      <div class="container w-auto" *ngIf="showVideoPlayer">
-        <div class="row">
-          <div class="col-6">
-            <mat-card>
-              <app-video-player [videoId]="videoId"></app-video-player>
-            </mat-card>
-          </div>
-          <div class="col-6 p-2">
-            <app-annotation-list [videoId]="videoId"></app-annotation-list>
-            <!-- <mat-card>
-          </mat-card> -->
-            <!-- <app-add-annotations [videoId]="videoId" (annotaionAdded)="annotationAdded()"></app-add-annotations> -->
-          </div>
-        </div>
-      </div>
-    </mat-card>
-
-    <div class="m-5">
-      <button
-        mat-button
-        mat-raised-button
-        matStepperPrevious
-        (click)="resetPlayer()"
-        color="secondary"
-      >
-        Back
-      </button>
+  </mat-step> -->
+<!-- <mat-step label="add anotations"> -->
+  <div class="container w-auto bg-grey" *ngIf="showVideoPlayer">
+    <div class="row m-3 mt-4 text-page-title">
+      <h1>Procedure Details</h1>
     </div>
-  </mat-step>
-</mat-horizontal-stepper>
+    <div class="row">
+      <div class="col-6 p-1">
+        <mat-tab-group mat-align-tabs="start" dynamicHeight>
+          <mat-tab label="Scrubbed">
+            <app-video-player [videoId]="videoId"></app-video-player>
+          </mat-tab>
+          <mat-tab label="Unscrubbed">
+            <app-video-player [videoId]="videoId"></app-video-player>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+      <div class="col-6 p-1">
+        <mat-card class="responsive-height">
+
+        <mat-tab-group mat-align-tabs="start" dynamicHeight>
+          <mat-tab label="Activity">
+            <app-annotation-list [videoId]="videoId"></app-annotation-list>
+          </mat-tab>
+          <mat-tab label="Details">Details</mat-tab>
+        </mat-tab-group>
+
+      </mat-card>
+    </div>
+
+    </div>
+  </div>
+
+<!-- <div class="m-5">
+  <button
+    mat-button
+    mat-raised-button
+    (click)="resetPlayer()"
+    color="secondary"
+  >
+    Back
+  </button>
+</div> -->
+<!-- </mat-step> -->

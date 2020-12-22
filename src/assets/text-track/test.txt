@@ -1,0 +1,41 @@
+
+
+
+
+create procedure =>  GET, POST
+
+
+_id: id
+patient id: id (ref patient Table)
+surgical date: string
+DOB: string
+study(radio box)
+site: string
+surgeon: string
+procedure type: string
+total video: number
+video: [array of video id] ref video table
+type: string
+refill: string
+status: string;
+procedure date: string
+created: date
+scrubbed date: date
+completed date: date
+
+
+
+
+videoTable:  GET, POST
+
+_id;
+filepath;
+fileSubtitle:
+annotationid: [id(ref annotation table)]
+
+
+annotation Table:  GET, POST
+id;
+time;
+comment;
+

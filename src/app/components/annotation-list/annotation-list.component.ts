@@ -61,20 +61,15 @@ export class AnnotationListComponent implements OnInit {
       );
   }
 
+
   addAnnotation(): void {
     this.showSaveOption = true;
     this.currentTime = this.sharedService.currentTimeObs$.value.time;
-    const relativeValue = this.sharedService.currentTimeObs$.value.videoPlayerTime;
-
     this.sharedService.pauseVideoObs$.next(true);
     const element = this.commentBox.nativeElement as HTMLInputElement;
     element.focus();
   }
 
-  // getProgressValue(time: string): number {
-  //   const percentage = (parseInt(time, 10) / parseInt(this.duration)) * 100;
-  //   return Math.floor(percentage);
-  // }
   cancle(): void {
     this.currentTime = '';
     this.comments = '';
@@ -85,7 +80,8 @@ export class AnnotationListComponent implements OnInit {
     this.showSaveOption = false;
 
     const userResponse: Annotation = {
-      id: 'annotationId-' + Math.random() * 100,
+      // id: 'annotationId-' + Math.random() * 100,
+      id: 'test',
       time: this.currentTime,
       comments: this.comments,
       videoPlayerTime: this.sharedService.currentTimeObs$.value.videoPlayerTime,
@@ -94,7 +90,7 @@ export class AnnotationListComponent implements OnInit {
     this.store$.dispatch(
       VideoTrialStoreActions.addAnnotations({
         annotationsList: [userResponse],
-        videoId: this.videoId,
+        videoId: 'test',
       })
     );
     this.currentTime = '';
@@ -111,7 +107,6 @@ export class AnnotationListComponent implements OnInit {
   }
 
   jumpToAnnotaion(annotation: Annotation): void {
-    // this.jumpToLocation.emit(annotation.videoPlayerTime);
     this.sharedService.jumpToAnnotaion.next(annotation.videoPlayerTime);
   }
 }

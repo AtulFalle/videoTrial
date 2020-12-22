@@ -1,6 +1,7 @@
-<div class="container">
+<div class="container mt-2">
   <div class="video">
-    <video
+    <!-- http://localhost:3000/mov_bbb.mp4 -->
+    <!-- <video
       #videoPlayer
       [src]="url"
       height="400"
@@ -14,36 +15,52 @@
         src="../../../assets/text-track/track.vtt"
         default=""
       />
+    </video> -->
+    <video
+    crossorigin="anonymous"
+      #videoPlayer
+      src="http://localhost:3000/big_buck_bunny_720p_10mb.mp4"
+      height="400"
+      (timeupdate)="getCurrentTime($event)"
+      (loadeddata)="getCurrentTime($event)"
+    >
+      <track
+        label="English subtitles"
+        kind="subtitles"
+        srclang="en"
+        src="http://localhost:3000/annotation.vtt"
+        default=""
+      />
     </video>
     <div class="row controls p-0">
-
       <div class="col-5 justify-center" (dblclick)="backward(10)">
         <mat-icon class="m-3 video-controls text-right" (click)="backward(10)"
-        >replay_10</mat-icon
-      >
+          >replay_10</mat-icon
+        >
       </div>
       <div class="col-2 justify-center">
         <mat-icon
-        class="m-3 video-controls"
-        *ngIf="!videoStatus"
-        (click)="play()"
-      >
-        play_arrow</mat-icon
-      >
-      <mat-icon class="m-3 video-controls" *ngIf="videoStatus" (click)="pause()"
-        >pause</mat-icon
-      >
+          class="m-3 video-controls"
+          *ngIf="!videoStatus"
+          (click)="play()"
+        >
+          play_arrow</mat-icon
+        >
+        <mat-icon
+          class="m-3 video-controls"
+          *ngIf="videoStatus"
+          (click)="pause()"
+          >pause</mat-icon
+        >
       </div>
       <div class="col-5 justify-center" (dblclick)="forward(10)">
         <mat-icon class="m-3 video-controls text-left" (click)="forward(10)"
-        >forward_10</mat-icon
-      >
+          >forward_10</mat-icon
+        >
       </div>
     </div>
 
     <div class="timeline">
-
-
       <mat-slider
         min="0"
         max="100"
@@ -52,8 +69,13 @@
         (input)="timelineDragged($event)"
       ></mat-slider>
       <div class="markerList">
-        <div class="marker" [style.margin-left]="getProgressValue(time)">
-        </div>
+        <div
+          *ngFor="let marker of annotationMarkerList"
+          class="marker"
+          [matTooltip]="marker.comments"
+          (click)="jumpToAnnotation(marker.videoPlayerTime)"
+          [style.left]="calculateMargin(marker.videoPlayerTime)"
+        ></div>
       </div>
       <div class="time">
         {{ toTimeFormat(time) }}/ {{ toTimeFormat(duration) }}

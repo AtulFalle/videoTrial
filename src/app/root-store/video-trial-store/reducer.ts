@@ -9,13 +9,13 @@ const featureReducer = createReducer(
     const temp = [...state.video];
     temp.push(video);
     const videoList = [...new Set(temp)];
-    // const videoList = [...new Set([temp.video.push(video)])];
     console.log(videoList);
     return {
       ...state,
       isLoading: true,
       error: null,
       video: videoList,
+      currentVideo: video,
     };
   }),
   on(
@@ -23,6 +23,7 @@ const featureReducer = createReducer(
     (state, { annotationsList, videoId }) => {
       const temp = [...new Set(state.video)];
       const annotations = [];
+      let currentVideo = { ...state.currentVideo };
       for (const iterator of temp) {
         if (iterator.video.videoId === videoId) {
           const tempAnnotations = [...new Set(iterator.annotations)];
@@ -33,6 +34,7 @@ const featureReducer = createReducer(
             annotations: [...new Set(updatedList)],
             metadata: iterator.metadata,
           };
+          currentVideo = videoObject;
           const index = temp.indexOf(iterator);
           temp[index] = videoObject;
         }
@@ -43,24 +45,25 @@ const featureReducer = createReducer(
         isLoading: true,
         error: null,
         video: temp,
+        currentVideo,
       };
     }
   ),
   on(videoTrialActions.deleteAnnotation, (state, { videoId, id }) => {
     const temp = [...new Set(state.video)];
     const annotations = [];
+    let currentVideo = { ...state.currentVideo };
     for (const iterator of temp) {
       if (iterator.video.videoId === videoId) {
         const tempAnnotations = [...new Set(iterator.annotations)];
-        const updatedList = tempAnnotations.filter(
-          (iterator) => iterator.id !== id
-        );
+        const updatedList = tempAnnotations.filter((i) => i.id !== id);
 
         const videoObject: TrialVideo = {
           video: iterator.video,
           annotations: [...new Set(updatedList)],
           metadata: iterator.metadata,
         };
+        currentVideo = videoObject;
         const index = temp.indexOf(iterator);
         temp[index] = videoObject;
       }
@@ -70,23 +73,24 @@ const featureReducer = createReducer(
       isLoading: true,
       error: null,
       video: temp,
+      currentVideo,
     };
   }),
 
   on(videoTrialActions.updateDuration, (state, { time, videoId }) => {
     const temp = [...new Set(state.video)];
+    const currentVideo = { ...state.currentVideo };
     for (const iterator of temp) {
       if (iterator.video.videoId === videoId) {
-
         iterator.metadata.duration = time;
-
+        currentVideo.metadata.duration = time;
       }
     }
 
     return {
       ...state,
-      video: temp
-
+      video: temp,
+      currentVideo,
     };
   })
 );
