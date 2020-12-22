@@ -1,1 +1,94 @@
-<p>drop-video works!</p>
+<div class="drop-video-wrapper">
+  <div class="header">New Procedure</div>
+  <div class="content">
+    <div class="video-uploader">
+      <div class="card video-upload">
+        <div class="card-header">Video Files</div>
+        <div class="card-body">
+          Upload all videos associated with this procedure by dropping them in
+          the area below, or by clicking below and selecting your file(s).
+          <b
+            >Please do not navigate off this page until all video uploads have
+            completed</b
+          >
+          <div class="file-drop">Drop File(s) or Click Here</div>
+        </div>
+      </div>
+      <div class="card patient-info">
+        <div class="card-header">Patient Information</div>
+        <div class="card-body">
+          <form class="patient-info-form">
+            <mat-form-field class="full-width-input" appearance="fill">
+              <mat-label>Patient ID</mat-label>
+              <input matInput value="" />
+            </mat-form-field>
+            <mat-form-field class="full-width-input" appearance="fill">
+              <mat-label>Procedure Data</mat-label>
+              <input matInput value="" />
+            </mat-form-field>
+            <mat-form-field class="full-width-input" appearance="fill">
+              <mat-label>Patients Date of Birth</mat-label>
+              <input matInput [matDatepicker]="picker" />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <div>
+              <div class="study-form-field">Study</div>
+              <div class="study-checkboxes">
+                <mat-checkbox
+                  *ngFor="let studyTask of studyTasks"
+                  class="checkboxes-input"
+                  >{{ studyTask.name }}</mat-checkbox
+                >
+              </div>
+            </div>
+            <mat-form-field class="full-width-input" appearance="fill">
+              <mat-label>Site</mat-label>
+              <mat-select>
+                <mat-option value="kaleidoscope">Kaleidoscope</mat-option>
+                <mat-option value="periscope">Periscope</mat-option>
+                <mat-option value="mercedes">Mercedes</mat-option>
+                <mat-option value="audi">Audi</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="full-width-input" appearance="fill">
+              <mat-label>Procedure Type</mat-label>
+              <mat-select>
+                <mat-option value="kaleidoscope">Kaleidoscope</mat-option>
+                <mat-option value="periscope">Periscope</mat-option>
+                <mat-option value="mercedes">Mercedes</mat-option>
+                <mat-option value="audi">Audi</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="full-width-input" appearance="fill">
+              <mat-label>Conducting Surgeon</mat-label>
+              <mat-select>
+                <mat-option value="kaleidoscope">Steve Mathews</mat-option>
+                <mat-option value="periscope">John Smith</mat-option>
+                <mat-option value="mercedes">David Warner</mat-option>
+                <mat-option value="audi">Shane Watson</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="full-width-input" appearance="fill">
+              <mat-label>Surgical Device Liaison (if present)</mat-label>
+              <mat-select>
+                <mat-option value="kaleidoscope">Steve Mathews</mat-option>
+                <mat-option value="periscope">John Smith</mat-option>
+                <mat-option value="mercedes">David Warner</mat-option>
+                <mat-option value="audi">Shane Watson</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="full-width-input" appearance="fill">
+              <mat-label>Total Number of Video Files</mat-label>
+              <input matInput value="" type="number" />
+            </mat-form-field>
+            <button mat-raised-button color="primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

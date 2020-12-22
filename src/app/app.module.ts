@@ -12,24 +12,26 @@ import { environment } from '../environments/environment';
 import { VideoTrialStoreModule } from './root-store/video-trial-store';
 import { VideoPlayerComponent } from './components/video-player/video-player.component';
 import { VideoListComponent } from './components/video-list/video-list.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { HomeComponent } from './components/home/home.component';
-import {MatStepperModule} from '@angular/material/stepper';
+import { MatStepperModule } from '@angular/material/stepper';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VideoUploaderComponent } from './components/video-uploader/video-uploader.component';
 import { AddAnnotationsComponent } from './components/add-annotations/add-annotations.component';
 // import { MatFormFieldModule, MatInputModule } from '@angular/material';
-import {MatInputModule} from '@angular/material/input';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AnnotationListComponent } from './components/annotation-list/annotation-list.component';
-import {MatCardModule} from '@angular/material/card';
-import {MatSliderModule} from '@angular/material/slider';
-import {MatTableModule} from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTableModule } from '@angular/material/table';
 import { DropVideoComponent } from './components/drop-video/drop-video.component';
-
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +41,7 @@ import { DropVideoComponent } from './components/drop-video/drop-video.component
     VideoUploaderComponent,
     AddAnnotationsComponent,
     AnnotationListComponent,
-    DropVideoComponent
+    DropVideoComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +50,10 @@ import { DropVideoComponent } from './components/drop-video/drop-video.component
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
     VideoTrialStoreModule,
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
+    }),
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
@@ -60,9 +65,13 @@ import { DropVideoComponent } from './components/drop-video/drop-video.component
     MatProgressBarModule,
     MatCardModule,
     MatSliderModule,
-    MatTableModule
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatSelectModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [MatNativeDateModule],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
