@@ -3,13 +3,16 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-drop-video',
   templateUrl: './drop-video.component.html',
-  styleUrls: ['./drop-video.component.scss']
+  styleUrls: ['./drop-video.component.scss'],
 })
 export class DropVideoComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
+  studyTasks = [
+    { name: 'Blood Pressure', completed: false },
+    { name: 'Body Temperature', completed: false },
+    { name: 'Weight', completed: false },
+  ];
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }
