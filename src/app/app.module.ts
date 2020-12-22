@@ -30,11 +30,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { DropVideoComponent } from './components/drop-video/drop-video.component';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ProcedureDetailsComponent } from './components/procedure-details/procedure-details.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { DragDropDirective } from './directive/drag-drop.directive';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,6 +47,7 @@ import { DragDropDirective } from './directive/drag-drop.directive';
     AnnotationListComponent,
     DropVideoComponent,
     DragDropDirective,
+    ProcedureDetailsComponent,
   ],
   imports: [
     BrowserModule,

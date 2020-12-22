@@ -1,14 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-html,
-body {
-  height: 100%;
-  user-select: none;
-}
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .container {
@@ -138,7 +132,7 @@ body {
   border: 1px solid #afa8a8;
 }
 
-.w-auto {
+.w-inherit {
   width: inherit !important;
 }
 
@@ -171,4 +165,29 @@ body {
   font-weight: 550;
   font-size: 26px;
   line-height: 1;
+}
+
+.bold-1 {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.bold-2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+.align-end {
+  justify-content: flex-end;
+}
+
+.border-bottom {
+  border-bottom: 1px solid rgb(197 202 208 / 82%);
+}
+
+.w-auto {
+  width: auto;
+}
+
+.pr-1 {
+  padding-right: 0.5rem;
 }

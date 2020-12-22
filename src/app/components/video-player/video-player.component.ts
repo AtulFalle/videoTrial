@@ -53,7 +53,6 @@ export class VideoPlayerComponent implements OnInit {
 
   constructor(
     private store$: Store<VideoTrialStoreState.State>,
-    private router: Router,
     private sharedService: SharedService,
     private domSanitizer: DomSanitizer
   ) {}
@@ -166,6 +165,7 @@ export class VideoPlayerComponent implements OnInit {
   }
 
   toTimeFormat(secs: string): string {
+    // tslint:disable-next-line: variable-name
     const sec_num = parseInt(secs, 10);
     const hours = Math.floor(sec_num / 3600);
     const minutes = Math.floor(sec_num / 60) % 60;

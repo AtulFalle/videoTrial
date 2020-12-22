@@ -80,8 +80,7 @@ export class AnnotationListComponent implements OnInit {
     this.showSaveOption = false;
 
     const userResponse: Annotation = {
-      // id: 'annotationId-' + Math.random() * 100,
-      id: 'test',
+      id: 'annotationId-' + Math.random() * 100,
       time: this.currentTime,
       comments: this.comments,
       videoPlayerTime: this.sharedService.currentTimeObs$.value.videoPlayerTime,

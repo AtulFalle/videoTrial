@@ -1,0 +1,14 @@
+{
+
+    "patiantId": "1234456",
+    "procedureId": "#345",
+    "site": "Kaleidoscope",
+    "status": "Scrubbed on 01/01/2020",
+    "procedureLength": "00:20",
+    "conductingSurgeon": "Surgeon Not Listed",
+    "SurgicalDeviceLiaison": "No SDL Present",
+    "videoList": [{
+
+    }]
+
+}
