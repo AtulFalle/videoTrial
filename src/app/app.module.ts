@@ -24,10 +24,10 @@ import { AddAnnotationsComponent } from './components/add-annotations/add-annota
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AnnotationListComponent } from './components/annotation-list/annotation-list.component';
-import {MatCardModule} from '@angular/material/card';
-import {MatSliderModule} from '@angular/material/slider';
-import {MatTableModule} from '@angular/material/table';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { DropVideoComponent } from './components/drop-video/drop-video.component';
 import { ProcedureDetailsComponent } from './components/procedure-details/procedure-details.component';
@@ -36,6 +36,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { PatientVideoListComponent } from './components/patient-video-list/patient-video-list.component';
 
 
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
+import { DragDropDirective } from './directive/drag-drop.directive';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +51,9 @@ import { PatientVideoListComponent } from './components/patient-video-list/patie
     AnnotationListComponent,
     DropVideoComponent,
     ProcedureDetailsComponent,
-    PatientVideoListComponent
+    PatientVideoListComponent,
+    DragDropDirective,
+    ProcedureDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,9 +79,15 @@ import { PatientVideoListComponent } from './components/patient-video-list/patie
     MatCardModule,
     MatSliderModule,
     MatTableModule,
-
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !environment.production }),
-    AngularMaterialModule
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: !environment.production,
+    }),
+    AngularMaterialModule,
   ],
   providers: [MatNativeDateModule],
   bootstrap: [AppComponent],

@@ -11,7 +11,44 @@
             >Please do not navigate off this page until all video uploads have
             completed</b
           >
-          <div class="file-drop">Drop File(s) or Click Here</div>
+          <div
+            class="file-drop"
+            appDragDrop
+            (fileDropped)="onFileDropped($event)"
+          >
+            <input
+              type="file"
+              #fileDropRef
+              id="fileDropRef"
+              multiple
+              (change)="fileBrowseHandler($event)"
+            />
+            <div class="file-drop-box">Drop File(s) or Click Here</div>
+          </div>
+          <div class="files-list">
+            <div class="single-file" *ngFor="let file of files; let i = index">
+              <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file" />
+              <div class="info">
+                <h4 class="name">
+                  {{ file?.name }}
+                </h4>
+                <p class="size">
+                  {{ formatBytes(file?.size) }}
+                </p>
+                <mat-progress-bar
+                  mode="determinate"
+                  [value]="file?.progress"
+                ></mat-progress-bar>
+              </div>
+              <img
+                src="assets/img/dnd/ic-delete-file.svg"
+                class="delete"
+                width="20px"
+                alt="file"
+                (click)="deleteFile(i)"
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div class="card patient-info">
@@ -41,6 +78,7 @@
                 <mat-checkbox
                   *ngFor="let studyTask of studyTasks"
                   class="checkboxes-input"
+                  color="primary"
                   >{{ studyTask.name }}</mat-checkbox
                 >
               </div>
