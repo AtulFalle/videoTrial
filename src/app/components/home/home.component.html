@@ -20,7 +20,7 @@
 
         </mat-tab>
         <mat-tab label="Unscrubbed">
-          <app-video-player [videoId]="videoId"></app-video-player>
+          <app-video-player [videoId]="videoId" [procedureId]="procedureID"></app-video-player>
         </mat-tab>
       </mat-tab-group>
     </div>
@@ -31,7 +31,7 @@
             <app-procedure-details></app-procedure-details>
           </mat-tab>
           <mat-tab label="Activity">
-            <app-annotation-list [videoId]="videoId"></app-annotation-list>
+            <app-annotation-list [videoId]="videoId" [procedureId]="procedureID"></app-annotation-list>
           </mat-tab>
         </mat-tab-group>
       </mat-card>

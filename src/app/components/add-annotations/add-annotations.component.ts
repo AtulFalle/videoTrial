@@ -64,12 +64,12 @@ export class AddAnnotationsComponent implements OnInit {
   saveAnnotations(): void {
     console.log(this.annotationForm.value);
 
-    this.store$.dispatch(
-      VideoTrialStoreActions.addAnnotations({
-        annotationsList: this.annotationForm.value,
-        videoId: this.videoId,
-      })
-    );
+    // this.store$.dispatch(
+    //   VideoTrialStoreActions.addAnnotations({
+    //     annotationsList: this.annotationForm.value,
+    //     videoId: this.videoId,
+    //   })
+    // );
     this.annotaionAdded.emit(true);
   }
 }

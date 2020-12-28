@@ -19,7 +19,7 @@ const featureReducer = createReducer(
     };
   }),
   on(
-    videoTrialActions.addAnnotations,
+    videoTrialActions.addAnnotationsSucces,
     (state, { annotationsList, videoId }) => {
       const tempProcedure = { ...state.procedure };
       const temp = [...tempProcedure.videoList];
@@ -53,33 +53,37 @@ const featureReducer = createReducer(
       };
     }
   ),
-  on(videoTrialActions.deleteAnnotation, (state, { videoId, id }) => {
-    const temp = [...new Set(state.video)];
-    const annotations = [];
-    let currentVideo = { ...state.currentVideo };
-    for (const iterator of temp) {
-      if (iterator.video.videoId === videoId) {
-        const tempAnnotations = [...new Set(iterator.annotations)];
-        const updatedList = tempAnnotations.filter((i) => i.id !== id);
+  on(
+    videoTrialActions.deleteAnnotationSuccess,
+    (state, { procedureId, videoId, id }) => {
+      const temp = [...state.procedure.videoList];
+      const currentVideo = { ...state.currentVideo };
+      const updatedProcedure = { ...state.procedure };
+      for (const iterator of temp) {
+        if (iterator.video.videoId === videoId) {
+          const tempAnnotations = [...new Set(iterator.annotations)];
+          const updatedList = tempAnnotations.filter((i) => i.id !== id);
 
-        const videoObject: TrialVideo = {
-          video: iterator.video,
-          annotations: [...new Set(updatedList)],
-          metadata: iterator.metadata,
-        };
-        currentVideo = videoObject;
-        const index = temp.indexOf(iterator);
-        temp[index] = videoObject;
+          const videoObject: TrialVideo = {
+            video: iterator.video,
+            annotations: [...new Set(updatedList)],
+            metadata: iterator.metadata,
+          };
+          currentVideo.annotations = videoObject.annotations;
+          const index = temp.indexOf(iterator);
+          temp[index] = videoObject;
+          updatedProcedure.videoList = temp;
+        }
       }
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+        procedure: updatedProcedure,
+        currentVideo
+      };
     }
-    return {
-      ...state,
-      isLoading: true,
-      error: null,
-      video: temp,
-      currentVideo,
-    };
-  }),
+  ),
 
   on(videoTrialActions.updateDuration, (state, { time, videoId }) => {
     const temp = [...new Set(state.video)];

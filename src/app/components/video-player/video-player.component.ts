@@ -28,6 +28,10 @@ import { MatSliderChange } from '@angular/material/slider';
 export class VideoPlayerComponent implements OnInit {
   @Input()
   videoId!: string;
+
+  @Input()
+  procedureId!: string;
+
   @Input()
   jumpToLocation!: Observable<number>;
 
@@ -73,9 +77,10 @@ export class VideoPlayerComponent implements OnInit {
       (res) => {
         if (res) {
           this.pause();
-          const player = this.videoPlayer.nativeElement;
+          const player = this.videoPlayer.nativeElement as HTMLVideoElement;
+          player.load();
           this.videoStatus = false;
-          player.currentTime = res;
+          player.currentTime = parseFloat(res);
           this.time = '' + player.currentTime;
         }
       }
@@ -130,7 +135,7 @@ export class VideoPlayerComponent implements OnInit {
     this.duration = '' + player.duration;
     this.time = '' + player.currentTime;
     const playerTime = {
-      time: this.toTimeFormat(this.time),
+      time: this.sharedService.toTimeFormat(this.time),
       videoPlayerTime: this.time,
     };
     if (player.paused) {
@@ -146,7 +151,7 @@ export class VideoPlayerComponent implements OnInit {
     this.duration = '' + player.duration;
     this.time = '' + player.currentTime;
     const playerTime = {
-      time: this.toTimeFormat(this.time),
+      time: this.sharedService.toTimeFormat(this.time),
       videoPlayerTime: this.time,
     };
     if (player.paused) {
@@ -158,20 +163,7 @@ export class VideoPlayerComponent implements OnInit {
     this.sharedService.currentTimeObs$.next(playerTime);
   }
 
-  toTimeFormat(secs: string): string {
-    // tslint:disable-next-line: variable-name
-    const sec_num = parseInt(secs, 10);
-    const hours = Math.floor(sec_num / 3600);
-    const minutes = Math.floor(sec_num / 60) % 60;
-    const seconds = sec_num % 60;
 
-    const time = [hours, minutes, seconds]
-      .map((v) => (v < 10 ? '0' + v : v))
-      .filter((v, i) => v !== '00' || i > 0)
-      .join(':');
-
-    return time;
-  }
   timelineDragged(ev: MatSliderChange): void {
     console.log(ev.value);
     const value = ev.value || 0;
@@ -199,5 +191,10 @@ export class VideoPlayerComponent implements OnInit {
   getSafeURL(): SafeResourceUrl {
     const url = 'http://localhost:3000/annotation.vtt';
     return this.domSanitizer.bypassSecurityTrustUrl(url);
+  }
+
+  getFotmattedTime(time: string): string {
+
+    return this.sharedService.toTimeFormat(time);
   }
 }

@@ -1,7 +1,7 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   VideoTrialStoreActions,
   VideoTrialStoreSelectors,
@@ -25,21 +25,28 @@ export class HomeComponent implements OnInit {
   jumpLocation = this._jumpLocation.asObservable();
   isLoading = false;
   procedure: Observable<Procedure>;
+  procedureID: string;
 
   constructor(
     private router: Router,
-    private store$: Store<VideoTrialStoreState.State>
+    private store$: Store<VideoTrialStoreState.State>,
+    private actRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.store$.dispatch(VideoTrialStoreActions.getProcedure());
+    this.procedureID = this.actRoute.snapshot.params.id;
+    this.store$.dispatch(
+      VideoTrialStoreActions.getProcedure({ procedureID: this.procedureID })
+    );
     this.store$.select(VideoTrialStoreSelectors.isLoading).subscribe((res) => {
       this.isLoading = res;
     });
     this.procedure = this.store$.select(VideoTrialStoreSelectors.getProcedure);
-    this.store$.select(VideoTrialStoreSelectors.getCurrentVideo).subscribe(res => {
-      this.videoId = res.video.videoId;
-    });
+    this.store$
+      .select(VideoTrialStoreSelectors.getCurrentVideo)
+      .subscribe((res) => {
+        this.videoId = res.video.videoId;
+      });
   }
 
   redirectToHome(): void {

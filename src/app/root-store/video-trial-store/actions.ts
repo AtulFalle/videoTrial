@@ -12,6 +12,8 @@ export enum VideoTrialActionType {
   UPDATE_ANNOTATIONS = '[video annotation] add video annotations list',
   ADD_ANNOTATION = '[video annotation] add annotation at time interval ',
   DELETE_ANNOTATION = '[video annotation remove] remove annotation by id',
+  DELETE_ANNOTATION_SUCCESS = '[video annotation delete success] annotation removed successfully',
+  ADD_ANNOTATION_SUCCESS = '[video annotation add success] vido annotation added successfully',
 
   // update video values actions
   UPDATE_CURRENT_TIME = '[video current time] update current time of video',
@@ -36,7 +38,13 @@ export const uploadVideoSuccess = createAction(
 
 export const addAnnotations = createAction(
   VideoTrialActionType.UPDATE_ANNOTATIONS,
-  props<{ annotationsList: Annotation[]; videoId: string }>()
+  props<{ annotationsList: Annotation[]; videoId: string , procedureId: string}>()
+);
+
+
+export const addAnnotationsSucces = createAction(
+  VideoTrialActionType.ADD_ANNOTATION_SUCCESS,
+  props<{ annotationsList: Annotation[]; videoId: string, procedureId: string }>()
 );
 
 export const insertAnnotation = createAction(
@@ -46,7 +54,12 @@ export const insertAnnotation = createAction(
 
 export const deleteAnnotation = createAction(
   VideoTrialActionType.DELETE_ANNOTATION,
-  props<{ videoId: string; id: string }>()
+  props<{ procedureId: string; videoId: string; id: string }>()
+);
+
+export const deleteAnnotationSuccess = createAction(
+  VideoTrialActionType.DELETE_ANNOTATION_SUCCESS,
+  props<{ procedureId: string; videoId: string; id: string }>()
 );
 
 export const updateCurrentTime = createAction(
@@ -59,7 +72,10 @@ export const updateDuration = createAction(
   props<{ time: string; videoId: string }>()
 );
 
-export const getProcedure = createAction(VideoTrialActionType.GET_PROCEDURE);
+export const getProcedure = createAction(
+  VideoTrialActionType.GET_PROCEDURE,
+  props<{ procedureID: string }>()
+);
 
 export const getProcedureSuccess = createAction(
   VideoTrialActionType.GET_PROCEDURE_SUCCESS,

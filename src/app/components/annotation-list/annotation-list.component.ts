@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment.prod';
 import { Annotation, TrialVideo } from './../../core/models/annotations.model';
 import { SharedService } from './../../service/shared.service';
 import {
@@ -26,8 +27,12 @@ import { map } from 'rxjs/operators';
 })
 export class AnnotationListComponent implements OnInit {
   @ViewChild('comment', { static: true }) commentBox!: ElementRef;
+
   @Input()
   videoId!: string;
+
+  @Input()
+  procedureId!: string;
 
   @Output()
   jumpToLocation: EventEmitter<string> = new EventEmitter(true);
@@ -71,17 +76,23 @@ export class AnnotationListComponent implements OnInit {
   save(): void {
     this.showSaveOption = false;
 
+    const endtime =
+      parseInt(this.sharedService.currentTimeObs$.value.videoPlayerTime, 10) +
+      environment.SUBTITLE_TIME;
+
     const userResponse: Annotation = {
-      id: 'annotationId-' + Math.random() * 100,
+      id: 'annotationId-' + Math.random(),
       time: this.currentTime,
       comments: this.comments,
       videoPlayerTime: this.sharedService.currentTimeObs$.value.videoPlayerTime,
+      endtime: this.sharedService.toTimeFormat(endtime.toString()),
     };
 
     this.store$.dispatch(
       VideoTrialStoreActions.addAnnotations({
         annotationsList: [userResponse],
         videoId: this.videoId,
+        procedureId: this.procedureId
       })
     );
     this.currentTime = '';
@@ -91,6 +102,7 @@ export class AnnotationListComponent implements OnInit {
   deleteAnnotation(id: string): void {
     this.store$.dispatch(
       VideoTrialStoreActions.deleteAnnotation({
+        procedureId: this.procedureId,
         videoId: this.videoId,
         id,
       })

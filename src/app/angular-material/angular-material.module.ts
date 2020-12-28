@@ -42,7 +42,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatNativeDateModule,
     MatCheckboxModule,
     MatSelectModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   exports: [
     MatToolbarModule,

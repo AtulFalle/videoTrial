@@ -1,3 +1,4 @@
+import { VideoTrialInterceptor } from './core/interceptor/http.interceptor';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { EffectsModule } from '@ngrx/effects';
 import { BrowserModule } from '@angular/platform-browser';
@@ -32,9 +33,8 @@ import { AngularMaterialModule } from './angular-material/angular-material.modul
 import { DropVideoComponent } from './components/drop-video/drop-video.component';
 import { ProcedureDetailsComponent } from './components/procedure-details/procedure-details.component';
 import { MatNativeDateModule } from '@angular/material/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PatientVideoListComponent } from './components/patient-video-list/patient-video-list.component';
-
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
@@ -89,7 +89,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     }),
     AngularMaterialModule,
   ],
-  providers: [MatNativeDateModule],
+  providers: [
+    MatNativeDateModule,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: VideoTrialInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

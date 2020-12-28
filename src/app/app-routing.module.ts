@@ -15,7 +15,7 @@ const routes: Routes = [
     component: VideoListComponent,
   },
   {
-    path: 'add-video',
+    path: 'procedure-details/:id',
     component: HomeComponent,
   },
   {
@@ -24,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: HomeComponent,
+    component: VideoListComponent,
   },
 ];
 

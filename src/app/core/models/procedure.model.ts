@@ -1,5 +1,6 @@
 import { TrialVideo } from './annotations.model';
 export interface Procedure {
+  id?: string;
   implant: string;
   procedureId: string;
   date: string;
