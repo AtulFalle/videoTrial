@@ -1,0 +1,9 @@
+.sidebarnav {
+  width: 15%;
+  .selection-list {
+    padding: 0;
+  }
+  .active-link {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
