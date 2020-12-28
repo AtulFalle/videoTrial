@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
 import {
@@ -12,7 +13,10 @@ import {
 })
 export class VideoTrialInterceptor implements HttpInterceptor {
   serverUrl = environment.SERVER_URI;
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     const url = this.serverUrl + req.url;
     const cloneReq = req.clone({
       url,

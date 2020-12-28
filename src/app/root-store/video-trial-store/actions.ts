@@ -1,3 +1,4 @@
+import { Video } from './../../core/models/video.model';
 import { Procedure } from './../../core/models/procedure.model';
 import { TrialVideo, Annotation } from './../../core/models/annotations.model';
 
@@ -38,13 +39,20 @@ export const uploadVideoSuccess = createAction(
 
 export const addAnnotations = createAction(
   VideoTrialActionType.UPDATE_ANNOTATIONS,
-  props<{ annotationsList: Annotation[]; videoId: string , procedureId: string}>()
+  props<{
+    annotationsList: Annotation[];
+    videoId: string;
+    procedureId: string;
+  }>()
 );
-
 
 export const addAnnotationsSucces = createAction(
   VideoTrialActionType.ADD_ANNOTATION_SUCCESS,
-  props<{ annotationsList: Annotation[]; videoId: string, procedureId: string }>()
+  props<{
+    annotationsList: Annotation[];
+    videoId: string;
+    procedureId: string;
+  }>()
 );
 
 export const insertAnnotation = createAction(
@@ -84,10 +92,10 @@ export const getProcedureSuccess = createAction(
 
 export const setCurrentVideo = createAction(
   VideoTrialActionType.SET_CURRENT_VIDEO,
-  props<{ video: TrialVideo }>()
+  props<{ video: Video }>()
 );
 
 export const updateCurrentVideo = createAction(
   VideoTrialActionType.UPDATE_CURRENT_VIDEO,
-  props<{ video: TrialVideo }>()
+  props<{ video: Video }>()
 );

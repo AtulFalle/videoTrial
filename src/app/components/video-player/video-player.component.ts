@@ -1,3 +1,4 @@
+import { Video } from './../../core/models/video.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SharedService } from './../../service/shared.service';
 import { TrialVideo, Annotation } from './../../core/models/annotations.model';
@@ -53,6 +54,7 @@ export class VideoPlayerComponent implements OnInit {
   private _subscription = [new Subscription()];
   annotationMarkerList$!: Observable<TrialVideo>;
   annotationMarkerList: Annotation[] = [];
+  isRefreshing = false;
 
   set subscription(sub: Subscription) {
     this._subscription.push(sub);
@@ -67,10 +69,10 @@ export class VideoPlayerComponent implements OnInit {
   ngOnInit(): void {
     this.store$
       .select(VideoTrialStoreSelectors.getCurrentVideo)
-      .subscribe((res: TrialVideo) => {
+      .subscribe((res: Video) => {
         this.annotationMarkerList = [...res.annotations];
-        this.url = res.video.data;
-        this.subtitle = res.video.subtitle;
+        this.url = res.name;
+        this.subtitle = res.subtitles;
         this.isDataLoaded = true;
       });
     this.subscription = this.sharedService.jumpToAnnotationTime.subscribe(
@@ -163,7 +165,6 @@ export class VideoPlayerComponent implements OnInit {
     this.sharedService.currentTimeObs$.next(playerTime);
   }
 
-
   timelineDragged(ev: MatSliderChange): void {
     console.log(ev.value);
     const value = ev.value || 0;
@@ -194,7 +195,16 @@ export class VideoPlayerComponent implements OnInit {
   }
 
   getFotmattedTime(time: string): string {
-
     return this.sharedService.toTimeFormat(time);
+  }
+
+  /**
+   * refresh video player, to reflect updated subtitle file
+   */
+  refreshAnnotation(): void {
+    this.isRefreshing = true;
+    setTimeout(() => {
+      this.isRefreshing = false;
+    }, 100);
   }
 }

@@ -13,11 +13,11 @@
   <div class="row border-bottom p-1 w-auto">
     <div class="col align-start">
       <div class="label pr-1">Patient ID:</div>
-      <div class="values bold-2">{{(procedureDetail | async).patientId}}</div>
+      <div class="values bold-2">{{(procedureDetail | async).patient_id}}</div>
     </div>
     <div class="col align-end">
       <div class="label pr-1">Procedure Date:</div>
-      <div class="values bold-2">{{(procedureDetail | async).date}}</div>
+      <div class="values bold-2">{{(procedureDetail | async).procedure_date}}</div>
     </div>
   </div>
 
@@ -40,11 +40,11 @@
   <div class="col-12 border-bottom p-1 ">
     <div class="row align-start">
       <div class="label pr-1">Conducting Surgeon:</div>
-      <div class=" bold-2">{{(procedureDetail | async).conductingSurgeon}}</div>
+      <div class=" bold-2">{{(procedureDetail | async).conducting_surgeon}}</div>
     </div>
     <div class="row align-start mt-2">
       <div class="label pr-1">Surgical Device Liason:</div>
-      <div class=" bold-2">{{(procedureDetail | async).surgicalDeviceLiaison}}</div>
+      <div class=" bold-2">{{(procedureDetail | async).surgical_device_liaison}}</div>
     </div>
   </div>
 </div>

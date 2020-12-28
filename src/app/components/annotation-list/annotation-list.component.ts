@@ -1,3 +1,5 @@
+import { Video } from './../../core/models/video.model';
+import { MessageBoxService } from './../../core/message-dialog-box/message-box.service';
 import { environment } from './../../../environments/environment.prod';
 import { Annotation, TrialVideo } from './../../core/models/annotations.model';
 import { SharedService } from './../../service/shared.service';
@@ -10,7 +12,6 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Store } from '@ngrx/store';
 import {
   VideoTrialStoreActions,
@@ -46,14 +47,15 @@ export class AnnotationListComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private store$: Store<VideoTrialStoreState.State>
+    private store$: Store<VideoTrialStoreState.State>,
+    private messageBoxService: MessageBoxService
   ) {}
 
   ngOnInit(): void {
     this.annotationList = this.store$
       .select(VideoTrialStoreSelectors.getCurrentVideo)
       .pipe(
-        map((video: TrialVideo) => {
+        map((video: Video) => {
           return video.annotations;
         })
       );

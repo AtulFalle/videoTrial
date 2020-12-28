@@ -5,6 +5,7 @@
       #videoPlayer
       src="{{ url }}"
       height="400"
+      *ngIf="!isRefreshing"
       (timeupdate)="getCurrentTime($event)"
       (loadeddata)="getCurrentTime($event)"
     >
@@ -67,6 +68,14 @@
     </div>
   </div>
   <div class="row m-2 align-end border-bottom p-1 w-auto">
+    <!-- <div class="row">
+
+      <div class="col-2 align-end">
+        <button mat-raised-button color="primary" class="m-1" (click)="refreshAnnotation()">
+          refresh Annotation
+        </button>
+      </div>
+    </div> -->
     <div class="align-end label">
       Quality : <span class="bold-2"> 480P 720P RAW</span>
     </div>

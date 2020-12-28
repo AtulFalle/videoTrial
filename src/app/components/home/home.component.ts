@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
     this.store$
       .select(VideoTrialStoreSelectors.getCurrentVideo)
       .subscribe((res) => {
-        this.videoId = res.video.videoId;
+        this.videoId = res.videoId;
       });
   }
 

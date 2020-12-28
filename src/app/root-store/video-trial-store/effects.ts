@@ -1,3 +1,4 @@
+import { MessageBoxService } from './../../core/message-dialog-box/message-box.service';
 import { ProcedureService } from './../../core/services/procedure-service/procedure.service';
 import { of } from 'rxjs';
 import { Injectable } from '@angular/core';
@@ -18,7 +19,8 @@ import { DeleteAnnotation } from 'src/app/core/models/annotations.model';
 export class VideoTrialStoreEffects {
   constructor(
     private actions$: Actions,
-    private procedureService: ProcedureService
+    private procedureService: ProcedureService,
+    private messageBoxService: MessageBoxService
   ) {}
 
   @Effect()
@@ -44,6 +46,9 @@ export class VideoTrialStoreEffects {
         .deleteAnnotation(action.procedureId, action.videoId, action.id)
         .pipe(
           switchMap((res: DeleteAnnotation) => {
+            this.messageBoxService.openSuccessMessage(
+              'annotation Deleted successfully'
+            );
             return of(
               videoTrialActions.deleteAnnotationSuccess({
                 procedureId: action.procedureId,
@@ -51,6 +56,12 @@ export class VideoTrialStoreEffects {
                 id: action.id,
               })
             );
+          }),
+          catchError((e) => {
+            this.messageBoxService.openErrorMessage(
+              'error while adding annotation'
+            );
+            return e;
           })
         );
     })
@@ -63,16 +74,30 @@ export class VideoTrialStoreEffects {
   addAnnotation = this.actions$.pipe(
     ofType(videoTrialActions.addAnnotations),
     switchMap((action) => {
-      return this.procedureService.updateAnnotationList(action.procedureId, action.videoId, action.annotationsList)
+      return this.procedureService
+        .updateAnnotationList(
+          action.procedureId,
+          action.videoId,
+          action.annotationsList
+        )
         .pipe(
           switchMap((res: Procedure) => {
+            this.messageBoxService.openSuccessMessage(
+              'annotation added successfully'
+            );
             return of(
               videoTrialActions.addAnnotationsSucces({
                 procedureId: action.procedureId,
                 videoId: action.videoId,
-               annotationsList: action.annotationsList
+                annotationsList: action.annotationsList,
               })
             );
+          }),
+          catchError((e) => {
+            this.messageBoxService.openErrorMessage(
+              'error while adding annotation'
+            );
+            return e;
           })
         );
     })

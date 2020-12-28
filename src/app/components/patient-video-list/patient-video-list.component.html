@@ -2,38 +2,58 @@
   <div class="row m-2 w-auto h-100">
     <div class="col-6">
       <div class="lable bold-2 m-1 text-right">
-        Number of Procedures for same patient - {{ procedure.videoList.length }}
+        Number of Procedures for same patient - {{ procedure.video.length }}
       </div>
     </div>
     <div class="col-6">
       <div class="row align-end">
-        <button mat-raised-button color="{{!showVideoList ? 'primary' : 'accent'}}" class="m-1" (click)="toggleVideoList()">{{showVideoList ? 'Hide ALL' : 'View ALL'}}</button>
+        <button
+          mat-raised-button
+          color="{{ !showVideoList ? 'primary' : 'accent' }}"
+          class="m-1"
+          (click)="toggleVideoList()"
+        >
+          {{ showVideoList ? "Hide ALL" : "View ALL" }}
+        </button>
         <button mat-raised-button color="primary" class="m-1">Download</button>
       </div>
     </div>
-
-
   </div>
   <div class="row m-2" *ngIf="showVideoList">
     <mat-accordion class="w-inherit m-2">
-      <mat-expansion-panel *ngFor="let item of procedure.videoList;let i=index">
-        <mat-expansion-panel-header >
-         #{{i+1 + ') '}}  {{ item.video.videoId }}
+      <mat-expansion-panel *ngFor="let item of procedure.video; let i = index">
+        <mat-expansion-panel-header>
+          #{{ i + 1 + ") " }} {{ item.videoId }}
         </mat-expansion-panel-header>
         <div class="row w-auto">
           <div class="col-4">
-            <p>Video ID: {{ item.video.videoId }}</p>
+            <p>Video ID: {{ item.videoId }}</p>
           </div>
           <div class="col-4">
-            <video src="{{item.video.data}}" width="100px"></video>
+            <video src="{{ item.name }}" width="100px"></video>
           </div>
           <div class="col-4">
             <div class="row">
-
-              <button mat-raised-button color="primary" class="m-1" (click)="changeCurrentVideo(item)">
+              <a
+                href="http://localhost:3000/5fe45ba649f8b20384f1eb04-test-annotaion.vtt"
+                download="file.mp4"
+                target="_self"
+                >download</a
+              >
+              <button
+                mat-raised-button
+                color="primary"
+                class="m-1"
+                (click)="changeCurrentVideo(item)"
+              >
                 View
               </button>
-              <button mat-raised-button color="primary" class="m-1" (click)="downloadVideo(item)">
+              <button
+                mat-raised-button
+                color="primary"
+                class="m-1"
+                (click)="downloadVideo(item)"
+              >
                 Download
               </button>
             </div>

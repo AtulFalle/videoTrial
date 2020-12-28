@@ -17,11 +17,11 @@
   </div>
   <div class="row m-1" *ngFor="let item of (videoList | async)">
     <div class="col-6">
-      {{item.video.videoId}}
+      {{item.videoId}}
     </div>
     <div class="col-6">
       <video width="200" height="100">
-        <source [src]="getUrl(item.video.data)" type="video/mp4" />
+        <source [src]="getUrl(item.name)" type="video/mp4" />
      </video>
     </div>
   </div>

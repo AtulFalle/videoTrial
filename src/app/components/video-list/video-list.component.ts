@@ -1,3 +1,4 @@
+import { Video } from './../../core/models/video.model';
 import { TrialVideo } from './../../core/models/annotations.model';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -15,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./video-list.component.scss'],
 })
 export class VideoListComponent implements OnInit {
-  videoList!: Observable<TrialVideo[]>;
+  videoList!: Observable<Video[]>;
 
   constructor(
     private store$: Store<VideoTrialStoreState.State>,

@@ -1,5 +1,8 @@
+import { Annotation } from './annotations.model';
 export interface Video {
   videoId: string;
-  data: any;
-  subtitle?: string;
+  name: any;
+  subtitles?: string;
+  formats?: string[];
+  annotations: Annotation[];
 }

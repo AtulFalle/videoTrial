@@ -19,7 +19,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { HomeComponent } from './components/home/home.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { VideoUploaderComponent } from './components/video-uploader/video-uploader.component';
 import { AddAnnotationsComponent } from './components/add-annotations/add-annotations.component';
 // import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { MatInputModule } from '@angular/material/input';
@@ -46,7 +45,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     VideoPlayerComponent,
     VideoListComponent,
     HomeComponent,
-    VideoUploaderComponent,
     AddAnnotationsComponent,
     AnnotationListComponent,
     DropVideoComponent,
