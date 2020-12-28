@@ -1,11 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-drop-video',
-  templateUrl: './drop-video.component.html',
-  styleUrls: ['./drop-video.component.scss'],
+  selector: 'app-add-procedure',
+  templateUrl: './add-procedure.component.html',
+  styleUrls: ['./add-procedure.component.scss'],
 })
-export class DropVideoComponent implements OnInit {
+export class AddProcedureComponent implements OnInit {
   @ViewChild('fileDropRef', { static: false }) fileDropEl: ElementRef;
   files: any[] = [];
 

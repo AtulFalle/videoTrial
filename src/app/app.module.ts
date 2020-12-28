@@ -29,7 +29,6 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
-import { DropVideoComponent } from './components/drop-video/drop-video.component';
 import { ProcedureDetailsComponent } from './components/procedure-details/procedure-details.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -39,6 +38,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { DragDropDirective } from './directive/drag-drop.directive';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { AddProcedureComponent } from './components/add-procedure/add-procedure.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,11 +47,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     HomeComponent,
     AddAnnotationsComponent,
     AnnotationListComponent,
-    DropVideoComponent,
     ProcedureDetailsComponent,
     PatientVideoListComponent,
     DragDropDirective,
     ProcedureDetailsComponent,
+    AddProcedureComponent,
   ],
   imports: [
     BrowserModule,

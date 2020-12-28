@@ -1,6 +1,25 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <span>Video Trial</span>
+    <button mat-icon-button (click)="opened = !opened">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Clinical Video Trial</span>
   </mat-toolbar-row>
 </mat-toolbar>
-<router-outlet></router-outlet>
+<mat-sidenav-container>
+  <mat-sidenav class="sidebarnav" mode="side" [(opened)]="opened">
+    <mat-nav-list class="selection-list">
+      <a
+        mat-list-item
+        routerLink="/add-procedure"
+        routerLinkActive="active-link"
+      >
+        Add Procedure
+      </a>
+      <a mat-list-item routerLink="/videoList" routerLinkActive="active-link">
+        List all Procedures
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content><router-outlet></router-outlet></mat-sidenav-content>
+</mat-sidenav-container>

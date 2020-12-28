@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DropVideoComponent } from './drop-video.component';
+import { AddProcedureComponent } from './add-procedure.component';
 
-describe('DropVideoComponent', () => {
-  let component: DropVideoComponent;
-  let fixture: ComponentFixture<DropVideoComponent>;
+describe('AddProcedureComponent', () => {
+  let component: AddProcedureComponent;
+  let fixture: ComponentFixture<AddProcedureComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DropVideoComponent ]
+      declarations: [ AddProcedureComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DropVideoComponent);
+    fixture = TestBed.createComponent(AddProcedureComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

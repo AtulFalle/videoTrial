@@ -20,6 +20,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [],
@@ -45,6 +47,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatExpansionModule,
     MatSnackBarModule,
+    MatSidenavModule,
+    MatListModule,
   ],
   exports: [
     MatToolbarModule,
@@ -67,6 +71,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatExpansionModule,
     MatSnackBarModule,
+    MatSidenavModule,
+    MatListModule,
   ],
   providers: [MatNativeDateModule],
 })
