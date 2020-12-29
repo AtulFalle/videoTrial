@@ -1,4 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { ProcedureService } from 'src/app/core/services/procedure-service/procedure.service';
 
 @Component({
   selector: 'app-add-procedure',
@@ -9,13 +11,32 @@ export class AddProcedureComponent implements OnInit {
   @ViewChild('fileDropRef', { static: false }) fileDropEl: ElementRef;
   files: any[] = [];
 
-  constructor() {}
+  procedureForm = this.fb.group({
+    patientId: [''],
+    procedureDate: [''],
+    patientDob: [''],
+    study: this.fb.group({
+      bloodPressure: [false],
+      bodyTemperature: [false],
+      weight: [false],
+    }),
+    site: [''],
+    procedureType: [''],
+    conductingSurgeon: [''],
+    surgicalDeviceLiaison: [''],
+  });
+
+  constructor(
+    private fb: FormBuilder,
+    private procedureService: ProcedureService
+  ) {}
 
   studyTasks = [
-    { name: 'Blood Pressure', completed: false },
-    { name: 'Body Temperature', completed: false },
-    { name: 'Weight', completed: false },
+    { formKey: 'bloodPressure', name: 'Blood Pressure', completed: false },
+    { formKey: 'bodyTemperature', name: 'Body Temperature', completed: false },
+    { formKey: 'weight', name: 'Weight', completed: false },
   ];
+  processing = false;
 
   ngOnInit(): void {}
 
@@ -39,32 +60,30 @@ export class AddProcedureComponent implements OnInit {
    */
   prepareFilesList(files: Array<any>) {
     for (const item of files) {
-      item.progress = 0;
       this.files.push(item);
     }
     this.fileDropEl.nativeElement.value = '';
-    this.uploadFilesSimulator(0);
   }
 
   /**
    * Simulate the upload process
    */
-  uploadFilesSimulator(index: number) {
-    setTimeout(() => {
-      if (index === this.files.length) {
-        return;
-      } else {
-        const progressInterval = setInterval(() => {
-          if (this.files[index].progress === 100) {
-            clearInterval(progressInterval);
-            this.uploadFilesSimulator(index + 1);
-          } else {
-            this.files[index].progress += 5;
-          }
-        }, 200);
-      }
-    }, 1000);
-  }
+  // uploadFilesSimulator(index: number) {
+  //   setTimeout(() => {
+  //     if (index === this.files.length) {
+  //       return;
+  //     } else {
+  //       const progressInterval = setInterval(() => {
+  //         if (this.files[index].progress === 100) {
+  //           clearInterval(progressInterval);
+  //           this.uploadFilesSimulator(index + 1);
+  //         } else {
+  //           this.files[index].progress += 5;
+  //         }
+  //       }, 200);
+  //     }
+  //   }, 1000);
+  // }
 
   /**
    * format bytes
@@ -92,5 +111,29 @@ export class AddProcedureComponent implements OnInit {
       return;
     }
     this.files.splice(index, 1);
+  }
+
+  onSubmit() {
+    const formData = this.toFormData(this.procedureForm.value, this.files);
+    this.procedureService
+      .createProcedure(formData)
+      .subscribe((procedure) => console.log(procedure));
+  }
+
+  toFormData(formValue: any, videos: any[]) {
+    const formData = new FormData();
+    const formValueCopy = { ...formValue };
+    formValueCopy.procedureDate = formValueCopy.procedureDate.toISOString();
+    formValueCopy.patientDob = formValueCopy.patientDob.toISOString();
+    formValueCopy.study = 'study';
+
+    for (const key of Object.keys(formValueCopy)) {
+      const value = formValueCopy[key];
+      formData.append(key, value);
+    }
+    videos.forEach((video) => {
+      formData.append('videos', video, video.name);
+    });
+    return formData;
   }
 }

@@ -1,6 +1,6 @@
 import { Procedure } from './../../models/procedure.model';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Annotation, DeleteAnnotation } from '../../models/annotations.model';
 
@@ -44,5 +44,18 @@ export class ProcedureService {
   ): Observable<Procedure> {
     const url = `/procedure/updateAnnotation/${videoId}/${procedureId}`;
     return this.http.patch<Procedure>(url, annotationList);
+  }
+
+  createProcedure(formData: any): Observable<any> {
+    const url = `/procedure`;
+    let headers = new HttpHeaders();
+    //this is the important step. You need to set content type as null
+    headers.set('Content-Type', null);
+    headers.set('Accept', 'multipart/form-data');
+    return this.http.post(url, formData, {
+      reportProgress: true,
+      observe: 'events',
+      headers,
+    });
   }
 }
