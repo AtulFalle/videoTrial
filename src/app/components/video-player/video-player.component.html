@@ -1,21 +1,15 @@
 <div class="container mt-2" *ngIf="isDataLoaded">
   <div class="video">
     <video
+    controlsList="download"
       crossorigin="anonymous"
       #videoPlayer
-      src="{{ url }}"
+      src="{{  url }}"
       height="400"
       *ngIf="!isRefreshing"
       (timeupdate)="getCurrentTime($event)"
       (loadeddata)="getCurrentTime($event)"
     >
-      <track
-        label="English subtitles"
-        kind="subtitles"
-        srclang="en"
-        src="{{ subtitle }}"
-        default=""
-      />
     </video>
     <div class="row controls p-0">
       <div class="col-5 justify-center" (dblclick)="backward(10)">

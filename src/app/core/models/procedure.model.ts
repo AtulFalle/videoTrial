@@ -1,15 +1,14 @@
 import { Video } from './video.model';
 export interface Procedure {
   id?: string;
-  date: string;
-  patient_id: string;
-  procedure_date: string;
-  patient_dob: string;
+  patientId: string;
+  procedureDate: string;
+  patientDob: string;
   study: string;
   site: string;
-  procedure_type: string;
-  conducting_surgeon: string;
-  surgical_device_liaison: string;
+  procedureType: string;
+  conductingSurgeon: string;
+  surgicalDeviceLiaison: string;
   total_videos: 0;
   implant: string;
   procedureId: string;
