@@ -39,6 +39,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { DragDropDirective } from './directive/drag-drop.directive';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AddProcedureComponent } from './components/add-procedure/add-procedure.component';
+import { ProceduresListComponent } from './components/procedures-list/procedures-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,6 +53,7 @@ import { AddProcedureComponent } from './components/add-procedure/add-procedure.
     DragDropDirective,
     ProcedureDetailsComponent,
     AddProcedureComponent,
+    ProceduresListComponent,
   ],
   imports: [
     BrowserModule,

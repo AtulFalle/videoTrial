@@ -20,6 +20,15 @@ export class ProcedureService {
   }
 
   /**
+   *
+   * @returns procedures: array of all procedure
+   */
+  getAllProcedures(): Observable<Procedure[]> {
+    const url = `/procedure`;
+    return this.http.get<Procedure[]>(url);
+  }
+
+  /**
    * @param procedureId : procedure id
    * @param videoId : video id
    * @param annotationId : annotation to e deleted
