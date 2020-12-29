@@ -6,18 +6,22 @@
     <span>Clinical Video Trial</span>
   </mat-toolbar-row>
 </mat-toolbar>
-<mat-sidenav-container>
+<mat-sidenav-container class="sidenav-container">
   <mat-sidenav class="sidebarnav" mode="side" [(opened)]="opened">
     <mat-nav-list class="selection-list">
+      <a
+        mat-list-item
+        routerLink="/procedures-list"
+        routerLinkActive="active-link"
+      >
+        List all Procedures
+      </a>
       <a
         mat-list-item
         routerLink="/add-procedure"
         routerLinkActive="active-link"
       >
         Add Procedure
-      </a>
-      <a mat-list-item routerLink="/videoList" routerLinkActive="active-link">
-        List all Procedures
       </a>
     </mat-nav-list>
   </mat-sidenav>

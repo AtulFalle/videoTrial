@@ -23,6 +23,8 @@ export enum VideoTrialActionType {
   // procedure Actions
   GET_PROCEDURE = '[Procedure GET] get procedure Details',
   GET_PROCEDURE_SUCCESS = '[Procedure success] get procedure Details successfully',
+  GET_ALL_PROCEDURE = '[Procedures GET] get all procedures Details',
+  GET_ALL_PROCEDURE_SUCCESS = '[Procedures Success] get all procedures successfully',
 
   // Current video update
   SET_CURRENT_VIDEO = '[Trial video current video] set current video',
@@ -88,6 +90,15 @@ export const getProcedure = createAction(
 export const getProcedureSuccess = createAction(
   VideoTrialActionType.GET_PROCEDURE_SUCCESS,
   props<{ procedure: Procedure }>()
+);
+
+export const getAllProcedures = createAction(
+  VideoTrialActionType.GET_ALL_PROCEDURE
+);
+
+export const getAllProcedureSuccess = createAction(
+  VideoTrialActionType.GET_ALL_PROCEDURE_SUCCESS,
+  props<{ procedures: Procedure[] }>()
 );
 
 export const setCurrentVideo = createAction(
