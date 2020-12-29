@@ -76,4 +76,17 @@
     font-size: 15px;
     font-weight: 500;
   }
+  .subtitle-container{
+    background: #525050bd;
+    position: absolute;
+    bottom: 2.1rem;
+    width: 70%;
+    /* margin: 0 2rem; */
+    padding: 0.5rem;
+    text-align: center;
+    color: white;
+    line-height: 1;
+    font-size: 1rem;
+    font-weight: 300;
+  }
 }

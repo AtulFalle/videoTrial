@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { Video } from './../../core/models/video.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SharedService } from './../../service/shared.service';
@@ -55,6 +56,7 @@ export class VideoPlayerComponent implements OnInit {
   annotationMarkerList$!: Observable<TrialVideo>;
   annotationMarkerList: Annotation[] = [];
   isRefreshing = false;
+  isSubtitle = { show: false, comment: '' };
 
   set subscription(sub: Subscription) {
     this._subscription.push(sub);
@@ -145,7 +147,33 @@ export class VideoPlayerComponent implements OnInit {
     } else {
       this.videoStatus = true;
     }
+
+    this.isSubtitle = this.showSubtitle(this.time, this.annotationMarkerList);
     this.sharedService.currentTimeObs$.next(playerTime);
+  }
+  showSubtitle(
+    time: any,
+    annotationMarkerList: Annotation[]
+  ): { show: boolean; comment: string } {
+    let res = false;
+    let subtitleString = '';
+    const currenttime = parseInt(this.time, 10);
+    const endTime = currenttime + environment.SUBTITLE_TIME;
+
+    for (const iterator of annotationMarkerList) {
+      if (
+        currenttime <= parseInt(iterator.time, 10) &&
+        endTime >= parseInt(iterator.time, 10)
+      ) {
+        res = true;
+        subtitleString = iterator.comments;
+      }
+    }
+
+    return {
+      show: res,
+      comment: subtitleString,
+    };
   }
 
   videoLoaded(ev: any): void {
@@ -207,4 +235,9 @@ export class VideoPlayerComponent implements OnInit {
       this.isRefreshing = false;
     }, 100);
   }
+
+  /**
+   * add custom annotations
+   */
+  addCustomSubtitles(): void {}
 }
