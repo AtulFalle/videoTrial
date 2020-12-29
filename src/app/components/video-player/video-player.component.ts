@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { Video } from './../../core/models/video.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SharedService } from './../../service/shared.service';
@@ -11,9 +12,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { take } from 'rxjs/operators';
 import {
   VideoTrialStoreSelectors,
   VideoTrialStoreState,
@@ -42,7 +41,7 @@ export class VideoPlayerComponent implements OnInit {
   @Output()
   addAnnotationDesc: EventEmitter<boolean> = new EventEmitter(true);
 
-  url: string | ArrayBuffer | null = '';
+  url = '';
   subtitle = '';
   videoStatus = false;
   time = '0';
@@ -55,6 +54,7 @@ export class VideoPlayerComponent implements OnInit {
   annotationMarkerList$!: Observable<TrialVideo>;
   annotationMarkerList: Annotation[] = [];
   isRefreshing = false;
+  isSubtitle = { show: false, comment: '' };
 
   set subscription(sub: Subscription) {
     this._subscription.push(sub);
@@ -71,8 +71,8 @@ export class VideoPlayerComponent implements OnInit {
       .select(VideoTrialStoreSelectors.getCurrentVideo)
       .subscribe((res: Video) => {
         this.annotationMarkerList = [...res.annotations];
-        this.url = res.name;
-        this.subtitle = res.subtitles;
+        this.url = environment.SERVER_URI + '/videos/' + res.name;
+        this.subtitle = environment.SERVER_URI + '/annotations/' + res.subtitles;
         this.isDataLoaded = true;
       });
     this.subscription = this.sharedService.jumpToAnnotationTime.subscribe(
@@ -145,7 +145,37 @@ export class VideoPlayerComponent implements OnInit {
     } else {
       this.videoStatus = true;
     }
+
+    this.isSubtitle = this.showSubtitle(this.time, this.annotationMarkerList);
+    console.log(this.isSubtitle);
+
     this.sharedService.currentTimeObs$.next(playerTime);
+  }
+  showSubtitle(
+    time: any,
+    annotationMarkerList: Annotation[]
+  ): { show: boolean; comment: string } {
+    console.log(time, annotationMarkerList);
+
+    let res = false;
+    let subtitleString = '';
+    const currenttime = parseInt(time, 10);
+    const endTime = currenttime + environment.SUBTITLE_TIME;
+
+    for (const iterator of annotationMarkerList) {
+      if (
+        currenttime >= parseInt(iterator.videoPlayerTime, 10) &&
+        currenttime <= parseInt(iterator.videoPlayerTime, 10) + 3
+      ) {
+        res = true;
+        subtitleString = iterator.comments;
+      }
+    }
+
+    return {
+      show: res,
+      comment: subtitleString,
+    };
   }
 
   videoLoaded(ev: any): void {
@@ -207,4 +237,9 @@ export class VideoPlayerComponent implements OnInit {
       this.isRefreshing = false;
     }, 100);
   }
+
+  /**
+   * add custom annotations
+   */
+  addCustomSubtitles(): void {}
 }

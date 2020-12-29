@@ -1,21 +1,15 @@
 <div class="container mt-2" *ngIf="isDataLoaded">
   <div class="video">
     <video
+    controlsList="download"
       crossorigin="anonymous"
       #videoPlayer
-      src="{{ url }}"
+      src="{{  url }}"
       height="400"
       *ngIf="!isRefreshing"
       (timeupdate)="getCurrentTime($event)"
       (loadeddata)="getCurrentTime($event)"
     >
-      <track
-        label="English subtitles"
-        kind="subtitles"
-        srclang="en"
-        src="{{ subtitle }}"
-        default=""
-      />
     </video>
     <div class="row controls p-0">
       <div class="col-5 justify-center" (dblclick)="backward(10)">
@@ -66,19 +60,17 @@
         {{ getFotmattedTime(time) }}/ {{ getFotmattedTime(duration) }}
       </div>
     </div>
+    <div class="subtitle-container" *ngIf="isSubtitle.show">
+      <div class="row">
+        <div class="col-12">
+          <p class="m-0">{{isSubtitle.comment}}</p>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="row m-2 align-end border-bottom p-1 w-auto">
-    <!-- <div class="row">
-
-      <div class="col-2 align-end">
-        <button mat-raised-button color="primary" class="m-1" (click)="refreshAnnotation()">
-          refresh Annotation
-        </button>
-      </div>
-    </div> -->
     <div class="align-end label">
       Quality : <span class="bold-2"> 480P 720P RAW</span>
     </div>
   </div>
-
 </div>

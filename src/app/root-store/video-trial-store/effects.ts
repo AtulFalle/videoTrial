@@ -72,7 +72,7 @@ export class VideoTrialStoreEffects {
           }),
           catchError((e) => {
             this.messageBoxService.openErrorMessage(
-              'error while adding annotation'
+              'error while Deleting annotation'
             );
             return e;
           })

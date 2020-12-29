@@ -32,18 +32,11 @@ export class PatientVideoListComponent implements OnInit {
 
   downloadVideo(video: Video): void {
     const link = document.createElement('a');
-    // link.setAttribute('target', '_blank');
-    link.setAttribute('href', 'http://localhost:3000/5fe45ba649f8b20384f1eb04-test-annotaion.vtt');
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', 'http://localhost:3000/procedure/downloadVideo/' + video.name);
     link.setAttribute('download', 'video.mp4');
-    // document.body.appendChild(link);
-    // link.click();
-
-    if (document.createEvent) {
-      const e = document.createEvent('MouseEvents');
-      e.initEvent('click', true, true);
-      link.dispatchEvent(e);
-      // return true;
-    }
-    // link.remove();
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   }
 }
