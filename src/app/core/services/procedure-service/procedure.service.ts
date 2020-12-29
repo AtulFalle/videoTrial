@@ -61,10 +61,6 @@ export class ProcedureService {
     //this is the important step. You need to set content type as null
     headers.set('Content-Type', null);
     headers.set('Accept', 'multipart/form-data');
-    return this.http.post(url, formData, {
-      reportProgress: true,
-      observe: 'events',
-      headers,
-    });
+    return this.http.post(url, formData);
   }
 }

@@ -1,7 +1,5 @@
 <div class="procedure-list-wrapper">
-  <!-- <div *ngFor="let procedure of procedures$ | async">
-    {{ procedure._id }}
-  </div> -->
+  <div class="header">Procedures List</div>
   <table mat-table [dataSource]="procedures$ | async" class="procedures-table">
     <ng-container matColumnDef="patientId">
       <th mat-header-cell *matHeaderCellDef>Patient ID</th>
