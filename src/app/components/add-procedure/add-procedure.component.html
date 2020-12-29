@@ -15,6 +15,7 @@
             class="file-drop"
             appDragDrop
             (fileDropped)="onFileDropped($event)"
+            (click)="fileDropRef.click()"
           >
             <input
               type="file"
@@ -36,6 +37,7 @@
                   {{ formatBytes(file?.size) }}
                 </p>
                 <mat-progress-bar
+                  *ngIf="processing === true"
                   mode="determinate"
                   [value]="file?.progress"
                 ></mat-progress-bar>
@@ -54,18 +56,37 @@
       <div class="card patient-info">
         <div class="card-header">Patient Information</div>
         <div class="card-body">
-          <form class="patient-info-form">
+          <form
+            class="patient-info-form"
+            [formGroup]="procedureForm"
+            (ngSubmit)="onSubmit()"
+          >
             <mat-form-field class="full-width-input" appearance="fill">
               <mat-label>Patient ID</mat-label>
-              <input matInput value="" />
+              <input matInput required formControlName="patientId" />
             </mat-form-field>
             <mat-form-field class="full-width-input" appearance="fill">
-              <mat-label>Procedure Data</mat-label>
-              <input matInput value="" />
+              <mat-label>Procedure Date</mat-label>
+              <input
+                matInput
+                required
+                [matDatepicker]="picker2"
+                formControlName="procedureDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker2"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
             <mat-form-field class="full-width-input" appearance="fill">
               <mat-label>Patients Date of Birth</mat-label>
-              <input matInput [matDatepicker]="picker" />
+              <input
+                matInput
+                required
+                [matDatepicker]="picker"
+                formControlName="patientDob"
+              />
               <mat-datepicker-toggle
                 matSuffix
                 [for]="picker"
@@ -74,18 +95,19 @@
             </mat-form-field>
             <div>
               <div class="study-form-field">Study</div>
-              <div class="study-checkboxes">
+              <div class="study-checkboxes" formGroupName="study">
                 <mat-checkbox
                   *ngFor="let studyTask of studyTasks"
                   class="checkboxes-input"
                   color="primary"
+                  formControlName="{{ studyTask.formKey }}"
                   >{{ studyTask.name }}</mat-checkbox
                 >
               </div>
             </div>
             <mat-form-field class="full-width-input" appearance="fill">
               <mat-label>Site</mat-label>
-              <mat-select>
+              <mat-select required formControlName="site">
                 <mat-option value="kaleidoscope">Kaleidoscope</mat-option>
                 <mat-option value="periscope">Periscope</mat-option>
                 <mat-option value="mercedes">Mercedes</mat-option>
@@ -94,7 +116,7 @@
             </mat-form-field>
             <mat-form-field class="full-width-input" appearance="fill">
               <mat-label>Procedure Type</mat-label>
-              <mat-select>
+              <mat-select required formControlName="procedureType">
                 <mat-option value="kaleidoscope">Kaleidoscope</mat-option>
                 <mat-option value="periscope">Periscope</mat-option>
                 <mat-option value="mercedes">Mercedes</mat-option>
@@ -103,7 +125,7 @@
             </mat-form-field>
             <mat-form-field class="full-width-input" appearance="fill">
               <mat-label>Conducting Surgeon</mat-label>
-              <mat-select>
+              <mat-select required formControlName="conductingSurgeon">
                 <mat-option value="kaleidoscope">Steve Mathews</mat-option>
                 <mat-option value="periscope">John Smith</mat-option>
                 <mat-option value="mercedes">David Warner</mat-option>
@@ -112,18 +134,20 @@
             </mat-form-field>
             <mat-form-field class="full-width-input" appearance="fill">
               <mat-label>Surgical Device Liaison (if present)</mat-label>
-              <mat-select>
+              <mat-select formControlName="surgicalDeviceLiaison">
                 <mat-option value="kaleidoscope">Steve Mathews</mat-option>
                 <mat-option value="periscope">John Smith</mat-option>
                 <mat-option value="mercedes">David Warner</mat-option>
                 <mat-option value="audi">Shane Watson</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="full-width-input" appearance="fill">
-              <mat-label>Total Number of Video Files</mat-label>
-              <input matInput value="" type="number" />
-            </mat-form-field>
-            <button mat-raised-button color="primary">Submit</button>
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="!procedureForm.valid"
+            >
+              Submit
+            </button>
           </form>
         </div>
       </div>
