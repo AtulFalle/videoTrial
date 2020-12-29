@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { VideoPlayerComponent } from './components/video-player/video-player.component';
 import { AddProcedureComponent } from './components/add-procedure/add-procedure.component';
+import { ProceduresListComponent } from './components/procedures-list/procedures-list.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'add-procedure',
     component: AddProcedureComponent,
+  },
+  {
+    path: 'procedures-list',
+    component: ProceduresListComponent,
   },
   {
     path: '',

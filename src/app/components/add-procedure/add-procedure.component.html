@@ -94,16 +94,27 @@
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             <div>
-              <div class="study-form-field">Study</div>
-              <div class="study-checkboxes" formGroupName="study">
-                <mat-checkbox
-                  *ngFor="let studyTask of studyTasks"
-                  class="checkboxes-input"
+              <mat-label>Study</mat-label>
+              <mat-radio-group class="radio-group" formControlName="study">
+                <mat-radio-button
                   color="primary"
-                  formControlName="{{ studyTask.formKey }}"
-                  >{{ studyTask.name }}</mat-checkbox
+                  class="radio-button"
+                  value="bodyTemperature"
+                  >Body Temperature</mat-radio-button
                 >
-              </div>
+                <mat-radio-button
+                  color="primary"
+                  class="radio-button"
+                  value="bodyWeight"
+                  >Body Weight</mat-radio-button
+                >
+                <mat-radio-button
+                  color="primary"
+                  class="radio-button"
+                  value="bloodPressure"
+                  >Blood Pressure</mat-radio-button
+                >
+              </mat-radio-group>
             </div>
             <mat-form-field class="full-width-input" appearance="fill">
               <mat-label>Site</mat-label>
@@ -144,7 +155,6 @@
             <button
               mat-raised-button
               color="primary"
-              [disabled]="!procedureForm.valid"
             >
               Submit
             </button>

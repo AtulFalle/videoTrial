@@ -1,6 +1,6 @@
 import { Video } from './video.model';
 export interface Procedure {
-  id?: string;
+  _id?: string;
   date: string;
   patient_id: string;
   procedure_date: string;

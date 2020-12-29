@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ProcedureService } from 'src/app/core/services/procedure-service/procedure.service';
 
 @Component({
@@ -15,11 +16,7 @@ export class AddProcedureComponent implements OnInit {
     patientId: [''],
     procedureDate: [''],
     patientDob: [''],
-    study: this.fb.group({
-      bloodPressure: [false],
-      bodyTemperature: [false],
-      weight: [false],
-    }),
+    study: [''],
     site: [''],
     procedureType: [''],
     conductingSurgeon: [''],
@@ -28,14 +25,10 @@ export class AddProcedureComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private procedureService: ProcedureService
+    private procedureService: ProcedureService,
+    private router: Router
   ) {}
 
-  studyTasks = [
-    { formKey: 'bloodPressure', name: 'Blood Pressure', completed: false },
-    { formKey: 'bodyTemperature', name: 'Body Temperature', completed: false },
-    { formKey: 'weight', name: 'Weight', completed: false },
-  ];
   processing = false;
 
   ngOnInit(): void {}
@@ -114,10 +107,13 @@ export class AddProcedureComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.procedureForm.invalid) {
+      return false;
+    }
     const formData = this.toFormData(this.procedureForm.value, this.files);
-    this.procedureService
+    return this.procedureService
       .createProcedure(formData)
-      .subscribe((procedure) => console.log(procedure));
+      .subscribe((procedure) => this.router.navigate(['procedures-list']));
   }
 
   toFormData(formValue: any, videos: any[]) {
@@ -125,7 +121,6 @@ export class AddProcedureComponent implements OnInit {
     const formValueCopy = { ...formValue };
     formValueCopy.procedureDate = formValueCopy.procedureDate.toISOString();
     formValueCopy.patientDob = formValueCopy.patientDob.toISOString();
-    formValueCopy.study = 'study';
 
     for (const key of Object.keys(formValueCopy)) {
       const value = formValueCopy[key];

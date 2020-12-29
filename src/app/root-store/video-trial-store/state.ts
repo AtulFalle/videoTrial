@@ -8,6 +8,8 @@ export interface State {
   video: Video[];
   currentVideo: Video;
   procedure: Procedure;
+  procedures: Procedure[];
+  isLoadingProcedures: boolean;
 }
 
 export const initialState: State = {
@@ -26,4 +28,6 @@ export const initialState: State = {
     annotations: [],
   },
   procedure: null,
+  procedures: [],
+  isLoadingProcedures: false,
 };
