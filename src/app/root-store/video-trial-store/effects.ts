@@ -24,6 +24,19 @@ export class VideoTrialStoreEffects {
   ) {}
 
   @Effect()
+  getAllProcedures = this.actions$.pipe(
+    ofType(videoTrialActions.getAllProcedures),
+    switchMap((action) => this.procedureService.getAllProcedures()),
+    switchMap((procedures: Procedure[]) => {
+      return of(
+        videoTrialActions.getAllProcedureSuccess({
+          procedures,
+        })
+      );
+    })
+  );
+
+  @Effect()
   getMeatadataInformation = this.actions$.pipe(
     ofType(videoTrialActions.getProcedure),
     switchMap((action) =>

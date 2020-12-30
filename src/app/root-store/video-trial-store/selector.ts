@@ -23,3 +23,13 @@ export const isLoading = createSelector(
   selectVideoState,
   (state: State) => state.isLoading
 );
+
+export const isLoadingProcedures = createSelector(
+  selectVideoState,
+  (state: State) => state.isLoadingProcedures
+);
+
+export const getProcedures = createSelector(
+  selectVideoState,
+  (state: State) => state.procedures
+);

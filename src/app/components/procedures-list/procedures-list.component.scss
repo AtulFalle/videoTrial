@@ -1,0 +1,22 @@
+.procedure-list-wrapper {
+  background-color: #f4f6f8;
+  width: calc(100% - 48px);
+  min-height: 100vh;
+  padding: 24px;
+  .header {
+    font-size: 1.4996rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 500;
+    line-height: 1.167;
+    letter-spacing: -0.06px;
+    margin: 12px;
+  }
+  .procedures-table {
+    width: calc(100% - 48px);
+    max-height: calc(100% - 48px);
+    margin: 12px;
+  }
+  .procedure-data-row:hover {
+    background-color: whitesmoke;
+  }
+}

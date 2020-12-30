@@ -20,6 +20,15 @@ export class ProcedureService {
   }
 
   /**
+   *
+   * @returns procedures: array of all procedure
+   */
+  getAllProcedures(): Observable<Procedure[]> {
+    const url = `/procedure`;
+    return this.http.get<Procedure[]>(url);
+  }
+
+  /**
    * @param procedureId : procedure id
    * @param videoId : video id
    * @param annotationId : annotation to e deleted
@@ -52,10 +61,6 @@ export class ProcedureService {
     //this is the important step. You need to set content type as null
     headers.set('Content-Type', null);
     headers.set('Accept', 'multipart/form-data');
-    return this.http.post(url, formData, {
-      reportProgress: true,
-      observe: 'events',
-      headers,
-    });
+    return this.http.post(url, formData);
   }
 }

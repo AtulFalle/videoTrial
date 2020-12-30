@@ -22,7 +22,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-
+import { MatRadioModule } from '@angular/material/radio';
 @NgModule({
   declarations: [],
   imports: [
@@ -49,6 +49,7 @@ import { MatListModule } from '@angular/material/list';
     MatSnackBarModule,
     MatSidenavModule,
     MatListModule,
+    MatRadioModule,
   ],
   exports: [
     MatToolbarModule,
@@ -73,6 +74,7 @@ import { MatListModule } from '@angular/material/list';
     MatSnackBarModule,
     MatSidenavModule,
     MatListModule,
+    MatRadioModule,
   ],
   providers: [MatNativeDateModule],
 })

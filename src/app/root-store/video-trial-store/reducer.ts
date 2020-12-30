@@ -124,6 +124,19 @@ const featureReducer = createReducer(
       ...state,
       currentVideo: video,
     };
+  }),
+  on(videoTrialActions.getAllProcedures, (state) => {
+    return {
+      ...state,
+      isLoadingProcedures: true,
+    };
+  }),
+  on(videoTrialActions.getAllProcedureSuccess, (state, { procedures }) => {
+    return {
+      ...state,
+      isLoadingProcedures: false,
+      procedures,
+    };
   })
 );
 
