@@ -33,3 +33,13 @@ export const getProcedures = createSelector(
   selectVideoState,
   (state: State) => state.procedures
 );
+
+export const unscrubbedVideo = createSelector(
+  selectVideoState,
+  (state: State) => state.unscrubbedVideo
+);
+
+export const getCurrentVideoTab = createSelector(
+  selectVideoState,
+  (state: State) => state.currentTabIndex
+);

@@ -4,7 +4,7 @@
     controlsList="download"
       crossorigin="anonymous"
       #videoPlayer
-      src="{{  url }}"
+      src="{{ url }}"
       height="400"
       *ngIf="!isRefreshing"
       (timeupdate)="getCurrentTime($event)"
@@ -13,11 +13,17 @@
     </video>
     <div class="row controls p-0">
       <div class="col-5 justify-center" (dblclick)="backward(10)">
-        <mat-icon class="m-3 video-controls text-right" (click)="backward(10)"
+        <div class="row-inverse w-auto">
+
+          <mat-icon class="m-3 video-controls text-right" (click)="backward(10)"
           >replay_10</mat-icon
-        >
+          >
+        </div>
       </div>
       <div class="col-2 justify-center">
+
+        <div class="row justify-center">
+
         <mat-icon
           class="m-3 video-controls"
           *ngIf="!videoStatus"
@@ -32,10 +38,15 @@
           >pause</mat-icon
         >
       </div>
+
+      </div>
       <div class="col-5 justify-center" (dblclick)="forward(10)">
-        <mat-icon class="m-3 video-controls text-left" (click)="forward(10)"
+        <div class="row">
+
+          <mat-icon class="m-3 video-controls text-left" (click)="forward(10)"
           >forward_10</mat-icon
-        >
+          >
+        </div>
       </div>
     </div>
 
@@ -60,12 +71,16 @@
         {{ getFotmattedTime(time) }}/ {{ getFotmattedTime(duration) }}
       </div>
     </div>
-    <div class="subtitle-container" *ngIf="isSubtitle.show">
+    <div class="subtitle-container" *ngIf="isSubtitle.show && showSubtitles">
       <div class="row">
         <div class="col-12">
           <p class="m-0">{{isSubtitle.comment}}</p>
         </div>
       </div>
+    </div>
+    <div class="row subtitle-btn-container">
+      <mat-icon class="subtitle-btn p-1" *ngIf="showSubtitles" (click)="toggleSubtitles(false)">closed_caption</mat-icon>
+      <mat-icon class="subtitle-btn p-1" *ngIf="!showSubtitles" (click)="toggleSubtitles(true)">closed_caption_disabled</mat-icon>
     </div>
   </div>
   <div class="row m-2 align-end border-bottom p-1 w-auto">

@@ -20,6 +20,11 @@ body {
   height: auto;
 }
 
+.row-inverse{
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .col-12 {
   display: flex;
   flex-direction: column;
@@ -227,6 +232,12 @@ body {
   height: inherit !important;
 }
 
+.label{
+  font-size: 15px;
+    line-height: 1.3;
+    font-weight: 500;
+}
+
 .h-min-100 {
   min-height: 100%;
 }
@@ -254,4 +265,12 @@ body {
   color: yellow;
   border: 1px solid;
   border-radius: 1rem;
+}
+
+
+.mat-slider-track-fill,
+.mat-slider-wrapper,
+.mat-slider-track-wrapper,
+.mat-slider-track-background {
+    height: 5px !important;
 }

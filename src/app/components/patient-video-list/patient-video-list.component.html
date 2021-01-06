@@ -22,14 +22,19 @@
     <mat-accordion class="w-inherit m-2">
       <mat-expansion-panel *ngFor="let item of procedure.video; let i = index">
         <mat-expansion-panel-header>
-          #{{ i + 1 + ") " }} {{ item.name }}
+         <p class="bold-2">
+          {{ item.name }}
+         </p>
         </mat-expansion-panel-header>
         <div class="row w-auto">
           <div class="col-4">
-            <p>Video ID: {{ item.videoId }}</p>
+            <p class="label">Video ID: {{ item.videoId }}</p>
           </div>
           <div class="col-4">
-            <video src="{{ item.name }}" width="100px"></video>
+            <div class="row justify-center">
+
+              <video src="{{ getVideoUrl(item.name) }}" width="100px"></video>
+            </div>
           </div>
           <div class="col-4">
             <div class="row">

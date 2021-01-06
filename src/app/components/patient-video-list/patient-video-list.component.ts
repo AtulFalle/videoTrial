@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { Video } from './../../core/models/video.model';
 import { TrialVideo } from './../../core/models/annotations.model';
 import { Component, Input, OnInit } from '@angular/core';
@@ -38,5 +39,10 @@ export class PatientVideoListComponent implements OnInit {
     document.body.appendChild(link);
     link.click();
     link.remove();
+  }
+
+  getVideoUrl(name: string): string {
+
+    return environment.SERVER_URI + '/videos/' + name;
   }
 }

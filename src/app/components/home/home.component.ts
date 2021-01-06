@@ -1,3 +1,4 @@
+import { Video } from './../../core/models/video.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
@@ -9,6 +10,8 @@ import {
 } from 'src/app/root-store/video-trial-store';
 import { Store } from '@ngrx/store';
 import { Procedure } from 'src/app/core/models/procedure.model';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
+import { VideoTrialActionType } from 'src/app/root-store/video-trial-store/actions';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +20,8 @@ import { Procedure } from 'src/app/core/models/procedure.model';
 })
 export class HomeComponent implements OnInit {
   // @ViewChild('stepper', { static: true }) stepper!: MatStepper;
+
+  @ViewChild('videoTab', { static: true }) videoTabIndex!: MatTabGroup;
   videoId = 'test';
   showVideoPlayer = true;
 
@@ -24,8 +29,10 @@ export class HomeComponent implements OnInit {
 
   jumpLocation = this._jumpLocation.asObservable();
   isLoading = false;
-  procedure: Observable<Procedure>;
-  procedureID: string;
+  procedure!: Observable<Procedure>;
+  procedureID!: string;
+  showActivityTab = true;
+  videoSub$: Observable<Video>;
 
   constructor(
     private router: Router,
@@ -42,10 +49,19 @@ export class HomeComponent implements OnInit {
       this.isLoading = res;
     });
     this.procedure = this.store$.select(VideoTrialStoreSelectors.getProcedure);
+    this.videoSub$ = this.store$.select(
+      VideoTrialStoreSelectors.getCurrentVideo
+    );
+
+
     this.store$
-      .select(VideoTrialStoreSelectors.getCurrentVideo)
-      .subscribe((res) => {
-        this.videoId = res.videoId;
+      .select(VideoTrialStoreSelectors.getCurrentVideoTab)
+      .subscribe((index) => {
+        if (index === 1) {
+          this.showActivityTab = false;
+        } else {
+          this.showActivityTab = true;
+        }
       });
   }
 
@@ -53,11 +69,11 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/videoList']);
   }
 
-  goToNext(videoId: string): void {
-    this.videoId = videoId;
-    // this.stepper.next();
-    this.showVideoPlayer = true;
+  changeTab(index: number): void {
+    this.videoTabIndex.selectedIndex = index;
+
   }
+
 
   resetPlayer(): void {
     this.showVideoPlayer = false;
@@ -69,5 +85,12 @@ export class HomeComponent implements OnInit {
 
   skipVideoToTime(time: number): void {
     this._jumpLocation.next(time);
+  }
+
+  tabChanged(ev: MatTabChangeEvent): void {
+    console.log(ev.index);
+    this.store$.dispatch(
+      VideoTrialStoreActions.updateCurrentVideoTab({ tab: ev.index })
+    );
   }
 }

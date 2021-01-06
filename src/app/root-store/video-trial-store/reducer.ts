@@ -137,7 +137,13 @@ const featureReducer = createReducer(
       isLoadingProcedures: false,
       procedures,
     };
-  })
+  }),
+  on(videoTrialActions.updateCurrentVideoTab, (state, { tab }) => {
+    return {
+      ...state,
+      currentTabIndex: tab
+    };
+  }),
 );
 
 // tslint:disable-next-line: typedef

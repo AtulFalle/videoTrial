@@ -28,7 +28,10 @@ export enum VideoTrialActionType {
 
   // Current video update
   SET_CURRENT_VIDEO = '[Trial video current video] set current video',
-  UPDATE_CURRENT_VIDEO = '[Trial viceo update] update metadata for current video',
+  UPDATE_CURRENT_VIDEO = '[Trial video update] update metadata for current video',
+
+  // video scrubbed or unscrubbed
+  VIDEO_TAB_CHANGED = '[video current tab] update current video tab'
 }
 
 export const uploadVideo = createAction(
@@ -109,4 +112,10 @@ export const setCurrentVideo = createAction(
 export const updateCurrentVideo = createAction(
   VideoTrialActionType.UPDATE_CURRENT_VIDEO,
   props<{ video: Video }>()
+);
+
+
+export const updateCurrentVideoTab = createAction(
+  VideoTrialActionType.VIDEO_TAB_CHANGED,
+  props<{tab: number}>()
 );
