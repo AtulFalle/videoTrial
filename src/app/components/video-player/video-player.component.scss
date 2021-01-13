@@ -35,14 +35,13 @@
     width: 100%;
     bottom: 3px;
     flex-direction: column;
-    /* width: fit-content; */
     justify-content: center;
-    max-width: 700px;
   }
   .time {
     color: white;
     font-weight: 200;
     font-size: 12px;
+    padding: 0 1rem;
   }
 
   .video:hover {

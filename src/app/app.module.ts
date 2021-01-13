@@ -40,6 +40,7 @@ import { DragDropDirective } from './directive/drag-drop.directive';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AddProcedureComponent } from './components/add-procedure/add-procedure.component';
 import { ProceduresListComponent } from './components/procedures-list/procedures-list.component';
+import { AzureMediaPlayerComponent } from './shared/components/azure-media-player/azure-media-player.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,6 +55,7 @@ import { ProceduresListComponent } from './components/procedures-list/procedures
     ProcedureDetailsComponent,
     AddProcedureComponent,
     ProceduresListComponent,
+    AzureMediaPlayerComponent,
   ],
   imports: [
     BrowserModule,

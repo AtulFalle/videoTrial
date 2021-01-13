@@ -4,6 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SharedService } from './../../service/shared.service';
 import { TrialVideo, Annotation } from './../../core/models/annotations.model';
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -25,7 +26,7 @@ import { MatSliderChange } from '@angular/material/slider';
   templateUrl: './video-player.component.html',
   styleUrls: ['./video-player.component.scss'],
 })
-export class VideoPlayerComponent implements OnInit {
+export class VideoPlayerComponent implements OnInit, AfterViewInit {
   @Input()
   videoId!: string;
 
@@ -35,8 +36,8 @@ export class VideoPlayerComponent implements OnInit {
   @Input()
   jumpToLocation!: Observable<number>;
 
-  @ViewChild('videoPlayer')
-  videoPlayer!: ElementRef;
+  @ViewChild('videoPlayer', { static: true })
+  videoPlayer: ElementRef;
 
   @Output()
   addAnnotationDesc: EventEmitter<boolean> = new EventEmitter(true);
@@ -55,6 +56,7 @@ export class VideoPlayerComponent implements OnInit {
   annotationMarkerList: Annotation[] = [];
   isRefreshing = false;
   isSubtitle = { show: false, comment: '' };
+  myPlayer: amp.Player;
 
   set subscription(sub: Subscription) {
     this._subscription.push(sub);
@@ -65,6 +67,30 @@ export class VideoPlayerComponent implements OnInit {
     private sharedService: SharedService,
     private domSanitizer: DomSanitizer
   ) {}
+  ngAfterViewInit(): void {
+    const myOptions = {
+      autoplay: false,
+      controls: false,
+      height: '400',
+      poster: '',
+      fluid: true,
+    };
+    this.myPlayer = amp(this.videoPlayer.nativeElement, myOptions);
+    this.myPlayer.src([
+      {
+        src:
+          'http://amssamples.streaming.mediaservices.windows.net/91492735-c523-432b-ba01-faba6c2206a2/AzureMediaServicesPromo.ism/manifest',
+        type: 'application/vnd.ms-sstr+xml',
+      },
+    ]);
+
+    this.myPlayer.addEventListener(amp.eventName.timeupdate, () => {
+      this.updateCurrentTime();
+    });
+    this.myPlayer.addEventListener(amp.eventName.durationchange, () => {
+      this.updateCurrentTime();
+    });
+  }
 
   ngOnInit(): void {
     this.store$
@@ -72,7 +98,8 @@ export class VideoPlayerComponent implements OnInit {
       .subscribe((res: Video) => {
         this.annotationMarkerList = [...res.annotations];
         this.url = environment.SERVER_URI + '/videos/' + res.name;
-        this.subtitle = environment.SERVER_URI + '/annotations/' + res.subtitles;
+        this.subtitle =
+          environment.SERVER_URI + '/annotations/' + res.subtitles;
         this.isDataLoaded = true;
       });
     this.subscription = this.sharedService.jumpToAnnotationTime.subscribe(
@@ -97,40 +124,72 @@ export class VideoPlayerComponent implements OnInit {
   play(): void {
     const player = this.videoPlayer.nativeElement;
     this.videoStatus = true;
-    player.play();
-    this.time = '' + player.currentTime;
-    this.sharedService.pauseVideoObs$.next(false);
+    this.myPlayer.play();
+    // this.myPlayer.options
+    // this.time = '' + player.currentTime;
+    // this.sharedService.pauseVideoObs$.next(false);
   }
 
   pause(): void {
     const player = this.videoPlayer.nativeElement;
     this.videoStatus = false;
-    this.time = '' + player.currentTime;
-    player.pause();
+    // this.time = '' + player.currentTime;
+    this.myPlayer.pause();
   }
 
   forward(value: number): void {
     const player = this.videoPlayer.nativeElement;
-    player.currentTime += value;
-    this.time = player.currentTime;
-    player.play();
+    const currentTime = this.myPlayer.currentMediaTime() + value;
+    this.myPlayer.currentTime(currentTime);
+    // this.time = player.currentTime;
+    this.myPlayer.play();
   }
 
   backward(value: number): void {
     const player = this.videoPlayer.nativeElement;
-    player.currentTime -= value;
-    this.time = '' + player.currentTime;
-    player.play();
+    const currentTime = this.myPlayer.currentMediaTime() - value;
+    this.myPlayer.currentTime(currentTime);
+    // this.time = '' + player.currentTime;
+    this.myPlayer.play();
   }
+
+  // play(): void {
+  //   const player = this.videoPlayer.nativeElement;
+  //   this.videoStatus = true;
+  //   player.play();
+  //   this.time = '' + player.currentTime;
+  //   this.sharedService.pauseVideoObs$.next(false);
+  // }
+
+  // pause(): void {
+  //   const player = this.videoPlayer.nativeElement;
+  //   this.videoStatus = false;
+  //   this.time = '' + player.currentTime;
+  //   player.pause();
+  // }
+
+  // forward(value: number): void {
+  //   const player = this.videoPlayer.nativeElement;
+  //   player.currentTime += value;
+  //   this.time = player.currentTime;
+  //   player.play();
+  // }
+
+  // backward(value: number): void {
+  //   const player = this.videoPlayer.nativeElement;
+  //   player.currentTime -= value;
+  //   this.time = '' + player.currentTime;
+  //   player.play();
+  // }
 
   getTime(): string {
     const player = this.videoPlayer.nativeElement as HTMLVideoElement;
     return '' + player.duration;
   }
 
-  getProgressValue(time: string): number {
-    const percentage = (parseInt(time, 10) / parseInt(this.duration, 10)) * 100;
-    return Math.floor(percentage);
+  updateCurrentTime(): void {
+    this.duration = this.myPlayer.duration().toString();
+    this.time = this.myPlayer.currentMediaTime().toString();
   }
   getCurrentTime(ev: any): void {
     const player = this.videoPlayer.nativeElement as HTMLVideoElement;
@@ -211,6 +270,10 @@ export class VideoPlayerComponent implements OnInit {
   calculateMargin(time: string): string {
     const value = this.getProgressValue(time);
     return '' + value + '%';
+  }
+  getProgressValue(time: string): number {
+    const percentage = (parseInt(time, 10) / parseInt(this.duration, 10)) * 100;
+    return Math.floor(percentage);
   }
 
   jumpToAnnotation(time: string): void {
