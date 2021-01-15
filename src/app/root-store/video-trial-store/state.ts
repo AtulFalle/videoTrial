@@ -19,12 +19,14 @@ export const initialState: State = {
     {
       videoId: 'test',
       name: '',
+      originalName: '',
       annotations: [],
     },
   ],
   currentVideo: {
     videoId: 'test',
     name: '',
+    originalName: '',
     annotations: [],
   },
   procedure: null,
