@@ -21,6 +21,7 @@ export const initialState: State = {
     {
       videoId: 'test',
       name: '',
+      originalName: '',
       annotations: [],
       type: 'Unscrubbed',
 
@@ -29,6 +30,7 @@ export const initialState: State = {
   currentVideo: {
     videoId: 'test',
     name: '',
+    originalName: '',
     annotations: [],
     type: 'Unscrubbed',
 

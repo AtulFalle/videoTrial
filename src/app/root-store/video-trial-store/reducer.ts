@@ -33,6 +33,7 @@ const featureReducer = createReducer(
 
           const videoObject: Video = {
             name: iterator.name,
+            originalName: iterator.originalName,
             videoId: iterator.videoId,
             annotations: [...new Set(updatedList)],
           };
@@ -67,6 +68,7 @@ const featureReducer = createReducer(
 
           const videoObject: Video = {
             name: iterator.name,
+            originalName: iterator.originalName,
             videoId: iterator.videoId,
             annotations: [...new Set(updatedList)],
           };

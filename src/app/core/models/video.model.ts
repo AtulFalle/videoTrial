@@ -7,7 +7,8 @@ export enum VideoType {
 
 export interface Video {
   videoId: string;
-  name: any;
+  name: string;
+  originalName: string;
   subtitles?: string;
   formats?: string[];
   annotations: Annotation[];
