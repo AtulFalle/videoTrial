@@ -13,6 +13,7 @@ export class UnscrubbedVideoComponent implements OnInit {
   videoSub$!: Observable<Video>;
 
   videoObject: Video = {
+    originalName: 'test',
     videoId: 'test',
     name: 'src/assets/video/big_buck_bunny_720p_10mb.mp4',
     subtitles: 'test',

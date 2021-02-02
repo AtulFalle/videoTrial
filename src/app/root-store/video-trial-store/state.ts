@@ -51,6 +51,7 @@ export const initialState: State = {
     procedureLength: 'test',
     video: [
       {
+        originalName: 'test',
         videoId: 'test',
         name: 'test',
         subtitles: 'test',
