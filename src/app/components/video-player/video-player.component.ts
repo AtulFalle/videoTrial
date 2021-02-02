@@ -30,6 +30,9 @@ export class VideoPlayerComponent implements OnInit {
   videoId!: string;
 
   @Input()
+  video!: Observable<Video>;
+
+  @Input()
   procedureId!: string;
 
   @Input()
@@ -49,6 +52,8 @@ export class VideoPlayerComponent implements OnInit {
 
   isDataLoaded = false;
 
+  showSubtitles = true;
+
   // tslint:disable-next-line: variable-name
   private _subscription = [new Subscription()];
   annotationMarkerList$!: Observable<TrialVideo>;
@@ -67,14 +72,12 @@ export class VideoPlayerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.store$
-      .select(VideoTrialStoreSelectors.getCurrentVideo)
-      .subscribe((res: Video) => {
-        this.annotationMarkerList = [...res.annotations];
-        this.url = environment.SERVER_URI + '/videos/' + res.name;
-        this.subtitle = environment.SERVER_URI + '/annotations/' + res.subtitles;
-        this.isDataLoaded = true;
-      });
+    this.subscription = this.video.subscribe((res: Video) => {
+      this.annotationMarkerList = [...res.annotations];
+      this.url = environment.SERVER_URI + '/videos/' + res.name;
+      this.subtitle = environment.SERVER_URI + '/annotations/' + res.subtitles;
+      this.isDataLoaded = true;
+    });
     this.subscription = this.sharedService.jumpToAnnotationTime.subscribe(
       (res) => {
         if (res) {
@@ -242,4 +245,8 @@ export class VideoPlayerComponent implements OnInit {
    * add custom annotations
    */
   addCustomSubtitles(): void {}
+
+  toggleSubtitles(val: boolean): void {
+    this.showSubtitles = val;
+  }
 }

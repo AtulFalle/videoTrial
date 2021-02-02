@@ -1,4 +1,5 @@
 .container {
+  user-select: none;
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -8,6 +9,14 @@
     justify-content: center;
     width: 100%;
     position: relative;
+
+    mat-icon{
+      background: #757373cf;
+    text-align: center;
+    border-radius: 50%;
+    height: auto;
+    width: fit-content;
+    }
   }
   .controls {
     display: flex;
@@ -23,10 +32,11 @@
   }
   .video-controls {
     color: white;
-    font-size: 3rem;
+    font-size: 2.7rem;
     font-weight: 300;
     cursor: pointer;
     display: none;
+    padding: 0.3rem;
     width: 100%;
   }
   .timeline {
@@ -45,11 +55,7 @@
     font-size: 12px;
   }
 
-  .video:hover {
-    .video-controls {
-      display: inline-block;
-    }
-  }
+
   .slider {
     height: 2rem !important;
   }
@@ -66,17 +72,16 @@
   .marker {
     background: yellow;
     width: 3px;
-    height: 12px;
+    height: 6px;
     position: absolute;
-    top: 25%;
+    top: 40%;
     cursor: pointer;
-
   }
-  .label{
+  .label {
     font-size: 15px;
     font-weight: 500;
   }
-  .subtitle-container{
+  .subtitle-container {
     background: #525050bd;
     position: absolute;
     bottom: 2.1rem;
@@ -88,5 +93,31 @@
     line-height: 1;
     font-size: 1rem;
     font-weight: 300;
+  }
+  .subtitle-btn {
+    font-size: 2rem;
+    cursor: pointer;
+  }
+  .subtitle-btn-container {
+    position: absolute;
+    flex-direction: row-reverse;
+    right: 4rem;
+    top: 1rem;
+    color: white;
+    z-index: 100;
+    -webkit-box-shadow: 9px 9px 41px -32px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 9px 9px 41px -32px rgba(0, 0, 0, 0.75);
+    box-shadow: 9px 9px 41px -32px rgba(0, 0, 0, 0.75);
+    display: none;
+  }
+
+  .video:hover {
+    .video-controls {
+      display: inline-block;
+    }
+    .subtitle-btn-container{
+      display: flex;
+    }
+
   }
 }

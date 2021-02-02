@@ -9,7 +9,7 @@ export interface Procedure {
   procedureType: string;
   conductingSurgeon: string;
   surgicalDeviceLiaison: string;
-  total_videos: 0;
+  total_videos: number;
   implant: string;
   procedureId: string;
   status: string;

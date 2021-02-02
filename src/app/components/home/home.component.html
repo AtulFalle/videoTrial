@@ -4,23 +4,41 @@
   *ngIf="isLoading"
 ></mat-progress-bar>
 
-<div class="container w-auto bg-grey h-inherti" *ngIf="showVideoPlayer && !isLoading">
-  <div class="w-auto row m-3 mt-4 text-page-title">
-    <h1>Procedure Details</h1>
+<div
+  class="container w-auto bg-grey h-inherti"
+  *ngIf="showVideoPlayer && !isLoading"
+>
+  <div class="w-auto row m-3 text-page-title">
+    <h1 class="m-0">Procedure Details</h1>
   </div>
   <div class="w-auto row">
     <div class="col-6 p-1">
-      <mat-tab-group mat-align-tabs="start" dynamicHeight>
+      <mat-tab-group
+        mat-align-tabs="start"
+        #videoTab
+        dynamicHeight
+        (selectedTabChange)="tabChanged($event)"
+      >
         <mat-tab label="Scrubbed">
           <div class="col-12">
-
-          <app-video-player [videoId]="videoId"></app-video-player>
-          <app-patient-video-list [procedure]= "procedure |async"></app-patient-video-list>
-        </div>
-
+            <app-video-player
+              [video]="videoSub$"
+              [videoId]="videoId"
+            ></app-video-player>
+            <app-patient-video-list
+              [procedure]="procedure | async"
+            ></app-patient-video-list>
+          </div>
         </mat-tab>
         <mat-tab label="Unscrubbed">
-          <app-video-player [videoId]="videoId" [procedureId]="procedureID"></app-video-player>
+          <div class="col-12">
+            <!-- <video ></video> -->
+            <app-unscrubbed-video></app-unscrubbed-video>
+            <!-- <app-video-player [videoId]="videoId" [procedureId]="procedureID"></app-video-player> -->
+            <app-patient-video-list
+              [procedure]="procedure | async"
+            ></app-patient-video-list>
+          </div>
         </mat-tab>
       </mat-tab-group>
     </div>
@@ -30,8 +48,11 @@
           <mat-tab label="Details">
             <app-procedure-details></app-procedure-details>
           </mat-tab>
-          <mat-tab label="Activity">
-            <app-annotation-list [videoId]="videoId" [procedureId]="procedureID"></app-annotation-list>
+          <mat-tab label="Activity" *ngIf="showActivityTab">
+            <app-annotation-list
+              [videoId]="(videoSub$ | async).videoId"
+              [procedureId]="procedureID"
+            ></app-annotation-list>
           </mat-tab>
         </mat-tab-group>
       </mat-card>
