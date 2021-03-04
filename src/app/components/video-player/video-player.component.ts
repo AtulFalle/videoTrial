@@ -31,6 +31,9 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
   videoId!: string;
 
   @Input()
+  video!: Observable<Video>;
+
+  @Input()
   procedureId!: string;
 
   @Input()
@@ -53,6 +56,8 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
 
   videoResolution: { resolution: number; bitrate: number }[] = [];
 
+  showSubtitles = true;
+
   // tslint:disable-next-line: variable-name
   private _subscription = [new Subscription()];
   annotationMarkerList$!: Observable<TrialVideo>;
@@ -74,7 +79,7 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     const myOptions = {
       autoplay: false,
-      controls: true,
+      controls: false,
       height: '400',
       poster: '',
       fluid: true,
@@ -88,29 +93,21 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
       },
     ]);
 
-    this.myPlayer.addEventListener(amp.eventName.timeupdate, () => {
+    this.myPlayer.addEventListener(amp.eventName.timeupdate, (e: any) => {
       this.updateCurrentTime();
+      this.getCurrentTime(e);
     });
-    this.myPlayer.addEventListener(amp.eventName.durationchange, () => {
+    this.myPlayer.addEventListener(amp.eventName.durationchange, (e: any) => {
       this.updateCurrentTime();
+      this.getCurrentTime(e);
+
     });
     this.myPlayer.addEventListener(amp.eventName.loadedmetadata, () => {
       this.getTracks();
     });
   }
   getTracks(): void {
-    console.log('inside metadata event');
-
     const streamList = this.myPlayer.currentVideoStreamList();
-    // this.videoResolution = [
-    //   ...streamList.streams[0].tracks
-    //     .map((ele) => {
-    //       return ele.height;
-    //     })
-    //     .sort((a, b) => b - a)
-    //     .map((e) => e.toString()),
-    // ];
-
     for (const item of streamList.streams[0].tracks) {
       const temp = { resolution: item.height, bitrate: item.bitrate };
       this.videoResolution.unshift(temp);
@@ -118,15 +115,12 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.store$
-      .select(VideoTrialStoreSelectors.getCurrentVideo)
-      .subscribe((res: Video) => {
-        this.annotationMarkerList = [...res.annotations];
-        this.url = environment.SERVER_URI + '/videos/' + res.name;
-        this.subtitle =
-          environment.SERVER_URI + '/annotations/' + res.subtitles;
-        this.isDataLoaded = true;
-      });
+    this.subscription = this.video.subscribe((res: Video) => {
+      this.annotationMarkerList = [...res.annotations];
+      this.url = environment.SERVER_URI + '/videos/' + res.name;
+      this.subtitle = environment.SERVER_URI + '/annotations/' + res.subtitles;
+      this.isDataLoaded = true;
+    });
     this.subscription = this.sharedService.jumpToAnnotationTime.subscribe(
       (res) => {
         if (res) {
@@ -173,37 +167,9 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
     this.myPlayer.play();
   }
 
-  // play(): void {
-  //   const player = this.videoPlayer.nativeElement;
-  //   this.videoStatus = true;
-  //   player.play();
-  //   this.time = '' + player.currentTime;
-  //   this.sharedService.pauseVideoObs$.next(false);
-  // }
-
-  // pause(): void {
-  //   const player = this.videoPlayer.nativeElement;
-  //   this.videoStatus = false;
-  //   this.time = '' + player.currentTime;
-  //   player.pause();
-  // }
-
-  // forward(value: number): void {
-  //   const player = this.videoPlayer.nativeElement;
-  //   player.currentTime += value;
-  //   this.time = player.currentTime;
-  //   player.play();
-  // }
-
-  // backward(value: number): void {
-  //   const player = this.videoPlayer.nativeElement;
-  //   player.currentTime -= value;
-  //   this.time = '' + player.currentTime;
-  //   player.play();
-  // }
-
   getTime(): string {
     const player = this.videoPlayer.nativeElement as HTMLVideoElement;
+    return this.myPlayer.duration().toString();
     return '' + player.duration;
   }
 
@@ -212,14 +178,13 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
     this.time = this.myPlayer.currentMediaTime().toString();
   }
   getCurrentTime(ev: any): void {
-    const player = this.videoPlayer.nativeElement as HTMLVideoElement;
-    this.duration = '' + player.duration;
-    this.time = '' + player.currentTime;
+    this.duration = this.myPlayer.duration().toString();
+    this.time = this.myPlayer.currentMediaTime().toString();
     const playerTime = {
       time: this.sharedService.toTimeFormat(this.time),
       videoPlayerTime: this.time,
     };
-    if (player.paused) {
+    if (this.myPlayer.paused()) {
       this.videoStatus = false;
     } else {
       this.videoStatus = true;
@@ -253,22 +218,7 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
     };
   }
 
-  videoLoaded(ev: any): void {
-    const player = this.videoPlayer.nativeElement as HTMLVideoElement;
-    this.duration = '' + player.duration;
-    this.time = '' + player.currentTime;
-    const playerTime = {
-      time: this.sharedService.toTimeFormat(this.time),
-      videoPlayerTime: this.time,
-    };
-    if (player.paused) {
-      this.videoStatus = false;
-    } else {
-      this.videoStatus = true;
-    }
 
-    this.sharedService.currentTimeObs$.next(playerTime);
-  }
 
   timelineDragged(ev: MatSliderChange): void {
     const value = ev.value || 0;
@@ -276,6 +226,7 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
     const currentTime = percentage * parseInt(this.duration, 10);
     const player = this.videoPlayer.nativeElement;
     player.currentTime = currentTime;
+    this.myPlayer.currentTime(currentTime);
   }
 
   calculateMargin(time: string): string {
@@ -291,6 +242,7 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
     const player = this.videoPlayer.nativeElement;
     player.currentTime = time;
     this.time = '' + player.currentTime;
+    this.myPlayer.currentTime(+time);
   }
 
   getSafeURL(): SafeResourceUrl {
@@ -333,12 +285,15 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
   getBitrate(val: string): string {
     switch (val.length) {
       case 6:
-        return (+val / 1000).toFixed(2) + 'Kbps';
+        return (+val / 1024).toFixed(2) + 'Kbps';
 
       case 7:
-        return (+val / 1000000).toFixed(2) + 'Mbps';
+        return (+val / (1024 * 1024)).toFixed(2) + 'Mbps';
       default:
         return val;
     }
+  }
+  toggleSubtitles(val: boolean): void {
+    this.showSubtitles = val;
   }
 }

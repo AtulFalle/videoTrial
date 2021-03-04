@@ -17,7 +17,7 @@
     </div>
     <div class="col align-end">
       <div class="label pr-1">Procedure Date:</div>
-      <div class="values bold-2">{{(procedureDetail | async)?.procedureDate || '-'}}</div>
+      <div class="values bold-2">{{((procedureDetail | async).procedureDate | date) || '-'}}</div>
     </div>
   </div>
 

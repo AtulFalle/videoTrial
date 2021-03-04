@@ -15,7 +15,6 @@
         >
           {{ showVideoList ? "Hide ALL" : "View ALL" }}
         </button>
-        <button mat-raised-button color="primary" class="m-1">Download</button>
       </div>
     </div>
   </div>
@@ -23,23 +22,22 @@
     <mat-accordion class="w-inherit m-2">
       <mat-expansion-panel *ngFor="let item of procedure.video; let i = index">
         <mat-expansion-panel-header>
-          #{{ i + 1 + ") " }} {{ item.videoId }}
+         <p class="bold-2">
+          {{ item.name }}
+         </p>
         </mat-expansion-panel-header>
         <div class="row w-auto">
           <div class="col-4">
-            <p>Video ID: {{ item.videoId }}</p>
+            <p class="label">Video ID: {{ item.videoId }}</p>
           </div>
           <div class="col-4">
-            <video src="{{ item.name }}" width="100px"></video>
+            <div class="row justify-center">
+
+              <video src="{{ getVideoUrl(item.name) }}" width="100px"></video>
+            </div>
           </div>
           <div class="col-4">
             <div class="row">
-              <!-- <a
-                href="http://localhost:3000/procedure/downloadVideo/big_buck_bunny_720p_10mb-1609219451682-499289986.mp4"
-                download="big_buck_bunny_720p_10mb-1609219451682-499289986.mp4"
-                target="_blank"
-                >download</a
-              > -->
               <button
                 mat-raised-button
                 color="primary"

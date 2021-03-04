@@ -41,6 +41,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AddProcedureComponent } from './components/add-procedure/add-procedure.component';
 import { ProceduresListComponent } from './components/procedures-list/procedures-list.component';
 import { AzureMediaPlayerComponent } from './shared/components/azure-media-player/azure-media-player.component';
+import { UnscrubbedVideoComponent } from './components/unscrubbed-video/unscrubbed-video.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,6 +57,7 @@ import { AzureMediaPlayerComponent } from './shared/components/azure-media-playe
     AddProcedureComponent,
     ProceduresListComponent,
     AzureMediaPlayerComponent,
+    UnscrubbedVideoComponent,
   ],
   imports: [
     BrowserModule,
