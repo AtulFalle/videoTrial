@@ -66,9 +66,15 @@
       </div>
     </div>
   </div>
-  <div class="row m-2 align-end border-bottom p-1 w-auto">
-    <div class="align-end label">
-      Quality : <span class="bold-2"> 480P 720P RAW</span>
+  <div class="row mx-2 align-end border-bottom p-1 w-auto mb-1" >
+    <div class="align-end label resolution-label mr-2">
+      Quality :
     </div>
+    <mat-form-field class="resolution-select">
+      <mat-select [(value)]="selectedResolution" (selectionChange)="updateResolution($event)">
+        <mat-option value="-1" selected>Auto</mat-option>
+        <mat-option *ngFor="let item of videoResolution" [value]="item">{{item.resolution}}P - ({{getBitrate(item.bitrate.toString())}})</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 </div>
