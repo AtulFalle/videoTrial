@@ -23,6 +23,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatRadioModule } from '@angular/material/radio';
+import {MatChipsModule} from '@angular/material/chips';
+
 @NgModule({
   declarations: [],
   imports: [
@@ -50,6 +52,7 @@ import { MatRadioModule } from '@angular/material/radio';
     MatSidenavModule,
     MatListModule,
     MatRadioModule,
+    MatChipsModule
   ],
   exports: [
     MatToolbarModule,
@@ -75,6 +78,7 @@ import { MatRadioModule } from '@angular/material/radio';
     MatSidenavModule,
     MatListModule,
     MatRadioModule,
+    MatChipsModule
   ],
   providers: [MatNativeDateModule],
 })

@@ -32,7 +32,7 @@
   }
   .video-controls {
     color: white;
-    font-size: 2.7rem;
+    font-size: 2rem;
     font-weight: 300;
     cursor: pointer;
     display: none;
@@ -46,6 +46,7 @@
     bottom: 3px;
     flex-direction: column;
     justify-content: center;
+    padding: 1rem 0 0.5rem 0;
   }
   .time {
     color: white;
@@ -73,7 +74,7 @@
     width: 3px;
     height: 6px;
     position: absolute;
-    top: 40%;
+    top: 16%;
     cursor: pointer;
   }
   .label {
@@ -83,9 +84,8 @@
   .subtitle-container {
     background: #525050bd;
     position: absolute;
-    bottom: 2.1rem;
-    width: 70%;
-    /* margin: 0 2rem; */
+    bottom: 3.1rem;
+    max-width: 70%;
     padding: 0.5rem;
     text-align: center;
     color: white;
@@ -93,13 +93,19 @@
     font-size: 1rem;
     font-weight: 300;
   }
+  .annotation-container{
+    position: absolute;
+    background: white;
+    font-size: 1rem;
+    bottom: 4.3rem;
+    width: 40%;
+  }
 
   .resolution-label{
     margin-top: 3%;
   }
 
   .subtitle-btn {
-    font-size: 2rem;
     cursor: pointer;
   }
   .subtitle-btn-container {
@@ -123,5 +129,25 @@
       display: flex;
     }
 
+  }
+
+  .video-extra-controls{
+    position: absolute;
+    bottom: 0;
+    color: white;
+  }
+  .select-invert{
+    color: white;
+    background: red;
+  }
+
+  .extra-icon{
+    padding: 5px;
+    font-size: 1.2rem;
+  }
+  .update-comment-container{
+    background: white;
+    width: 20rem;
+    color: black;
   }
 }

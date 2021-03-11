@@ -15,6 +15,7 @@ export enum VideoTrialActionType {
   DELETE_ANNOTATION = '[video annotation remove] remove annotation by id',
   DELETE_ANNOTATION_SUCCESS = '[video annotation delete success] annotation removed successfully',
   ADD_ANNOTATION_SUCCESS = '[video annotation add success] vido annotation added successfully',
+  EDIT_ANNOTATION = '[Video Annotation Edit] edit specific annotation by ID',
 
   // update video values actions
   UPDATE_CURRENT_TIME = '[video current time] update current time of video',
@@ -31,9 +32,13 @@ export enum VideoTrialActionType {
   UPDATE_CURRENT_VIDEO = '[Trial video update] update metadata for current video',
 
   // video scrubbed or unscrubbed
-  VIDEO_TAB_CHANGED = '[video current tab] update current video tab'
+  VIDEO_TAB_CHANGED = '[video current tab] update current video tab',
 }
 
+export const editAnnotation = createAction(
+  VideoTrialActionType.EDIT_ANNOTATION,
+  props<{ annotation: Annotation, videoId: string }>()
+);
 export const uploadVideo = createAction(
   VideoTrialActionType.UPLOAD_VIDEO,
   props<{ video: TrialVideo }>()
@@ -114,8 +119,7 @@ export const updateCurrentVideo = createAction(
   props<{ video: Video }>()
 );
 
-
 export const updateCurrentVideoTab = createAction(
   VideoTrialActionType.VIDEO_TAB_CHANGED,
-  props<{tab: number}>()
+  props<{ tab: number }>()
 );

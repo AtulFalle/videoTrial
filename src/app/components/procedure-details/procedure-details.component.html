@@ -5,7 +5,7 @@
       <div class=" bold-1">{{(procedureDetail | async)?.implant  || '-'}}</div>
     </div>
     <div class="col align-end">
-      <div class="label pr-1">procedure ID:</div>
+      <div class="label pr-1">Procedure ID:</div>
       <div class="values bold-2">{{(procedureDetail | async)?.procedureId || '-'}}</div>
     </div>
   </div>
@@ -23,7 +23,7 @@
 
   <div class="row border-bottom p-1 w-auto">
     <div class="col align-start">
-      <div class="label pr-1">site :</div>
+      <div class="label pr-1">Site :</div>
       <div class="values bold-2">{{(procedureDetail | async)?.site || '-'}}</div>
     </div>
     <div class="col align-end">
@@ -37,7 +37,7 @@
       <div class="values bold-2">{{(procedureDetail | async)?.procedureLength || '-'}}</div>
     </div>
   </div>
-  <div class="col-12 border-bottom p-1 ">
+  <div class="col-12  p-1 ">
     <div class="row align-start">
       <div class="label pr-1">Conducting Surgeon:</div>
       <div class=" bold-2">{{(procedureDetail | async)?.conductingSurgeon || '-'}}</div>

@@ -63,6 +63,8 @@ import { UnscrubbedVideoComponent } from './components/unscrubbed-video/unscrubb
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
