@@ -42,6 +42,7 @@ import { AddProcedureComponent } from './components/add-procedure/add-procedure.
 import { ProceduresListComponent } from './components/procedures-list/procedures-list.component';
 import { AzureMediaPlayerComponent } from './shared/components/azure-media-player/azure-media-player.component';
 import { UnscrubbedVideoComponent } from './components/unscrubbed-video/unscrubbed-video.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,6 +59,7 @@ import { UnscrubbedVideoComponent } from './components/unscrubbed-video/unscrubb
     ProceduresListComponent,
     AzureMediaPlayerComponent,
     UnscrubbedVideoComponent,
+    FileUploadComponent,
   ],
   imports: [
     BrowserModule,

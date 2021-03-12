@@ -1,3 +1,4 @@
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { HomeComponent } from './components/home/home.component';
 import { VideoListComponent } from './components/video-list/video-list.component';
 import { NgModule } from '@angular/core';
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'procedures-list',
     component: ProceduresListComponent,
+  },
+  {
+    path: 'file-upload',
+    component: FileUploadComponent
   },
   {
     path: '',

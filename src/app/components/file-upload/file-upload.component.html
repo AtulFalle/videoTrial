@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="col-12 m-4">
+    <input #fileupload placeholder="label" (change)="fileUpload($event, fileUpload)" type="file" />
+  </div>
+
+  <span>Progress = {{ progress }}/100%</span>
+  <div class="row">
+    <button mat-button (click)="pauseUpload()">pause</button>
+    <button mat-button (click)="resumeUpload()">resume</button>
+  </div>
+</div>
