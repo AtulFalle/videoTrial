@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MsalService, MsalBroadcastService } from '@azure/msal-angular';
+import { EventMessage, EventType } from '@azure/msal-browser';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { Procedure } from 'src/app/core/models/procedure.model';
 import {
   VideoTrialStoreActions,
@@ -14,7 +17,25 @@ import {
   styleUrls: ['./procedures-list.component.scss'],
 })
 export class ProceduresListComponent implements OnInit {
-  constructor(private store$: Store<VideoTrialStoreState.State>) {}
+  constructor(
+    private store$: Store<VideoTrialStoreState.State>,
+    private authService: MsalService,
+    private msalBroadcastService: MsalBroadcastService
+  ) {
+    this.msalBroadcastService.msalSubject$
+      .pipe(
+        filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS)
+      )
+      .subscribe({
+        next: (result: EventMessage) => {
+          console.log(result);
+          if (result?.payload?.account) {
+            this.authService.instance.setActiveAccount(result.payload.account);
+          }
+        },
+        error: (error) => console.log(error),
+      });
+  }
 
   displayedColumns: string[] = [
     'patientId',

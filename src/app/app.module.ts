@@ -41,6 +41,80 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AddProcedureComponent } from './components/add-procedure/add-procedure.component';
 import { ProceduresListComponent } from './components/procedures-list/procedures-list.component';
 import { UnscrubbedVideoComponent } from './components/unscrubbed-video/unscrubbed-video.component';
+import { LoginComponent } from './components/login/login.component';
+import {
+  MsalInterceptor,
+  MSAL_INSTANCE,
+  MSAL_GUARD_CONFIG,
+  MSAL_INTERCEPTOR_CONFIG,
+  MsalService,
+  MsalGuard,
+  MsalBroadcastService,
+  MsalGuardConfiguration,
+  MsalInterceptorConfiguration,
+} from '@azure/msal-angular';
+
+import { b2cPolicies, apiConfig } from './b2c-config';
+import {
+  LogLevel,
+  IPublicClientApplication,
+  PublicClientApplication,
+  BrowserCacheLocation,
+  InteractionType,
+} from '@azure/msal-browser';
+import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
+
+const isIE =
+  window.navigator.userAgent.indexOf('MSIE ') > -1 ||
+  window.navigator.userAgent.indexOf('Trident/') > -1;
+
+export function loggerCallback(logLevel: LogLevel, message: string) {
+  console.log(message);
+}
+
+export function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication({
+    auth: {
+      clientId: 'a39f9378-d595-42ad-b773-422b79502a9c',
+      authority: b2cPolicies.authorities.signUpSignIn.authority,
+      redirectUri: 'http://localhost:4200/home',
+      postLogoutRedirectUri: 'http://localhost:4200/login',
+      knownAuthorities: [b2cPolicies.authorityDomain],
+      navigateToLoginRequestUrl: false
+    },
+    cache: {
+      cacheLocation: BrowserCacheLocation.LocalStorage,
+      storeAuthStateInCookie: isIE, // set to true for IE 11
+    },
+    system: {
+      loggerOptions: {
+        loggerCallback,
+        logLevel: LogLevel.Info,
+        piiLoggingEnabled: false,
+      },
+    },
+  });
+}
+
+export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+  const protectedResourceMap = new Map<string, Array<string>>();
+  protectedResourceMap.set(apiConfig.uri, apiConfig.scopes);
+
+  return {
+    interactionType: InteractionType.Redirect,
+    protectedResourceMap,
+  };
+}
+
+export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+  return {
+    interactionType: InteractionType.Redirect,
+    authRequest: {
+      scopes: [...apiConfig.scopes],
+    },
+  };
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,6 +130,8 @@ import { UnscrubbedVideoComponent } from './components/unscrubbed-video/unscrubb
     AddProcedureComponent,
     ProceduresListComponent,
     UnscrubbedVideoComponent,
+    LoginComponent,
+    FileUploaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -98,6 +174,26 @@ import { UnscrubbedVideoComponent } from './components/unscrubbed-video/unscrubb
       useClass: VideoTrialInterceptor,
       multi: true,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true,
+    },
+    {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory,
+    },
+    {
+      provide: MSAL_GUARD_CONFIG,
+      useFactory: MSALGuardConfigFactory,
+    },
+    {
+      provide: MSAL_INTERCEPTOR_CONFIG,
+      useFactory: MSALInterceptorConfigFactory,
+    },
+    MsalService,
+    MsalGuard,
+    MsalBroadcastService,
   ],
   bootstrap: [AppComponent],
 })

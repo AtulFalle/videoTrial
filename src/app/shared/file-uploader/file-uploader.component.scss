@@ -1,0 +1,84 @@
+.video-uploader {
+  display: flex;
+  .video-upload {
+    width: 49%;
+    margin-right: 2%;
+    .file-drop {
+      background-color: rgb(244, 246, 248);
+      padding: 40px 0;
+      text-align: center;
+      margin: 20px;
+      border: 1px dashed;
+      font-size: 1.2rem;
+      input {
+        display: none;
+      }
+    }
+    .fileover {
+      opacity: 0.6;
+      border: 2px dashed;
+    }
+    .files-list {
+      margin-top: 1.5rem;
+      padding: 0 20px;
+      .single-file {
+        display: flex;
+        padding: 0.5rem;
+        justify-content: space-between;
+        align-items: center;
+        border: dashed 1px #979797;
+        margin-bottom: 1rem;
+
+        img.delete {
+          margin-left: 0.5rem;
+          cursor: pointer;
+          align-self: flex-end;
+        }
+
+        display: flex;
+        flex-grow: 1;
+
+        .name {
+          font-size: 14px;
+          font-weight: 500;
+          color: #353f4a;
+          margin: 0;
+        }
+
+        .size {
+          font-size: 12px;
+          font-weight: 500;
+          color: #a4a4a4;
+          margin: 0;
+          margin-bottom: 0.25rem;
+        }
+
+        .info {
+          width: 100%;
+          padding: 0 15px;
+        }
+      }
+    }
+  }
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    .radio-button {
+      margin: 5px;
+    }
+  }
+  .patient-info {
+    width: 49%;
+    .patient-info-form {
+      .full-width-input {
+        width: 100%;
+      }
+      .study-checkboxes {
+        display: flex;
+        flex-direction: column;
+        padding: 12px;
+      }
+    }
+  }
+}

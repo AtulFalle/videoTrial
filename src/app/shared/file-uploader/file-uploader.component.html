@@ -1,0 +1,71 @@
+<div class="video-uploader">
+  <div class="card video-upload">
+    <div class="card-body">
+      <div
+        class="file-drop"
+        appDragDrop
+        (fileDropped)="onFileDropped($event)"
+        (click)="fileDropRef.click()"
+      >
+        <input
+          type="file"
+          #fileDropRef
+          id="fileDropRef"
+          multiple
+          (change)="fileBrowseHandler($event)"
+        />
+        <div class="file-drop-box">Drop File(s) or Click Here</div>
+      </div>
+      <div class="files-list">
+        <div class="single-file" *ngFor="let file of files; let i = index">
+          <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file" />
+          <div class="info">
+            <h4 class="name">
+              {{ file?.name }}
+            </h4>
+            <p class="size" *ngIf="percentage !== '100.00'">
+              ( {{ file.percentage || '0' }}%/ 100%) {{ formatBytes(file?.size) }}
+            </p>
+            <p class="size" *ngIf="percentage=== '100.00'">
+              ( Upload completed ) {{ formatBytes(file?.size) }}
+            </p>
+            <mat-progress-bar
+              *ngIf="file.processing === true"
+              mode="determinate"
+              [value]="file?.progress"
+              [color]="file.isUploading ? 'primary' : 'warn'"
+            ></mat-progress-bar>
+          </div>
+          <button mat-button *ngIf="!file.isUploading && !file.isCompleted">
+            <mat-icon (click)="resume(i)">play_arrow</mat-icon>
+          </button>
+          <button mat-button *ngIf="file.isUploading && !file.isCompleted">
+            <mat-icon (click)="pause(i)">pause</mat-icon>
+          </button>
+          <img
+            *ngIf="file.isCompleted"
+            src="assets/img/dnd/ic-delete-file.svg"
+            class="delete"
+            width="20px"
+            alt="file"
+            (click)="deleteFile(i)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-2">
+      <button
+        mat-raised-button
+        color="primary"
+        mat-button
+        (click)="uploaadFiles()"
+      >
+        Upload
+      </button>
+    </div>
+  </div>
+</div>

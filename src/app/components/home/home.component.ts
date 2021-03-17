@@ -12,6 +12,7 @@ import { Store } from '@ngrx/store';
 import { Procedure } from 'src/app/core/models/procedure.model';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { VideoTrialActionType } from 'src/app/root-store/video-trial-store/actions';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +34,7 @@ export class HomeComponent implements OnInit {
   procedureID!: string;
   showActivityTab = true;
   videoSub$: Observable<Video>;
+  userRole: any;
 
   constructor(
     private router: Router,
@@ -53,16 +55,23 @@ export class HomeComponent implements OnInit {
       VideoTrialStoreSelectors.getCurrentVideo
     );
 
-
     this.store$
       .select(VideoTrialStoreSelectors.getCurrentVideoTab)
       .subscribe((index) => {
+        ``;
         if (index === 1) {
           this.showActivityTab = false;
         } else {
           this.showActivityTab = true;
         }
       });
+
+    try {
+      const token: any = jwt_decode(sessionStorage.getItem('token'));
+      this.userRole = token.extension_role;
+    } catch (e) {
+      this.userRole = '';
+    }
   }
 
   redirectToHome(): void {
@@ -71,9 +80,7 @@ export class HomeComponent implements OnInit {
 
   changeTab(index: number): void {
     this.videoTabIndex.selectedIndex = index;
-
   }
-
 
   resetPlayer(): void {
     this.showVideoPlayer = false;

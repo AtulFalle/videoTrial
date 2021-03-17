@@ -30,11 +30,9 @@
             ></app-patient-video-list>
           </div>
         </mat-tab>
-        <mat-tab label="Unscrubbed">
+        <mat-tab label="Unscrubbed" *ngIf="userRole === 'admin'">
           <div class="col-12">
-            <!-- <video ></video> -->
             <app-unscrubbed-video></app-unscrubbed-video>
-            <!-- <app-video-player [videoId]="videoId" [procedureId]="procedureID"></app-video-player> -->
             <app-patient-video-list
               [procedure]="procedure | async"
             ></app-patient-video-list>

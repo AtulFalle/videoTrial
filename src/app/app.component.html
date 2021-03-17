@@ -4,6 +4,23 @@
       <mat-icon>menu</mat-icon>
     </button>
     <span>Clinical Video Trial</span>
+    <span class="example-spacer"></span>
+    <div class="user-data">
+      <div class="col-12 mr-2">
+        <span class="m-0 name" *ngIf="username || getUserName()"
+          >Hi, {{ username || getUserName() || "" }}</span
+        >
+        <span>{{userRole || getUserRole() || ''}}</span>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      class="example-icon"
+      aria-label="Example icon-button with menu icon"
+      (click)="logout()"
+    >
+      <mat-icon>logout</mat-icon>
+    </button>
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-sidenav-container class="sidenav-container">
@@ -17,15 +34,24 @@
         List all Procedures
       </a>
       <a
+      *ngIf="canAddProcedure()"
         mat-list-item
         routerLink="/add-procedure"
         routerLinkActive="active-link"
       >
         Add Procedure
       </a>
+      <a
+      *ngIf="canUplaodVideo()"
+      mat-list-item
+      routerLink="/file-uploader"
+      routerLinkActive="active-link"
+    >
+      Upload Videos
+    </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
- </mat-sidenav-container>
+</mat-sidenav-container>

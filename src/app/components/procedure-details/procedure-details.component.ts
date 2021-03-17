@@ -6,6 +6,7 @@ import {
   VideoTrialStoreSelectors,
   VideoTrialStoreState,
 } from 'src/app/root-store/video-trial-store';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-procedure-details',
@@ -14,11 +15,13 @@ import {
 })
 export class ProcedureDetailsComponent implements OnInit {
   procedureDetail!: Observable<Procedure>;
+  userRole: any;
   constructor(private store$: Store<VideoTrialStoreState.State>) {}
 
   ngOnInit(): void {
     this.procedureDetail = this.store$.select(
       VideoTrialStoreSelectors.getProcedure
     );
+
   }
 }
