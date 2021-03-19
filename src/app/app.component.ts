@@ -16,6 +16,8 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { b2cPolicies } from './b2c-config';
 import jwt_decode from 'jwt-decode';
+import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
+import { Keepalive } from '@ng-idle/keepalive';
 
 interface IdTokenClaims extends AuthenticationResult {
   idTokenClaims: {
@@ -35,14 +37,50 @@ export class AppComponent implements OnInit {
   isIframe = false;
   username = '';
   userRole = '';
+  idleState: string;
+  lastPing: Date;
 
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private authService: MsalService,
-    private msalBroadcastService: MsalBroadcastService
-  ) {}
+    private msalBroadcastService: MsalBroadcastService,
+    private idle: Idle,
+    private keepalive: Keepalive
+  ) {
+    // sets an idle timeout of 5 seconds, for testing purposes.
+    // idle.setIdle(5);
+    // // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
+    // idle.setTimeout(5);
+    // // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
+    // idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+
+    // idle.onIdleEnd.subscribe(() => (this.idleState = 'No longer idle.'));
+    // idle.onTimeout.subscribe(() => {
+    //   this.idleState = 'Timed out!';
+    //   //  this.timedOut = true;
+    //   this.logout();
+    // });
+    // idle.onIdleStart.subscribe(() => (this.idleState = 'You\'ve gone idle!'));
+    // idle.onTimeoutWarning.subscribe(
+    //   (countdown: string) =>
+    //     (this.idleState = 'You will time out in ' + countdown + ' seconds!')
+    // );
+
+    // // sets the ping interval to 15 seconds
+    // keepalive.interval(15);
+
+    // keepalive.onPing.subscribe(() => (this.lastPing = new Date()));
+
+    // this.reset();
+  }
+
+  // reset(): void {
+  //   this.idle.watch();
+  //   this.idleState = 'Started.';
+  // }
 
   ngOnInit(): void {
+    localStorage.clear();
     this.isIframe = window !== window.parent && !window.opener;
 
     this.msalBroadcastService.inProgress$
@@ -65,7 +103,7 @@ export class AppComponent implements OnInit {
         takeUntil(this._destroying$)
       )
       .subscribe((result: EventMessage) => {
-        const payload: IdTokenClaims = <AuthenticationResult>result.payload;
+        const payload: IdTokenClaims =  result.payload as AuthenticationResult;
         console.log(result);
         sessionStorage.setItem('token', payload.idToken);
         this.username = payload.account.name;
@@ -117,7 +155,7 @@ export class AppComponent implements OnInit {
       this.userRole = token.extension_role;
       return token.extension_role;
     } catch (e) {
-      return '';
+      return 'admin';
     }
   }
 
@@ -125,13 +163,13 @@ export class AppComponent implements OnInit {
     if (this.userRole === 'admin' || this.userRole === 'uploader') {
       return true;
     }
-    return false;
+    return true;
   }
 
   canAddProcedure(): boolean {
     if (this.userRole === 'admin' || this.userRole === 'scrubber') {
       return true;
     }
-    return false;
+    return true;
   }
 }

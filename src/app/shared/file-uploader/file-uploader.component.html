@@ -17,33 +17,40 @@
         <div class="file-drop-box">Drop File(s) or Click Here</div>
       </div>
       <div class="files-list">
-        <div class="single-file" *ngFor="let file of files; let i = index">
+        <div
+          class="single-file"
+          *ngFor="let file of fileObs$ | async; let i = index"
+        >
           <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file" />
           <div class="info">
             <h4 class="name">
-              {{ file?.name }}
+              {{ file?.fileName }}
             </h4>
-            <p class="size" *ngIf="percentage !== '100.00'">
-              ( {{ file.percentage || '0' }}%/ 100%) {{ formatBytes(file?.size) }}
+            <p class="size" *ngIf="file.status !== 'COMPLETED' && file.progress !== 100.00">
+              ( {{ file.progress }}%/ 100%)
+              {{ formatBytes(file?.size) }}
             </p>
-            <p class="size" *ngIf="percentage=== '100.00'">
+            <p class="size" *ngIf="file.status === 'COMPLETED'">
               ( Upload completed ) {{ formatBytes(file?.size) }}
             </p>
+            <p class="size" *ngIf="file.status !== 'COMPLETED' && file.progress == 100.00">
+              ( verifying integrity of file) {{ formatBytes(file?.size) }}
+            </p>
             <mat-progress-bar
-              *ngIf="file.processing === true"
+              *ngIf="file.status !== 'COMPLETED'"
               mode="determinate"
               [value]="file?.progress"
-              [color]="file.isUploading ? 'primary' : 'warn'"
+              [color]="file.status === 'IN-PROGRESS' ? 'primary' : 'warn'"
             ></mat-progress-bar>
           </div>
-          <button mat-button *ngIf="!file.isUploading && !file.isCompleted">
-            <mat-icon (click)="resume(i)">play_arrow</mat-icon>
+          <button mat-button *ngIf="file.status === 'PAUSED'" (click)="resume(file)">
+            <mat-icon >play_arrow</mat-icon>
           </button>
-          <button mat-button *ngIf="file.isUploading && !file.isCompleted">
-            <mat-icon (click)="pause(i)">pause</mat-icon>
+          <button mat-button *ngIf="file.status === 'IN-PROGRESS'" (click)="pause(file)">
+            <mat-icon >pause</mat-icon>
           </button>
           <img
-            *ngIf="file.isCompleted"
+            *ngIf="file.status === 'COMPLETED'"
             src="assets/img/dnd/ic-delete-file.svg"
             class="delete"
             width="20px"

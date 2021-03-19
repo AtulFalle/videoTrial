@@ -43,3 +43,8 @@ export const getCurrentVideoTab = createSelector(
   selectVideoState,
   (state: State) => state.currentTabIndex
 );
+
+export const getUploadingFile = createSelector(
+  selectVideoState,
+  (state: State) => state.fileUpload
+);

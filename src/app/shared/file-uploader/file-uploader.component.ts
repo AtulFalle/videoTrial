@@ -1,5 +1,14 @@
+import { SharedService } from './../../service/shared.service';
+import { FileMetadata } from './../../core/models/file-upload.model';
+import { Observable } from 'rxjs';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as tus from 'tus-js-client';
+import {
+  VideoTrialStoreActions,
+  VideoTrialStoreState,
+  VideoTrialStoreSelectors,
+} from 'src/app/root-store/video-trial-store';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-file-uploader',
@@ -17,9 +26,18 @@ export class FileUploaderComponent implements OnInit {
   percentage = '0';
   uploadList: any[] = [];
 
-  constructor() {}
+  fileObs$: Observable<FileMetadata[]>;
 
-  ngOnInit(): void {}
+  constructor(
+    private store$: Store<VideoTrialStoreState.State>,
+    private sharedService: SharedService
+  ) {}
+
+  ngOnInit(): void {
+    this.fileObs$ = this.store$.select(
+      VideoTrialStoreSelectors.getUploadingFile
+    );
+  }
 
   /**
    * on file drop handler
@@ -44,10 +62,25 @@ export class FileUploaderComponent implements OnInit {
     this.processing = true;
     this.isUploading = true;
     this.isCompleted = false;
+    const metadata: FileMetadata[] = [];
     for (const item of files) {
+      console.log(item);
+
+      const temp: FileMetadata = {
+        file: item,
+        status: 'SELECTED',
+        progress: 0,
+        fileName: item?.name,
+        size: item?.size,
+      };
+      metadata.push(temp);
       this.files.push(item);
     }
     console.log(this.files);
+
+    this.store$.dispatch(
+      VideoTrialStoreActions.addFilesToUpload({ files: metadata })
+    );
 
     // this.fileDropEl.nativeElement.value = '';
   }
@@ -82,20 +115,8 @@ export class FileUploaderComponent implements OnInit {
   }
 
   uploaadFiles(): void {
-    this.percentage = '0';
-    this.processing = true;
-    this.isUploading = true;
-    this.isCompleted = false;
-    // let file = this.files[0];
-    const thus = this;
-
-    for (const iterator of this.files) {
-      // Create a new tus upload
-      const upload = this.getTusObject(iterator, thus, this.files.indexOf(iterator));
-      this.uploadList.push(upload);
-      // Start the upload
-      upload.start();
-    }
+    this.sharedService.uploadFiles(this.files);
+    return;
   }
 
   private getTusObject(file: any, thus: this, index: number): any {
@@ -141,16 +162,23 @@ export class FileUploaderComponent implements OnInit {
     });
   }
 
-  pause(index: number): void {
-    this.uploadList[index].abort();
-    this.files[index].isUploading = false;
-    this.isUploading = false;
+  pause(file: any): void {
+    // this.sharedService.uploaderList[index].a/bort();
+
+    // this.store$.dispatch(Video)
+    this.sharedService.pause(file);
+    return;
+    // this.uploadList[index].abort();
+    // this.files[index].isUploading = false;
+    // this.isUploading = false;
   }
 
-  resume(index: number): void {
-    this.uploadList[index].start();
-    this.isUploading = true;
-    this.files[index].isUploading = true;
-
+  resume(file: any): void {
+    this.sharedService.play(file);
+    // this.sharedService.uploaderList[index].start();
+    return;
+    // this.uploadList[index].start();
+    // this.isUploading = true;
+    // this.files[index].isUploading = true;
   }
 }

@@ -1,3 +1,4 @@
+import { FileMetadata } from './../../core/models/file-upload.model';
 import { Video } from './../../core/models/video.model';
 import { Procedure } from 'src/app/core/models/procedure.model';
 
@@ -11,6 +12,8 @@ export interface State {
   procedures: Procedure[];
   isLoadingProcedures: boolean;
   unscrubbedVideo: Procedure;
+  fileUpload: FileMetadata[];
+
 }
 
 export const initialState: State = {
@@ -64,4 +67,5 @@ export const initialState: State = {
   procedure: null,
   procedures: [],
   isLoadingProcedures: false,
+  fileUpload: []
 };

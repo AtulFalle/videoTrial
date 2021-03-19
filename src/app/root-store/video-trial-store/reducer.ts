@@ -88,23 +88,6 @@ const featureReducer = createReducer(
       };
     }
   ),
-
-  // on(videoTrialActions.updateDuration, (state, { time, videoId }) => {
-  //   const temp = [...new Set(state.video)];
-  //   const currentVideo = { ...state.currentVideo };
-  //   for (const iterator of temp) {
-  //     if (iterator.videoId === videoId) {
-  //       iterator.metadata.duration = time;
-  //       currentVideo.metadata.duration = time;
-  //     }
-  //   }
-
-  //   return {
-  //     ...state,
-  //     video: temp,
-  //     currentVideo,
-  //   };
-  // }),
   on(videoTrialActions.getProcedure, (state) => {
     return {
       ...state,
@@ -143,9 +126,40 @@ const featureReducer = createReducer(
   on(videoTrialActions.updateCurrentVideoTab, (state, { tab }) => {
     return {
       ...state,
-      currentTabIndex: tab
+      currentTabIndex: tab,
     };
   }),
+  on(videoTrialActions.addFilesToUpload, (state, { files }) => {
+    return {
+      ...state,
+      fileUpload: files,
+    };
+  }),
+  on(videoTrialActions.updateFileProgress, (state, { file }) => {
+    const files = [...state.fileUpload];
+    const index = files.findIndex((ele) => ele.fileName === file.fileName);
+    files[index] = file;
+
+    return {
+      ...state,
+      fileUpload: files,
+    };
+  }),
+  on(videoTrialActions.updateFileStatus, (state, { file }) => {
+    const files = [];
+    for (const iterator of state.fileUpload) {
+      const temp = { ...iterator };
+      files.push(temp);
+    }
+    const index = files.findIndex((ele) => ele.fileName === file.file.fileName);
+    if (files[index].status !== file.status) {
+      files[index].status = file.status;
+    }
+    return {
+      ...state,
+      fileUpload: files,
+    };
+  })
 );
 
 // tslint:disable-next-line: typedef

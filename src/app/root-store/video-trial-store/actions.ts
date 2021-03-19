@@ -1,3 +1,4 @@
+import { FileMetadata } from './../../core/models/file-upload.model';
 import { Video } from './../../core/models/video.model';
 import { Procedure } from './../../core/models/procedure.model';
 import { TrialVideo, Annotation } from './../../core/models/annotations.model';
@@ -31,7 +32,12 @@ export enum VideoTrialActionType {
   UPDATE_CURRENT_VIDEO = '[Trial video update] update metadata for current video',
 
   // video scrubbed or unscrubbed
-  VIDEO_TAB_CHANGED = '[video current tab] update current video tab'
+  VIDEO_TAB_CHANGED = '[video current tab] update current video tab',
+
+  // File upload Actions
+  FILES_SELECTED = '[Video File Selected] file is selected to uplaoad',
+  UPDATE_PROGRESS_STATUS = '[Video File progress Update] update the progress for file',
+  UPDATE_UPLOAD_STATUS = '[Video File Status Update] update the status for file',
 }
 
 export const uploadVideo = createAction(
@@ -114,8 +120,22 @@ export const updateCurrentVideo = createAction(
   props<{ video: Video }>()
 );
 
-
 export const updateCurrentVideoTab = createAction(
   VideoTrialActionType.VIDEO_TAB_CHANGED,
-  props<{tab: number}>()
+  props<{ tab: number }>()
+);
+
+export const addFilesToUpload = createAction(
+  VideoTrialActionType.FILES_SELECTED,
+  props<{ files: FileMetadata[] }>()
+);
+
+export const updateFileProgress = createAction(
+  VideoTrialActionType.UPDATE_PROGRESS_STATUS,
+  props<{ file: FileMetadata }>()
+);
+
+export const updateFileStatus = createAction(
+  VideoTrialActionType.UPDATE_UPLOAD_STATUS,
+  props<{ file: FileMetadata }>()
 );

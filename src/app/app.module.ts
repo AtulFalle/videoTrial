@@ -63,6 +63,7 @@ import {
   InteractionType,
 } from '@azure/msal-browser';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
 
 const isIE =
   window.navigator.userAgent.indexOf('MSIE ') > -1 ||
@@ -166,6 +167,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
       logOnly: !environment.production,
     }),
     AngularMaterialModule,
+    NgIdleKeepaliveModule.forRoot()
   ],
   providers: [
     MatNativeDateModule,
