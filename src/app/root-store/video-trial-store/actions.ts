@@ -4,6 +4,7 @@ import { Procedure } from './../../core/models/procedure.model';
 import { TrialVideo, Annotation } from './../../core/models/annotations.model';
 
 import { createAction, props } from '@ngrx/store';
+import { UserMetadata } from 'src/app/core/models/user-roles.model';
 
 export enum VideoTrialActionType {
   // video upload actions
@@ -38,6 +39,10 @@ export enum VideoTrialActionType {
   FILES_SELECTED = '[Video File Selected] file is selected to uplaoad',
   UPDATE_PROGRESS_STATUS = '[Video File progress Update] update the progress for file',
   UPDATE_UPLOAD_STATUS = '[Video File Status Update] update the status for file',
+
+  // get/set User Study and Site metadata
+  GET_USER_METADATA = '[User Metadata ] get User metadata ',
+  UPDATE_SELECTED_STUDY = '[User Metadata] update User metadata current selected study',
 }
 
 export const uploadVideo = createAction(
@@ -138,4 +143,13 @@ export const updateFileProgress = createAction(
 export const updateFileStatus = createAction(
   VideoTrialActionType.UPDATE_UPLOAD_STATUS,
   props<{ file: FileMetadata }>()
+);
+
+export const getUserMetadata = createAction(
+  VideoTrialActionType.GET_USER_METADATA
+);
+
+export const updateSelectedStudy = createAction(
+  VideoTrialActionType.UPDATE_SELECTED_STUDY,
+  props<{ study: string }>()
 );

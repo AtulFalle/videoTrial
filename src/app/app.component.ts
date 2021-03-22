@@ -53,7 +53,6 @@ export class AppComponent implements OnInit {
     // idle.setTimeout(5);
     // // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
     // idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-
     // idle.onIdleEnd.subscribe(() => (this.idleState = 'No longer idle.'));
     // idle.onTimeout.subscribe(() => {
     //   this.idleState = 'Timed out!';
@@ -65,12 +64,9 @@ export class AppComponent implements OnInit {
     //   (countdown: string) =>
     //     (this.idleState = 'You will time out in ' + countdown + ' seconds!')
     // );
-
     // // sets the ping interval to 15 seconds
     // keepalive.interval(15);
-
     // keepalive.onPing.subscribe(() => (this.lastPing = new Date()));
-
     // this.reset();
   }
 
@@ -90,6 +86,7 @@ export class AppComponent implements OnInit {
         ),
         takeUntil(this._destroying$)
       )
+      // tslint:disable-next-line: deprecation
       .subscribe((res) => {
         console.log(res);
       });
@@ -102,8 +99,9 @@ export class AppComponent implements OnInit {
         ),
         takeUntil(this._destroying$)
       )
+      // tslint:disable-next-line: deprecation
       .subscribe((result: EventMessage) => {
-        const payload: IdTokenClaims =  result.payload as AuthenticationResult;
+        const payload: IdTokenClaims = result.payload as AuthenticationResult;
         console.log(result);
         sessionStorage.setItem('token', payload.idToken);
         this.username = payload.account.name;
@@ -134,6 +132,7 @@ export class AppComponent implements OnInit {
       authority: b2cPolicies.authorities.signUpSignIn.authority,
     };
     sessionStorage.clear();
+    // tslint:disable-next-line: deprecation
     this.authService.logout(endSessionRequest).subscribe((res) => {
       console.log('logout success');
     });
@@ -152,24 +151,40 @@ export class AppComponent implements OnInit {
   getUserRole(): string {
     try {
       const token: any = jwt_decode(sessionStorage.getItem('token'));
-      this.userRole = token.extension_role;
-      return token.extension_role;
+      const roleData = JSON.parse(token.extension_selectedrole);
+      const userRoles = [];
+      for (const iterator of Object.keys(roleData)) {
+        for (const iter of roleData[iterator]) {
+          userRoles.push(iter.role);
+        }
+      }
+      if (userRoles.find((e) => e === 'Admin')) {
+        this.userRole = 'admin';
+        return this.userRole;
+      } else if (userRoles.find((e) => e === 'Uploader')) {
+        this.userRole = 'uploader';
+        return this.userRole;
+      } else {
+        this.userRole = 'viewer';
+
+        return 'viewer';
+      }
     } catch (e) {
-      return 'admin';
+      return 'viewer';
     }
   }
 
   canUplaodVideo(): boolean {
-    if (this.userRole === 'admin' || this.userRole === 'uploader') {
+    if (this.userRole.toLowerCase() === 'admin' || this.userRole.toLowerCase() === 'uploader') {
       return true;
     }
-    return true;
+    return false;
   }
 
   canAddProcedure(): boolean {
-    if (this.userRole === 'admin' || this.userRole === 'scrubber') {
+    if (this.userRole.toLowerCase() === 'admin' || this.userRole.toLowerCase() === 'viewer') {
       return true;
     }
-    return true;
+    return false;
   }
 }

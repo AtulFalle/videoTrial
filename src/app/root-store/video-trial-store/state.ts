@@ -1,6 +1,7 @@
 import { FileMetadata } from './../../core/models/file-upload.model';
 import { Video } from './../../core/models/video.model';
 import { Procedure } from 'src/app/core/models/procedure.model';
+import { UserMetadata } from '../../core/models/user-roles.model';
 
 export interface State {
   isLoading?: boolean;
@@ -13,7 +14,8 @@ export interface State {
   isLoadingProcedures: boolean;
   unscrubbedVideo: Procedure;
   fileUpload: FileMetadata[];
-
+  studyList: UserMetadata[];
+  currentStudy: string;
 }
 
 export const initialState: State = {
@@ -27,7 +29,6 @@ export const initialState: State = {
       originalName: '',
       annotations: [],
       type: 'Unscrubbed',
-
     },
   ],
   currentVideo: {
@@ -36,7 +37,6 @@ export const initialState: State = {
     originalName: '',
     annotations: [],
     type: 'Unscrubbed',
-
   },
   unscrubbedVideo: {
     patientId: 'test',
@@ -67,5 +67,7 @@ export const initialState: State = {
   procedure: null,
   procedures: [],
   isLoadingProcedures: false,
-  fileUpload: []
+  fileUpload: [],
+  studyList: [],
+  currentStudy: '',
 };

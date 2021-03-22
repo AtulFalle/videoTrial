@@ -79,12 +79,12 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       clientId: 'a39f9378-d595-42ad-b773-422b79502a9c',
       authority: b2cPolicies.authorities.signUpSignIn.authority,
       redirectUri: 'http://localhost:4200/home',
-      postLogoutRedirectUri: 'http://localhost:4200/login',
+      postLogoutRedirectUri: 'http://localhost:4200',
       knownAuthorities: [b2cPolicies.authorityDomain],
       navigateToLoginRequestUrl: false
     },
     cache: {
-      cacheLocation: BrowserCacheLocation.LocalStorage,
+      cacheLocation: BrowserCacheLocation.SessionStorage,
       storeAuthStateInCookie: isIE, // set to true for IE 11
     },
     system: {

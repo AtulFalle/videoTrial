@@ -8,6 +8,7 @@ import { AddProcedureComponent } from './components/add-procedure/add-procedure.
 import { ProceduresListComponent } from './components/procedures-list/procedures-list.component';
 import { MsalGuard } from '@azure/msal-angular';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
+import { AuthRoleGuard } from './core/guard/auth-role.guard';
 
 const routes: Routes = [
   {
@@ -21,16 +22,17 @@ const routes: Routes = [
   {
     path: 'procedure-details/:id',
     component: HomeComponent,
+    canActivate: [AuthRoleGuard],
   },
   {
     path: 'add-procedure',
     component: AddProcedureComponent,
-    canActivate: [MsalGuard],
+    canActivate: [AuthRoleGuard],
   },
   {
     path: 'procedures-list',
     component: ProceduresListComponent,
-    canActivate: [MsalGuard],
+    canActivate: [AuthRoleGuard],
   },
   {
     path: 'login',

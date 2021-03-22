@@ -48,3 +48,19 @@ export const getUploadingFile = createSelector(
   selectVideoState,
   (state: State) => state.fileUpload
 );
+
+export const getStudyList = createSelector(selectVideoState, (state: State) =>
+  state.studyList
+    .filter((ele) =>
+      ele.site.findIndex((iter) => iter.role === 'Admin') > -1 ? true : false
+    )
+    .map((res) => res.name)
+);
+
+export const getSiteList = createSelector(selectVideoState, (state: State) =>
+  state.studyList
+    .filter((e) => e.name === state.currentStudy)
+    .map((iter) => iter.site)
+    .map((ele) => ele.filter((e) => e.role === 'Admin'))
+    .map((e) => e[0])
+);

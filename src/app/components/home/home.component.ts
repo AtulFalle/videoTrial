@@ -58,7 +58,6 @@ export class HomeComponent implements OnInit {
     this.store$
       .select(VideoTrialStoreSelectors.getCurrentVideoTab)
       .subscribe((index) => {
-        ``;
         if (index === 1) {
           this.showActivityTab = false;
         } else {
@@ -68,7 +67,19 @@ export class HomeComponent implements OnInit {
 
     try {
       const token: any = jwt_decode(sessionStorage.getItem('token'));
-      this.userRole = token.extension_role;
+      const roleData = JSON.parse(token.extension_selectedrole);
+      const userRoles = [];
+      for (const iterator of Object.keys(roleData)) {
+        for (const iter of roleData[iterator]) {
+          userRoles.push(iter.role);
+        }
+      }
+      if (userRoles.find((e) => e === 'Admin')) {
+        this.userRole = 'admin';
+      } else if (userRoles.find((e) => e === 'Uploader')) {
+        this.userRole = 'uploader';
+      } else {
+      }
     } catch (e) {
       this.userRole = '';
     }

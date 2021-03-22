@@ -1,24 +1,14 @@
+import { Site, UserMetadata } from './../../core/models/user-roles.model';
 import { Video } from './../../core/models/video.model';
 import { TrialVideo } from './../../core/models/annotations.model';
 import { Action, createReducer, on } from '@ngrx/store';
 import * as videoTrialActions from './actions';
 import { initialState, State } from './state';
+import jwt_decode from 'jwt-decode';
 
 const featureReducer = createReducer(
   initialState,
-  // on(videoTrialActions.uploadVideo, (state, { video }) => {
-  //   const temp = [...state.video];
-  //   temp.push(video);
-  //   const videoList = [...new Set(temp)];
-  //   console.log(videoList);
-  //   return {
-  //     ...state,
-  //     isLoading: true,
-  //     error: null,
-  //     video: videoList,
-  //     currentVideo: video,
-  //   };
-  // }),
+
   on(
     videoTrialActions.addAnnotationsSucces,
     (state, { annotationsList, videoId }) => {
@@ -159,6 +149,36 @@ const featureReducer = createReducer(
       ...state,
       fileUpload: files,
     };
+  }),
+  on(videoTrialActions.getUserMetadata, (state) => {
+    const token: any = jwt_decode(sessionStorage.getItem('token'));
+    const roleData = JSON.parse(token.extension_selectedrole);
+    const userRoles: UserMetadata[] = [];
+    for (const iterator of Object.keys(roleData)) {
+      const temp: UserMetadata = {
+        name: iterator,
+        site: roleData[iterator].map((ele: any) => {
+          const tempSite: Site = {
+            name: ele.site,
+            role: ele.role,
+          };
+          return tempSite;
+        }),
+      };
+      userRoles.push(temp);
+    }
+    return {
+      ...state,
+      studyList: userRoles,
+      currentStudy: userRoles[0].name,
+    };
+  }),
+  on(videoTrialActions.updateSelectedStudy, (state, {study}) => {
+
+    return {
+      ...state,
+      currentStudy: study
+    }
   })
 );
 

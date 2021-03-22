@@ -97,32 +97,20 @@
               <mat-label>Study</mat-label>
               <mat-radio-group class="radio-group" formControlName="study">
                 <mat-radio-button
+                  *ngFor="let item of (studyList | async)"
                   color="primary"
                   class="radio-button"
-                  value="bodyTemperature"
-                  >Body Temperature</mat-radio-button
-                >
-                <mat-radio-button
-                  color="primary"
-                  class="radio-button"
-                  value="bodyWeight"
-                  >Body Weight</mat-radio-button
-                >
-                <mat-radio-button
-                  color="primary"
-                  class="radio-button"
-                  value="bloodPressure"
-                  >Blood Pressure</mat-radio-button
+                  value="{{ item }}"
+                  (change)="studyUpdate($event)"
+                  >{{ item }}</mat-radio-button
                 >
               </mat-radio-group>
             </div>
             <mat-form-field class="full-width-input" appearance="fill">
               <mat-label>Site</mat-label>
               <mat-select required formControlName="site">
-                <mat-option value="kaleidoscope">Kaleidoscope</mat-option>
-                <mat-option value="periscope">Periscope</mat-option>
-                <mat-option value="mercedes">Mercedes</mat-option>
-                <mat-option value="audi">Audi</mat-option>
+                <mat-option *ngFor="let item of (roleList | async)" value="{{item.name}}">{{item.name}}</mat-option>
+
               </mat-select>
             </mat-form-field>
             <mat-form-field class="full-width-input" appearance="fill">
@@ -152,12 +140,7 @@
                 <mat-option value="audi">Shane Watson</mat-option>
               </mat-select>
             </mat-form-field>
-            <button
-              mat-raised-button
-              color="primary"
-            >
-              Submit
-            </button>
+            <button mat-raised-button color="primary">Submit</button>
           </form>
         </div>
       </div>
