@@ -1,3 +1,4 @@
+import { NotAuthorizedComponent } from './authentication/not-authorized/not-authorized.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { VideoListComponent } from './components/video-list/video-list.component';
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path: 'file-uploader',
     component: FileUploaderComponent
+  },
+  {
+    path: 'not-authorized',
+    component: NotAuthorizedComponent
   },
   {
     path: '**',

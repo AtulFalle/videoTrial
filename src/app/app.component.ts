@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   MSAL_GUARD_CONFIG,
@@ -45,8 +46,12 @@ export class AppComponent implements OnInit {
     private authService: MsalService,
     private msalBroadcastService: MsalBroadcastService,
     private idle: Idle,
-    private keepalive: Keepalive
+    private keepalive: Keepalive,
+    private router: Router
   ) {
+    // this.authService.handleRedirectObservable().subscribe((res) => {
+    //   console.log(res);
+    // });
     // sets an idle timeout of 5 seconds, for testing purposes.
     // idle.setIdle(5);
     // // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
@@ -90,6 +95,7 @@ export class AppComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
       });
+
     this.msalBroadcastService.msalSubject$
       .pipe(
         filter(
@@ -105,24 +111,30 @@ export class AppComponent implements OnInit {
         console.log(result);
         sessionStorage.setItem('token', payload.idToken);
         this.username = payload.account.name;
+        this.router.navigate(['/']);
+
+        // const getApproval: any = jwt_decode(payload.idToken);
+        // if (getApproval.extension_accountstatus === 'Requested') {
+        //   // this.router.navigate(['not-authorized']);
+        // }
 
         // We need to reject id tokens that were not issued with the default sign-in policy.
         // "acr" claim in the token tells us what policy is used (NOTE: for new policies (v2.0), use "tfp" instead of "acr")
         // To learn more about b2c tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
 
-        if (payload.idTokenClaims?.acr === b2cPolicies.names.forgotPassword) {
-          window.alert(
-            'Password has been reset successfully. \nPlease sign-in with your new password.'
-          );
-          return this.authService.logout();
-        } else if (
-          payload.idTokenClaims.acr === b2cPolicies.names.editProfile
-        ) {
-          window.alert(
-            'Profile has been updated successfully. \nPlease sign-in again.'
-          );
-          return this.authService.logout();
-        }
+        // if (payload.idTokenClaims?.acr === b2cPolicies.names.forgotPassword) {
+        //   window.alert(
+        //     'Password has been reset successfully. \nPlease sign-in with your new password.'
+        //   );
+        //   return this.authService.logout();
+        // } else if (
+        //   payload.idTokenClaims.acr === b2cPolicies.names.editProfile
+        // ) {
+        //   window.alert(
+        //     'Profile has been updated successfully. \nPlease sign-in again.'
+        //   );
+        //   return this.authService.logout();
+        // }
         return result;
       });
   }
@@ -142,7 +154,7 @@ export class AppComponent implements OnInit {
     // return '';
     try {
       const token: any = jwt_decode(sessionStorage.getItem('token'));
-      return token.name + ' ' + token.family_name;
+      return token.given_name + ' ' + token.family_name;
     } catch (e) {
       return '';
     }
@@ -175,14 +187,20 @@ export class AppComponent implements OnInit {
   }
 
   canUplaodVideo(): boolean {
-    if (this.userRole.toLowerCase() === 'admin' || this.userRole.toLowerCase() === 'uploader') {
+    if (
+      this.userRole.toLowerCase() === 'admin' ||
+      this.userRole.toLowerCase() === 'uploader'
+    ) {
       return true;
     }
     return false;
   }
 
   canAddProcedure(): boolean {
-    if (this.userRole.toLowerCase() === 'admin' || this.userRole.toLowerCase() === 'viewer') {
+    if (
+      this.userRole.toLowerCase() === 'admin' ||
+      this.userRole.toLowerCase() === 'viewer'
+    ) {
       return true;
     }
     return false;

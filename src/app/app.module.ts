@@ -63,7 +63,8 @@ import {
   InteractionType,
 } from '@azure/msal-browser';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
+import { NotAuthorizedComponent } from './authentication/not-authorized/not-authorized.component'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
 
 const isIE =
   window.navigator.userAgent.indexOf('MSIE ') > -1 ||
@@ -133,6 +134,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     UnscrubbedVideoComponent,
     LoginComponent,
     FileUploaderComponent,
+    NotAuthorizedComponent,
   ],
   imports: [
     BrowserModule,
