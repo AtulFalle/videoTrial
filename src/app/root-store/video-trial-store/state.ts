@@ -1,3 +1,4 @@
+import { User } from './../../core/models/admin.model';
 import { FileMetadata } from './../../core/models/file-upload.model';
 import { Video } from './../../core/models/video.model';
 import { Procedure } from 'src/app/core/models/procedure.model';
@@ -16,6 +17,8 @@ export interface State {
   fileUpload: FileMetadata[];
   studyList: UserMetadata[];
   currentStudy: string;
+  users: User[];
+
 }
 
 export const initialState: State = {
@@ -70,4 +73,5 @@ export const initialState: State = {
   fileUpload: [],
   studyList: [],
   currentStudy: '',
+  users: []
 };

@@ -1,3 +1,4 @@
+import { User } from './../../core/models/admin.model';
 import { FileMetadata } from './../../core/models/file-upload.model';
 import { Video } from './../../core/models/video.model';
 import { Procedure } from './../../core/models/procedure.model';
@@ -43,6 +44,12 @@ export enum VideoTrialActionType {
   // get/set User Study and Site metadata
   GET_USER_METADATA = '[User Metadata ] get User metadata ',
   UPDATE_SELECTED_STUDY = '[User Metadata] update User metadata current selected study',
+
+  GET_ALL_USER = '[USER GET] get all user Details',
+  GET_ALL_USER_SUCCESS = '[USER GET SUCCESS] get all user Details',
+  UPDATE_USER_DUMMY = '[USER UPDATE DUMMY] update the user status',
+  UPDATE_USER = '[USER UPDATE] update the user status',
+  UPDATE_USER_SUCCESS = '[USER UPDATE SUCCESS] update the user status',
 }
 
 export const uploadVideo = createAction(
@@ -152,4 +159,22 @@ export const getUserMetadata = createAction(
 export const updateSelectedStudy = createAction(
   VideoTrialActionType.UPDATE_SELECTED_STUDY,
   props<{ study: string }>()
+);
+
+export const getAllUserSuccess = createAction(
+  VideoTrialActionType.GET_ALL_USER_SUCCESS,
+  props<{ users: User[] }>()
+);
+export const getAllUser = createAction(VideoTrialActionType.GET_ALL_USER);
+export const updateUserStatus = createAction(
+  VideoTrialActionType.UPDATE_USER_DUMMY,
+  props<{ id: string; status: string; objectId: string }>()
+);
+export const updateUserStatusAdmin = createAction(
+  VideoTrialActionType.UPDATE_USER,
+  props<{ objectId: string; selectedRole: any }>()
+);
+export const updateUserStatusAdminSuccess = createAction(
+  VideoTrialActionType.UPDATE_USER_SUCCESS,
+  props<{ user: User }>()
 );

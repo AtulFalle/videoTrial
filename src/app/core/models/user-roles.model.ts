@@ -6,4 +6,5 @@ export interface UserMetadata {
 export interface Site {
   name: string;
   role: string;
+  siteRequestStatus: string;
 }

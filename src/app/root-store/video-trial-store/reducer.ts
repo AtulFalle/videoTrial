@@ -5,6 +5,7 @@ import { Action, createReducer, on } from '@ngrx/store';
 import * as videoTrialActions from './actions';
 import { initialState, State } from './state';
 import jwt_decode from 'jwt-decode';
+import { User } from 'src/app/core/models/admin.model';
 
 const featureReducer = createReducer(
   initialState,
@@ -161,6 +162,7 @@ const featureReducer = createReducer(
           const tempSite: Site = {
             name: ele.site,
             role: ele.role,
+            siteRequestStatus: ele.siteRequestStatus,
           };
           return tempSite;
         }),
@@ -173,12 +175,76 @@ const featureReducer = createReducer(
       currentStudy: userRoles[0].name,
     };
   }),
-  on(videoTrialActions.updateSelectedStudy, (state, {study}) => {
+  on(videoTrialActions.updateSelectedStudy, (state, { study }) => {
+    return {
+      ...state,
+      currentStudy: study,
+    };
+  }),
+  on(videoTrialActions.getAllUserSuccess, (state, { users }) => {
+    const updatedUserList: User[] = [];
+    for (const iterator of users) {
+      const temp = { ...iterator };
+      updatedUserList.push(temp);
+    }
+    updatedUserList.map((item) => {
+      item.selectedRole = JSON.parse(item.selectedRole);
+    });
+    return {
+      ...state,
+      users: updatedUserList,
+    };
+  }),
+  on(videoTrialActions.updateUserStatusAdminSuccess, (state, { user }) => {
+    const updatedUserList: User[] = [];
+    for (const iterator of state.users) {
+      const temp = { ...iterator };
+      updatedUserList.push(temp);
+    }
+    const index = updatedUserList.findIndex(
+      (ele) => ele.objectId === user.objectId
+    );
+    const parsedUser = { ...user };
+    parsedUser.selectedRole = JSON.parse(user.selectedRole);
+    updatedUserList[index] = parsedUser;
+    console.log(updatedUserList);
+    return {
+      ...state,
+      users: updatedUserList,
+    };
+  }),
+  on(videoTrialActions.updateUserStatus, (state, { id, status, objectId }) => {
+    const updatedUserList: User[] = [];
+    for (const iterator of state.users) {
+      const temp = { ...iterator };
+      updatedUserList.push(temp);
+    }
+    const index = updatedUserList.findIndex((ele) => ele.objectId === objectId);
+    const tempSelectedRole: any = {};
+    if (updatedUserList[index].selectedRole) {
+      Object.keys(updatedUserList[index].selectedRole).map((study) => {
+        const roleObjArr: any[] = [];
+        updatedUserList[index].selectedRole[study].map((roleObj: any) => {
+          if (roleObj.id == id) {
+            roleObjArr.push({
+              id,
+              role: roleObj.role,
+              site: roleObj.site,
+              siteRequestStatus: status,
+            });
+          } else {
+            roleObjArr.push(roleObj);
+          }
+        });
+        tempSelectedRole[study] = roleObjArr;
+      });
+    }
+    updatedUserList[index].selectedRole = tempSelectedRole;
 
     return {
       ...state,
-      currentStudy: study
-    }
+      users: updatedUserList,
+    };
   })
 );
 

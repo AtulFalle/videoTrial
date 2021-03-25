@@ -53,6 +53,10 @@ const routes: Routes = [
     component: NotAuthorizedComponent
   },
   {
+    path: 'admin-dashboard',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+  },
+  {
     path: '**',
     redirectTo: 'home',
     pathMatch: 'full',

@@ -110,31 +110,17 @@ export class AppComponent implements OnInit {
         const payload: IdTokenClaims = result.payload as AuthenticationResult;
         console.log(result);
         sessionStorage.setItem('token', payload.idToken);
-        this.username = payload.account.name;
-        this.router.navigate(['/']);
-
         const getApproval: any = jwt_decode(payload.idToken);
         if (getApproval.extension_accountstatus !== 'Active') {
-          this.router.navigate(['not-authorized']);
+          if (getApproval.extension_accountstatus === 'superuser') {
+            this.router.navigate(['admin-dashboard']);
+          } else {
+            this.router.navigate(['not-authorized']);
+          }
+        } else {
+          this.router.navigate(['/']);
         }
 
-        // We need to reject id tokens that were not issued with the default sign-in policy.
-        // "acr" claim in the token tells us what policy is used (NOTE: for new policies (v2.0), use "tfp" instead of "acr")
-        // To learn more about b2c tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
-
-        // if (payload.idTokenClaims?.acr === b2cPolicies.names.forgotPassword) {
-        //   window.alert(
-        //     'Password has been reset successfully. \nPlease sign-in with your new password.'
-        //   );
-        //   return this.authService.logout();
-        // } else if (
-        //   payload.idTokenClaims.acr === b2cPolicies.names.editProfile
-        // ) {
-        //   window.alert(
-        //     'Profile has been updated successfully. \nPlease sign-in again.'
-        //   );
-        //   return this.authService.logout();
-        // }
         return result;
       });
   }
@@ -151,7 +137,6 @@ export class AppComponent implements OnInit {
   }
 
   getUserName(): string {
-    // return '';
     try {
       const token: any = jwt_decode(sessionStorage.getItem('token'));
       return token.given_name + ' ' + token.family_name;
@@ -178,11 +163,10 @@ export class AppComponent implements OnInit {
         return this.userRole;
       } else {
         this.userRole = 'viewer';
-
         return 'viewer';
       }
     } catch (e) {
-      return 'viewer';
+      return '';
     }
   }
 
@@ -204,5 +188,15 @@ export class AppComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  idSuperAdmin(): boolean {
+    const token: any = jwt_decode(sessionStorage.getItem('token'));
+    if (token.extension_accountstatus === 'superuser') {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }

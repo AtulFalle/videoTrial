@@ -14,13 +14,16 @@ import {
 import * as videoTrialActions from './actions';
 import { Procedure } from 'src/app/core/models/procedure.model';
 import { DeleteAnnotation } from 'src/app/core/models/annotations.model';
+import { AdminService } from 'src/app/admin/admin.service';
+import { User } from 'src/app/core/models/admin.model';
 
 @Injectable()
 export class VideoTrialStoreEffects {
   constructor(
     private actions$: Actions,
     private procedureService: ProcedureService,
-    private messageBoxService: MessageBoxService
+    private messageBoxService: MessageBoxService,
+    private adminService: AdminService
   ) {}
 
   @Effect()
@@ -109,6 +112,45 @@ export class VideoTrialStoreEffects {
           catchError((e) => {
             this.messageBoxService.openErrorMessage(
               'error while adding annotation'
+            );
+            return e;
+          })
+        );
+    })
+  );
+  @Effect()
+  getAllUsers = this.actions$.pipe(
+    ofType(videoTrialActions.getAllUser),
+    switchMap((action) => this.adminService.getAllUsers()),
+    switchMap((users: User[]) => {
+      return of(
+        videoTrialActions.getAllUserSuccess({
+          users,
+        })
+      );
+    })
+  );
+
+  @Effect()
+  updateserStatus = this.actions$.pipe(
+    ofType(videoTrialActions.updateUserStatusAdmin),
+    switchMap((action) => {
+      return this.adminService
+        .updateUserStatus(action.objectId, action.selectedRole)
+        .pipe(
+          switchMap((res: any) => {
+            this.messageBoxService.openSuccessMessage(
+              'User Status updated successfully'
+            );
+            return of(
+              videoTrialActions.updateUserStatusAdminSuccess({
+               user:res
+              })
+            );
+          }),
+          catchError((e) => {
+            this.messageBoxService.openErrorMessage(
+              'Error while User Status'
             );
             return e;
           })

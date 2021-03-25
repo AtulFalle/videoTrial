@@ -17,7 +17,9 @@ export class VideoTrialInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const url = this.serverUrl + req.url;
+    // const url = this.serverUrl + req.url;
+    const url = req.url.toString().includes('https:') ? req.url : this.serverUrl + req.url;
+    console.log(url);
     const cloneReq = req.clone({
       url,
     });
