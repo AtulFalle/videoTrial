@@ -1,7 +1,7 @@
-<div class="col-12">
+<div class="col-12 mt-5 ml-5 parent">
   <h1>401 - UnAuthorized</h1>
   <p>
-    You are not authorized to access portal. logging you out in
-    <b> {{ time }} Seconds </b>
+   {{msg}}
+    <b> Logging you out in  {{ time >= 0 ? time : '0' }} Seconds </b>
   </p>
 </div>

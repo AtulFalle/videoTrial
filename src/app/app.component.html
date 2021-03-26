@@ -10,7 +10,7 @@
         <span class="m-0 name" *ngIf="username || getUserName()"
           >Hi, {{  getUserName() || "" }}</span
         >
-        <span>{{userRole || getUserRole() || ''}}</span>
+        <span>{{ getUserRole() || ''}}</span>
       </div>
     </div>
     <button
@@ -41,14 +41,14 @@
       >
         Add Procedure
       </a>
-      <a
+      <!-- <a
       *ngIf="canUplaodVideo()"
       mat-list-item
       routerLink="/file-uploader"
       routerLinkActive="active-link"
     >
       Upload Videos
-    </a>
+    </a> -->
     <a
     *ngIf="idSuperAdmin()"
     mat-list-item

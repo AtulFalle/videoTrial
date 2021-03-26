@@ -155,6 +155,11 @@ export class AppComponent implements OnInit {
           userRoles.push(iter.role);
         }
       }
+
+      if (token.extension_accountstatus === 'superuser') {
+        this.userRole = 'admin';
+        return ' Super Admin';
+      }
       if (userRoles.find((e) => e === 'Admin')) {
         this.userRole = 'admin';
         return this.userRole;
@@ -194,8 +199,7 @@ export class AppComponent implements OnInit {
     const token: any = jwt_decode(sessionStorage.getItem('token'));
     if (token.extension_accountstatus === 'superuser') {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }

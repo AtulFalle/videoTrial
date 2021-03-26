@@ -57,13 +57,19 @@ export const getStudyList = createSelector(selectVideoState, (state: State) =>
     .map((res) => res.name)
 );
 
-export const getSiteList = createSelector(selectVideoState, (state: State) =>
-  state.studyList
+export const getSiteList = createSelector(selectVideoState, (state: State) => {
+  const a = state.studyList
     .filter((e) => e.name === state.currentStudy)
     .map((iter) => iter.site)
-    .map((ele) => ele.filter((e) => e.role === 'Admin' && e.siteRequestStatus === 'approved'))
-    .map((e) => e[0])
-);
+    .map((ele) =>
+      ele.filter(
+        (e) => e.role === 'Admin' && e.siteRequestStatus === 'approved'
+      )
+    )
+    .map((e) => e[0]);
+  console.log(a);
+  return a;
+});
 
 export const getAllUsers = createSelector(
   selectVideoState,
