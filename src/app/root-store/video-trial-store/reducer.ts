@@ -124,7 +124,7 @@ const featureReducer = createReducer(
   on(videoTrialActions.addFilesToUpload, (state, { files }) => {
     return {
       ...state,
-      fileUpload: files,
+      fileUpload: [...files],
     };
   }),
   on(videoTrialActions.updateFileProgress, (state, { file }) => {
@@ -134,7 +134,7 @@ const featureReducer = createReducer(
 
     return {
       ...state,
-      fileUpload: files,
+      fileUpload: [...files],
     };
   }),
   on(videoTrialActions.updateFileStatus, (state, { file }) => {

@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { VideoTrialStoreActions } from 'src/app/root-store/video-trial-store';
 import { BlobUploadResponse, FileMetadata } from './../core/models/file-upload.model';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import * as tus from 'tus-js-client';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { VideoTrialStoreState } from '../root-store/video-trial-store';
 import { retry } from 'rxjs/operators';
+import { FileUploadService } from './file-upload.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +31,8 @@ export class SharedService {
 
   constructor(
     private store$: Store<VideoTrialStoreState.State>,
-    private http: HttpClient
+    private http: HttpClient,
+    private fileUpload: FileUploadService
   ) {}
 
   toTimeFormat(secs: string): string {
@@ -53,7 +53,12 @@ export class SharedService {
   uploadFiles(files: FileMetadata[]): void {
     // const thus = this;
     for (const iterator of files) {
-     this.store$.dispatch(VideoTrialStoreActions.sendChunk({file: iterator}));
+      of(this.fileUpload.startUploading(iterator)).subscribe(res => {
+        console.log(res);
+
+      });
+     //this.store$.dispatch(VideoTrialStoreActions.sendChunk({file: iterator}));
+
     }
 
   }
@@ -149,17 +154,17 @@ export class SharedService {
     // );
   }
 
-  appendChunk(file: FileMetadata): Observable<BlobUploadResponse> {
+  appendChunk(chunk: any , file: FileMetadata): Observable<BlobUploadResponse> {
     const url = 'https://localhost:44366/api/Values/UploadFiles/' + file.fileName;
     const formData = new FormData();
-    formData.append('files', file.file);
+    formData.append('files', chunk);
     return this.http.put<BlobUploadResponse>(url, formData).pipe(retry(3));
   }
 
-  commitChunk(file: any): Observable<any> {
+  commitChunk(fileIdList: string[], file: any): Observable<any> {
     const url = 'https://localhost:44366/api/Values/commitFile/' + file.name;
     const body = {
-      idList: file.idList,
+      idList: fileIdList,
     };
     return this.http.post(url, body);
   }

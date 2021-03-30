@@ -3,6 +3,6 @@ export enum FileUploadStatus {
   PAUSED = 'Paused',
   CHUNK_COMPLETED = 'Chunk-Completed',
   MERGING = 'Merging',
-  UPLOADED = 'uploaded',
+  UPLOADED = 'COMPLETED',
   ERROR = 'Error',
 }

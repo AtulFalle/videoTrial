@@ -12,7 +12,5 @@ export class MsalBrowserService {
   login(userFlowRequest?: RedirectRequest | PopupRequest): Observable<void> {
     return this.authService.loginRedirect();
   }
-  // handleRedirect(): any {
-  //   return this.authService.handleRedirectObservable
-  // }
+
 }

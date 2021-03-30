@@ -24,7 +24,7 @@
           <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file" />
           <div class="info">
             <h4 class="name">
-              {{ file?.fileName }}
+              {{ file.fileName }}
             </h4>
             <p class="size" *ngIf="file.status !== 'COMPLETED' && file.progress !== 100.00">
               ( {{ file.progress }}%/ 100%)
@@ -40,13 +40,13 @@
               *ngIf="file.status !== 'COMPLETED'"
               mode="determinate"
               [value]="file?.progress"
-              [color]="file.status === 'IN-PROGRESS' ? 'primary' : 'warn'"
+              [color]="file.status === 'primary' "
             ></mat-progress-bar>
           </div>
-          <button mat-button *ngIf="file.status === 'PAUSED'" (click)="resume(file)">
+          <button mat-button *ngIf="file.status === 'Paused'" (click)="resume(file)">
             <mat-icon >play_arrow</mat-icon>
           </button>
-          <button mat-button *ngIf="file.status === 'IN-PROGRESS'" (click)="pause(file)">
+          <button mat-button *ngIf="file.status === 'In-Progress'" (click)="pause(file)">
             <mat-icon >pause</mat-icon>
           </button>
           <img

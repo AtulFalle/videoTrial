@@ -46,7 +46,7 @@ export const getCurrentVideoTab = createSelector(
 
 export const getUploadingFile = createSelector(
   selectVideoState,
-  (state: State) => state.fileUpload
+  (state: State) => [...state.fileUpload]
 );
 
 export const getStudyList = createSelector(selectVideoState, (state: State) =>

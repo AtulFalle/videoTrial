@@ -2,7 +2,13 @@ import { FileUploadStatus } from './../../core/enum/file-upload-status.enum';
 import { SharedService } from './../../service/shared.service';
 import { FileMetadata } from './../../core/models/file-upload.model';
 import { Observable } from 'rxjs';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import * as tus from 'tus-js-client';
 import {
   VideoTrialStoreActions,
@@ -27,18 +33,27 @@ export class FileUploaderComponent implements OnInit {
   isCompleted = false;
   percentage = '0';
   uploadList: any[] = [];
+  fileObs: FileMetadata[] = [];
 
   fileObs$: Observable<FileMetadata[]>;
 
   constructor(
     private store$: Store<VideoTrialStoreState.State>,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.fileObs$ = this.store$.select(
       VideoTrialStoreSelectors.getUploadingFile
     );
+
+    // tslint:disable-next-line: deprecation
+    this.fileObs$.subscribe((res) => {
+      console.log(res);
+      this.fileObs = [...res];
+      this.cdRef.detectChanges();
+    });
   }
 
   /**
@@ -76,12 +91,14 @@ export class FileUploaderComponent implements OnInit {
         size: item?.size,
         blobId: [],
         chunkDetails: [],
-        lastChunk: 0
+        lastChunk: 0,
       };
       metadata.push(temp);
       this.files.push(item);
     }
     console.log(this.files);
+
+    this.files = [...metadata];
 
     this.store$.dispatch(
       VideoTrialStoreActions.addFilesToUpload({ files: metadata })
@@ -119,69 +136,66 @@ export class FileUploaderComponent implements OnInit {
     this.uploadList.splice(index, 1);
   }
 
-  uploaadFiles(): void{
+  uploaadFiles(): void {
     this.store$
       .select(VideoTrialStoreSelectors.getUploadingFile)
-      .pipe( take(1)).subscribe(res => {
+      .pipe(take(1))
+      .subscribe((res) => {
         console.log(res);
 
         this.sharedService.uploadFiles(res);
-      })
+      });
 
+    // .then(files=> {
 
-
-
-      // .then(files=> {
-
-
-      // });
+    // });
     // for (const iterator of file) {
 
     // }
   }
 
-  private getTusObject(file: any, thus: this, index: number): any {
-    return new tus.Upload(file, {
-      // Endpoint is the upload creation URL from your tus server
-      // endpoint: 'http://localhost:3000/files/',
-      // endpoint: 'https://master.tus.io/files/',
-      endpoint: 'https://master.tus.io/files/',
-      // Retry delays will enable tus-js-client to automatically retry on errors
-      retryDelays: [0, 3000, 5000, 10000, 20000],
-      // fileReader: temp,
-      // Attach additional meta data about the file for the server
-      metadata: {
-        name: file.name,
-        type: file.type,
-      },
-      // parallelUploads: 2,
-      // Callback for errors which cannot be fixed using retries
-      onError: (error: any) => {
-        console.log('Failed because: ' + error);
-      },
-      // Callback for reporting upload progress
-      onProgress: (bytesUploaded: number, bytesTotal: number) => {
-        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-        console.log(bytesUploaded, bytesTotal, percentage + '%');
-        thus.files[index].progress = percentage;
-        thus.files[index].percentage = percentage;
-        thus.files[index].isUploading = true;
-        thus.files[index].isCompleted = false;
-        thus.files[index].processing = true;
-      },
-      // Callback for once the upload is completed
-      onSuccess: () => {
-        console.log('file upload completed');
-        // thus.processing = false;
-        // thus.isCompleted = true;
-        thus.files[index].processing = false;
+  // private getTusObject(file: any, thus: this, index: number): any {
+  //   return new tus.Upload(file, {
+  //     // Endpoint is the upload creation URL from your tus server
+  //     // endpoint: 'http://localhost:3000/files/',
+  //     // endpoint: 'https://master.tus.io/files/',
+  //     endpoint: 'https://master.tus.io/files/',
+  //     // Retry delays will enable tus-js-client to automatically retry on errors
+  //     retryDelays: [0, 3000, 5000, 10000, 20000],
+  //     // fileReader: temp,
+  //     // Attach additional meta data about the file for the server
+  //     metadata: {
+  //       name: file.name,
+  //       type: file.type,
+  //     },
+  //     // parallelUploads: 2,
+  //     // Callback for errors which cannot be fixed using retries
+  //     onError: (error: any) => {
+  //       console.log('Failed because: ' + error);
+  //     },
+  //     // Callback for reporting upload progress
+  //     onProgress: (bytesUploaded: number, bytesTotal: number) => {
+  //       const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+  //       console.log(bytesUploaded, bytesTotal, percentage + '%');
+  //       thus.files[index].progress = percentage;
+  //       thus.files[index].percentage = percentage;
+  //       thus.files[index].isUploading = true;
+  //       thus.files[index].isCompleted = false;
+  //       thus.files[index].processing = true;
+  //     },
+  //     // Callback for once the upload is completed
+  //     onSuccess: () => {
+  //       console.log('file upload completed');
+  //       // thus.processing = false;
+  //       // thus.isCompleted = true;
+  //       thus.files[index].processing = false;
 
-        thus.files[index].isUploading = false;
-        thus.files[index].isCompleted = true;
-      },
-      chunkSize: 100 * 1024 * 1024 * 1024,
-    });
-  }
+  //       thus.files[index].isUploading = false;
+  //       thus.files[index].isCompleted = true;
+  //     },
+  //     chunkSize: 100 * 1024 * 1024 * 1024,
+  //   });
+  // }
 
   pause(file: any): void {
     // this.sharedService.uploaderList[index].a/bort();
