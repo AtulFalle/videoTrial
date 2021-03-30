@@ -1,5 +1,5 @@
 import { User } from './../../core/models/admin.model';
-import { FileMetadata } from './../../core/models/file-upload.model';
+import { ChunkDetails, FileMetadata } from './../../core/models/file-upload.model';
 import { Video } from './../../core/models/video.model';
 import { Procedure } from './../../core/models/procedure.model';
 import { TrialVideo, Annotation } from './../../core/models/annotations.model';
@@ -50,6 +50,16 @@ export enum VideoTrialActionType {
   UPDATE_USER_DUMMY = '[USER UPDATE DUMMY] update the user status',
   UPDATE_USER = '[USER UPDATE] update the user status',
   UPDATE_USER_SUCCESS = '[USER UPDATE SUCCESS] update the user status',
+
+  // file upload chunks
+  SEND_CHUNK = '[FileMetadata] send chunk of file',
+  SEND_CHUNK_SUCCESS = '[FileMetadata success] send chunk of file success',
+  UPDATE_STATUS = '[ string ] update status of file',
+  PAUSE_UPLOAD = '[FileMetadata Pause] pause file upload',
+  RESUME_UPLOAD = '[FileMEtadata Resume] resume sending the file',
+
+  COMMIT_BLOCKLIST = '[string[] commit] commit the uploaded blobs',
+  COMMIT_BLOCKLIST_SUCCESS = '[string] commit blob successfull',
 }
 
 export const uploadVideo = createAction(
@@ -177,4 +187,39 @@ export const updateUserStatusAdmin = createAction(
 export const updateUserStatusAdminSuccess = createAction(
   VideoTrialActionType.UPDATE_USER_SUCCESS,
   props<{ user: User }>()
+);
+
+export const sendChunk = createAction(
+  VideoTrialActionType.SEND_CHUNK,
+  props<{ file: FileMetadata }>()
+);
+
+export const sendChunkSuccess = createAction(
+  VideoTrialActionType.SEND_CHUNK_SUCCESS,
+  props<{ file: FileMetadata, chunkDetails: ChunkDetails }>()
+);
+
+export const updateStatus = createAction(
+  VideoTrialActionType.UPDATE_STATUS,
+  props<{ file: FileMetadata; status: string }>()
+);
+
+export const pauseUpload = createAction(
+  VideoTrialActionType.PAUSE_UPLOAD,
+  props<{ file: FileMetadata }>()
+);
+
+export const resumeUpload = createAction(
+  VideoTrialActionType.RESUME_UPLOAD,
+  props<{ file: FileMetadata }>()
+);
+
+export const commitBlockList = createAction(
+  VideoTrialActionType.COMMIT_BLOCKLIST,
+  props<{ file: FileMetadata }>()
+);
+
+export const commitBlockListSuccess = createAction(
+  VideoTrialActionType.COMMIT_BLOCKLIST_SUCCESS,
+  props<{ file: FileMetadata }>()
 );

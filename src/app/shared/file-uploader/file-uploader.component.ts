@@ -1,3 +1,4 @@
+import { FileUploadStatus } from './../../core/enum/file-upload-status.enum';
 import { SharedService } from './../../service/shared.service';
 import { FileMetadata } from './../../core/models/file-upload.model';
 import { Observable } from 'rxjs';
@@ -9,6 +10,7 @@ import {
   VideoTrialStoreSelectors,
 } from 'src/app/root-store/video-trial-store';
 import { Store } from '@ngrx/store';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-file-uploader',
@@ -68,10 +70,13 @@ export class FileUploaderComponent implements OnInit {
 
       const temp: FileMetadata = {
         file: item,
-        status: 'SELECTED',
+        status: FileUploadStatus.IN_PROGRESS,
         progress: 0,
         fileName: item?.name,
         size: item?.size,
+        blobId: [],
+        chunkDetails: [],
+        lastChunk: 0
       };
       metadata.push(temp);
       this.files.push(item);
@@ -114,9 +119,25 @@ export class FileUploaderComponent implements OnInit {
     this.uploadList.splice(index, 1);
   }
 
-  uploaadFiles(): void {
-    this.sharedService.uploadFiles(this.files);
-    return;
+  uploaadFiles(): void{
+    this.store$
+      .select(VideoTrialStoreSelectors.getUploadingFile)
+      .pipe( take(1)).subscribe(res => {
+        console.log(res);
+
+        this.sharedService.uploadFiles(res);
+      })
+
+
+
+
+      // .then(files=> {
+
+
+      // });
+    // for (const iterator of file) {
+
+    // }
   }
 
   private getTusObject(file: any, thus: this, index: number): any {

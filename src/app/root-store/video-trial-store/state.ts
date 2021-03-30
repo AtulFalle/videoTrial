@@ -18,7 +18,6 @@ export interface State {
   studyList: UserMetadata[];
   currentStudy: string;
   users: User[];
-
 }
 
 export const initialState: State = {

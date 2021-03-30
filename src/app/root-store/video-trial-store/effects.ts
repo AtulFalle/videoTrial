@@ -1,3 +1,7 @@
+import { FileUploadStatus } from './../../core/enum/file-upload-status.enum';
+import { environment } from './../../../environments/environment.prod';
+import { BlobUploadResponse } from './../../core/models/file-upload.model';
+import { SharedService } from './../../service/shared.service';
 import { MessageBoxService } from './../../core/message-dialog-box/message-box.service';
 import { ProcedureService } from './../../core/services/procedure-service/procedure.service';
 import { of } from 'rxjs';
@@ -23,7 +27,8 @@ export class VideoTrialStoreEffects {
     private actions$: Actions,
     private procedureService: ProcedureService,
     private messageBoxService: MessageBoxService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private sharedService: SharedService
   ) {}
 
   @Effect()
@@ -144,17 +149,143 @@ export class VideoTrialStoreEffects {
             );
             return of(
               videoTrialActions.updateUserStatusAdminSuccess({
-               user:res
+                user: res,
               })
             );
           }),
           catchError((e) => {
-            this.messageBoxService.openErrorMessage(
-              'Error while User Status'
-            );
+            this.messageBoxService.openErrorMessage('Error while User Status');
             return e;
           })
         );
     })
   );
+
+  // chunk upload effects
+
+  @Effect()
+  sendChunk = this.actions$.pipe(
+    ofType(videoTrialActions.sendChunk),
+    switchMap((action) =>
+      this.sharedService.appendChunk(action.file).pipe(
+        map((res) => {
+          return {
+            blob: res,
+            action,
+          };
+        })
+      )
+    ),
+    switchMap((res: { blob: BlobUploadResponse; action: any }) => {
+      if (res.action.file.status === FileUploadStatus.IN_PROGRESS) {
+        return of(
+          videoTrialActions.sendChunkSuccess({
+            file: res.action.file,
+            chunkDetails: {
+              blockId: res.blob.blockId,
+              chunkEnd: res.action.file.lastChunk + environment.CHUNK_SIZE,
+            },
+          })
+        );
+      } else {
+        return of(
+          videoTrialActions.updateStatus({
+            file: res.action.file,
+            status: res.action.file.status,
+          })
+        );
+      }
+    })
+  );
+
+  @Effect()
+  sendChunkSuccess = this.actions$.pipe(
+    ofType(videoTrialActions.sendChunkSuccess),
+    switchMap((action) =>
+      this.sharedService.appendChunk(action.file).pipe(
+        map((res) => {
+          return {
+            blob: res,
+            action,
+          };
+        })
+      )
+    ),
+    switchMap((res: { blob: BlobUploadResponse; action: any }) => {
+      if (res.action.file.status === FileUploadStatus.IN_PROGRESS) {
+        const chunkSize = res.action.file.lastChunk + environment.CHUNK_SIZE;
+        if (chunkSize > res.action.file.size) {
+          return of(
+            videoTrialActions.updateStatus({
+              file: res.action.file,
+              status: FileUploadStatus.CHUNK_COMPLETED,
+            })
+          );
+        }
+        return of(
+          videoTrialActions.sendChunkSuccess({
+            file: res.action.file,
+            chunkDetails: {
+              blockId: res.blob.blockId,
+              chunkEnd: res.action.file.lastChunk + environment.CHUNK_SIZE,
+            },
+          })
+        );
+      } else {
+        return of(
+          videoTrialActions.updateStatus({
+            file: res.action.file,
+            status: res.action.file.status,
+          })
+        );
+      }
+    })
+  );
+
+  // @Effect()
+  // sendChunkSuccess = this.actions$.pipe(
+  //   ofType(videoTrialActions.sendChunkSuccess),
+  //   switchMap((action) => {
+  //     return this.sharedService.appendChunk(action.file).pipe(
+  //       switchMap((res: BlobUploadResponse) => {
+  //         if (action.file.status === FileUploadStatus.IN_PROGRESS) {
+  //           const chunkSize = action.file.lastChunk + environment.CHUNK_SIZE;
+
+  //           if (chunkSize > action.file.size) {
+  //             return of(
+  //               videoTrialActions.updateStatus({
+  //                 file: action.file,
+  //                 status: FileUploadStatus.CHUNK_COMPLETED,
+  //               })
+  //             );
+  //           }
+  //           return of(
+  //             videoTrialActions.sendChunkSuccess({
+  //               file: action.file,
+  //               chunkDetails: {
+  //                 blockId: res.blockId,
+  //                 chunkEnd: action.file.lastChunk + environment.CHUNK_SIZE,
+  //               },
+  //             })
+  //           );
+  //         } else {
+  //           return of(
+  //             videoTrialActions.updateStatus({
+  //               file: action.file,
+  //               status: action.file.status,
+  //             })
+  //           );
+  //         }
+  //       }),
+  //       catchError((e) => {
+  //         return of(
+  //           videoTrialActions.updateStatus({
+  //             file: action.file,
+  //             status: FileUploadStatus.ERROR,
+  //           })
+  //         );
+  //       })
+  //     );
+  //   })
+  // );
 }

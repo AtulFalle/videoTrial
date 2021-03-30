@@ -1,3 +1,4 @@
+import { FileUploadStatus } from './../../core/enum/file-upload-status.enum';
 import { Site, UserMetadata } from './../../core/models/user-roles.model';
 import { Video } from './../../core/models/video.model';
 import { TrialVideo } from './../../core/models/annotations.model';
@@ -244,6 +245,42 @@ const featureReducer = createReducer(
     return {
       ...state,
       users: updatedUserList,
+    };
+  }),
+  on(videoTrialActions.sendChunkSuccess, (state, { file, chunkDetails }) => {
+    const fileList = [...state.fileUpload];
+    const index = fileList.findIndex((ele) => ele.fileName === file.fileName);
+    const fileObject = { ...fileList[index] };
+    const chunkDetailList = [...fileObject.chunkDetails];
+    chunkDetailList.push(chunkDetails);
+    fileObject.chunkDetails = chunkDetailList;
+    fileObject.lastChunk = chunkDetails.chunkEnd;
+    fileList[index] = fileObject;
+    return {
+      ...state,
+      fileUpload: fileList,
+    };
+  }),
+  on(videoTrialActions.updateStatus, (state, { file, status }) => {
+    const fileList = [...state.fileUpload];
+    const index = fileList.findIndex((ele) => ele.fileName === file.fileName);
+    const fileObject = { ...fileList[index] };
+    fileObject.status = status;
+    fileList[index] = fileObject;
+    return {
+      ...state,
+      fileUpload: fileList,
+    };
+  }),
+  on(videoTrialActions.commitBlockListSuccess, (state, { file }) => {
+    const fileList = [...state.fileUpload];
+    const index = fileList.findIndex((ele) => ele.fileName === file.fileName);
+    const fileObject = { ...fileList[index] };
+    fileObject.status = FileUploadStatus.UPLOADED;
+    fileList[index] = fileObject;
+    return {
+      ...state,
+      fileUpload: fileList,
     };
   })
 );
