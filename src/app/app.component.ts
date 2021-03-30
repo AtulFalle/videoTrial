@@ -45,8 +45,6 @@ export class AppComponent implements OnInit {
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private authService: MsalService,
     private msalBroadcastService: MsalBroadcastService,
-    private idle: Idle,
-    private keepalive: Keepalive,
     private router: Router
   ) {
     // this.authService.handleRedirectObservable().subscribe((res) => {
@@ -152,7 +150,9 @@ export class AppComponent implements OnInit {
       const userRoles = [];
       for (const iterator of Object.keys(roleData)) {
         for (const iter of roleData[iterator]) {
-          userRoles.push(iter.role);
+          if(iter.siteRequestStatus === 'approved') {
+            userRoles.push(iter.role);
+          }
         }
       }
 
@@ -187,8 +187,7 @@ export class AppComponent implements OnInit {
 
   canAddProcedure(): boolean {
     if (
-      this.userRole.toLowerCase() === 'admin' ||
-      this.userRole.toLowerCase() === 'viewer'
+      this.userRole.toLowerCase() === 'admin'
     ) {
       return true;
     }
@@ -199,7 +198,8 @@ export class AppComponent implements OnInit {
     const token: any = jwt_decode(sessionStorage.getItem('token'));
     if (token.extension_accountstatus === 'superuser') {
       return true;
-    } else {
+    }
+    else {
       return false;
     }
   }

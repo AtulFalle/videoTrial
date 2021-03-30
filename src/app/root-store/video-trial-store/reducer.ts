@@ -245,7 +245,16 @@ const featureReducer = createReducer(
       ...state,
       users: updatedUserList,
     };
-  })
+  }),
+  on(videoTrialActions.getAllRoleSuccess, (state, {roles}) => {
+    const parsedRoles = JSON.parse(roles)
+
+  return {
+    ...state,
+    roles: parsedRoles,
+  };
+}),
+  
 );
 
 // tslint:disable-next-line: typedef

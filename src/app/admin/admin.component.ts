@@ -12,14 +12,10 @@ export interface UserApproval {
   study: string;
   site: string;
   siteRequestStatus: string;
-  id: string;
+  id: string,
   objectId: string;
 }
-// const ELEMENT_DATA: UserApproval[] = [
-//   { firstName: 'Steve', lastName: 'Roger', emailId: 'steve@gmail.com', role: 'Admin', study: 'Study A', site: 'Site A' },
-//   { firstName: 'John', lastName: 'Smith', emailId: 'john@gmail.com', role: 'User', study: 'Study B', site: 'Site C' },
-//   { firstName: 'Alex', lastName: '', emailId: 'laex@gmail.com', role: 'Admin', study: 'Study C', site: 'Site A' }
-// ];
+
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -28,75 +24,92 @@ export interface UserApproval {
 
 export class AdminComponent implements OnInit {
   studies: any[] = [
-    { value: 'Study A', viewValue: 'Study A' },
-    { value: 'Study B', viewValue: 'Study B' },
-    { value: 'Study C', viewValue: 'Study c' }
+    { value: 'All', viewValue: 'All' }
   ];
   sites: any[] = [
-    { value: 'Site A', viewValue: 'Site A' },
-    { value: 'Site B', viewValue: 'Site B' },
-    { value: 'Site C', viewValue: 'Site c' }
+    { value: 'All', study: "All", viewValue: 'All' }
   ];
-  displayedColumns: string[] = ['firstName', 'lastName', 'emailId', 'role', 'study', 'site', 'action'];
+  displayedColumns: string[] = ["firstName", "lastName", "emailId", "role", "study", "site","status", "action"];
   siteList: any[];
   studiesList: any[];
   approvalUserList: UserApproval[] = [];
+  existingUserList: UserApproval[] = [];
   userList: User[] = [];
+  roles: any;
+  selectedSudy: string = 'All';
+  selectedSite: string = 'All';
+  selectedIndex: number = -1;
   constructor(
-    private adminService: AdminService,
     private store$: Store<VideoTrialStoreState.State>,
   ) { }
 
   ngOnInit(): void {
     this.store$.dispatch(VideoTrialStoreActions.getAllUser());
+    this.store$.dispatch(VideoTrialStoreActions.getAllRole());
+    this.store$.select(VideoTrialStoreSelectors.getAllRoles).subscribe((roles) => {
+
+      this.roles = roles;
+      if (roles.Studies) {
+        console.log(roles.Studies);
+        this.studies = [{ value: 'All', viewValue: 'All' }];
+        this.sites = [{ value: 'All', study: "All", viewValue: 'All' } ];
+        console.log(Object.keys(roles.Studies));
+        Object.keys(roles.Studies).map(study => {
+          this.studies.push({ value: study, viewValue: study });
+          roles.Studies[study].map((site: any) => {
+            this.sites.push({ value: site, study: study, viewValue: site })
+          })
+        })
+
+      }
+    });
+
     this.store$.select(VideoTrialStoreSelectors.getAllUsers).subscribe((res) => {
       this.approvalUserList = [];
+      this.existingUserList = [];
       this.userList = res;
-      console.log(res);
+      console.log(this.userList);
       res.map(user => {
         if (user.selectedRole) {
           Object.keys(user.selectedRole).map(study => {
-            console.log(user.selectedRole[study]);
             user.selectedRole[study].map((roleObj: any) => {
-              if (roleObj.siteRequestStatus == 'requested') {
-                this.approvalUserList.push({
-                  firstName: user.givenName,
-                  lastName: user.surname,
-                  emailId: user.email,
-                  role: roleObj.role,
-                  study,
-                  site: roleObj.site,
-                  siteRequestStatus: roleObj.siteRequestStatus,
-                  id: roleObj.id,
-                  objectId: user.objectId
-                });
+              let tempUser = {
+                firstName: user.givenName,
+                lastName: user.surname,
+                emailId: user.email,
+                role: roleObj.role,
+                study: study,
+                site: roleObj.site,
+                siteRequestStatus: roleObj.siteRequestStatus,
+                id: roleObj.id,
+                objectId: user.objectId
               }
-            });
+              if (roleObj.siteRequestStatus == "requested") {
+                this.approvalUserList.push(tempUser)
+              } else {
+                this.existingUserList.push(tempUser)
+              }
+            })
 
-          });
+          })
         }
       });
-
-      console.log(this.approvalUserList);
 
     });
   }
 
   updateUserStatus(id: string, status: string, objectId: string) {
-
-
-
+    this.selectedIndex = -1;
     const index = this.userList.findIndex((ele) => ele.objectId === objectId);
-    const tempSelectedRole: any = {};
+    let tempSelectedRole: any = {};
     if (this.userList[index].selectedRole) {
 
       Object.keys(this.userList[index].selectedRole).map(study => {
-        const roleObjArr: any[] = [];
+        let roleObjArr: any[] = [];
         this.userList[index].selectedRole[study].map((roleObj: any) => {
           if (roleObj.id == id) {
-            console.log(roleObj);
             roleObjArr.push({
-              id,
+              id: id,
               role: roleObj.role,
               site: roleObj.site,
               siteRequestStatus: status
@@ -105,15 +118,51 @@ export class AdminComponent implements OnInit {
             roleObjArr.push(roleObj);
           }
 
-        });
+        })
         tempSelectedRole[study] = roleObjArr;
-      });
+      })
     }
-    console.log(tempSelectedRole);
     this.store$.dispatch(
-      VideoTrialStoreActions.updateUserStatusAdmin({ objectId, selectedRole: tempSelectedRole })
+      VideoTrialStoreActions.updateUserStatusAdmin({ objectId: objectId, selectedRole: tempSelectedRole })
     );
 
   }
-
+  onStudySelect = () => {
+    this.selectedSite = 'All';
+  }
+  getSite = () => {
+    if(this.selectedSudy == 'All') {
+      return this.sites;
+    } else {
+      return this.sites.filter(site=> site.study == 'All' || site.study == this.selectedSudy)
+    }
+  }
+   getUsers = () => {
+    if (this.selectedSudy == 'All' && this.selectedSite == 'All') {
+      return this.approvalUserList;
+    } else if(this.selectedSudy !== 'All' && this.selectedSite == 'All') {
+       return this.approvalUserList.filter(user=> user.study == this.selectedSudy)
+    } else if(this.selectedSudy == 'All' && this.selectedSite !== 'All') {
+      return this.approvalUserList.filter(user=> user.site == this.selectedSite)
+   } else{
+      return this.approvalUserList.filter(user=> user.study == this.selectedSudy && user.site == this.selectedSite)
+    }
+  }
+  getExistingUsers = () => {
+    if (this.selectedSudy == 'All' && this.selectedSite == 'All') {
+      return this.existingUserList;
+    } else if(this.selectedSudy !== 'All' && this.selectedSite == 'All') {
+       return this.existingUserList.filter(user=> user.study == this.selectedSudy)
+    } else if(this.selectedSudy == 'All' && this.selectedSite !== 'All') {
+      return this.existingUserList.filter(user=> user.site == this.selectedSite)
+   } else{
+      return this.existingUserList.filter(user=> user.study == this.selectedSudy && user.site == this.selectedSite)
+    }
+  }
+  onRowClick = (index: number) => {
+    this.selectedIndex = index;
+  }
+  resetSelection = () => {
+    this.selectedIndex = -1;
+  }
 }

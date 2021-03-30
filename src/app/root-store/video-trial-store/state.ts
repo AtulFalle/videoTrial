@@ -18,7 +18,7 @@ export interface State {
   studyList: UserMetadata[];
   currentStudy: string;
   users: User[];
-
+  roles: any;
 }
 
 export const initialState: State = {
@@ -73,5 +73,6 @@ export const initialState: State = {
   fileUpload: [],
   studyList: [],
   currentStudy: '',
-  users: []
+  users: [],
+  roles:{}
 };

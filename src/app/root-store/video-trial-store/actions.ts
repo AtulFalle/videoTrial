@@ -50,6 +50,8 @@ export enum VideoTrialActionType {
   UPDATE_USER_DUMMY = '[USER UPDATE DUMMY] update the user status',
   UPDATE_USER = '[USER UPDATE] update the user status',
   UPDATE_USER_SUCCESS = '[USER UPDATE SUCCESS] update the user status',
+  GET_ALL_ROLE = '[GET ALL ROLE ] get all roles',
+  GET_ALL_ROLE_SUCCESS = '[GET ALL ROLE SUCCESS] get all roles',
 }
 
 export const uploadVideo = createAction(
@@ -177,4 +179,11 @@ export const updateUserStatusAdmin = createAction(
 export const updateUserStatusAdminSuccess = createAction(
   VideoTrialActionType.UPDATE_USER_SUCCESS,
   props<{ user: User }>()
+);
+export const getAllRoleSuccess = createAction(
+  VideoTrialActionType.GET_ALL_ROLE,
+  props<{ roles: any }>()
+);
+export const getAllRole = createAction(
+  VideoTrialActionType.GET_ALL_ROLE_SUCCESS
 );

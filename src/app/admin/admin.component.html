@@ -1,169 +1,185 @@
-<mat-tab-group>
-  <mat-tab label="Manage Users/Roles">
-    <mat-tab-group>
-      <mat-tab label="Manage Roles">
-        <div class="demo-tab-content">
+<div class="admin-container">
+  <mat-tab-group>
+    <mat-tab label="Manage Users/Roles">
+
+      <div class="demo-tab-content">
+        <div class=" dropdown-cntainer col-12">
           <div class="row">
+
+
             <mat-form-field class="col-2">
               <mat-label>Study</mat-label>
-              <mat-select>
+              <mat-select [(value)]="selectedSudy" (selectionChange)="onStudySelect()">
                 <mat-option *ngFor="let study of studies" [value]="study.value">
-                  {{ study.viewValue }}
+                  {{study.viewValue}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field class="col-2">
+            <mat-form-field class=" dropdown-input col-2">
               <mat-label>Site</mat-label>
-              <mat-select>
-                <mat-option *ngFor="let site of sites" [value]="site.value">
-                  {{ site.viewValue }}
+              <mat-select [(value)]="selectedSite">
+                <mat-option *ngFor="let site of getSite()" [value]="site.value">
+                  {{site.viewValue}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
+        </div>
+
+
+
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <label>Manage Signup Requests</label>
+            </mat-panel-title>
+            <mat-panel-description>
+
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
           <div class="col-12">
-            <table
-              mat-table
-              [dataSource]="approvalUserList"
-              class="mat-elevation-z8"
-            >
+            <table mat-table [dataSource]="getUsers()" class="mat-elevation-z8">
+
               <ng-container matColumnDef="firstName">
-                <th mat-header-cell *matHeaderCellDef>First name</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.firstName }}
-                </td>
+                <th mat-header-cell *matHeaderCellDef> First name </th>
+                <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
               </ng-container>
               <ng-container matColumnDef="lastName">
-                <th mat-header-cell *matHeaderCellDef>Last name</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.lastName }}
-                </td>
+                <th mat-header-cell *matHeaderCellDef> Last name </th>
+                <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
               </ng-container>
               <ng-container matColumnDef="emailId">
-                <th mat-header-cell *matHeaderCellDef>EmailId</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.emailId }}
-                </td>
+                <th mat-header-cell *matHeaderCellDef> EmailId </th>
+                <td mat-cell *matCellDef="let element"> {{element.emailId}} </td>
               </ng-container>
               <ng-container matColumnDef="role">
-                <th mat-header-cell *matHeaderCellDef>Role</th>
-                <td mat-cell *matCellDef="let element">{{ element.role }}</td>
+                <th mat-header-cell *matHeaderCellDef> Role </th>
+                <td mat-cell *matCellDef="let element"> {{element.role}} </td>
               </ng-container>
               <ng-container matColumnDef="study">
-                <th mat-header-cell *matHeaderCellDef>Study</th>
-                <td mat-cell *matCellDef="let element">{{ element.study }}</td>
+                <th mat-header-cell *matHeaderCellDef> Study </th>
+                <td mat-cell *matCellDef="let element"> {{element.study}} </td>
               </ng-container>
               <ng-container matColumnDef="site">
-                <th mat-header-cell *matHeaderCellDef>Site</th>
-                <td mat-cell *matCellDef="let element">{{ element.site }}</td>
+                <th mat-header-cell *matHeaderCellDef> Site </th>
+                <td mat-cell *matCellDef="let element"> {{element.site}} </td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef> Status </th>
+                <td mat-cell *matCellDef="let element">
+                  <button disabled mat-button>{{element.siteRequestStatus | uppercase }}</button>
+                </td>
               </ng-container>
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
-                <td mat-cell *matCellDef="let element">
-                  <div *ngIf="element.siteRequestStatus == 'requested'">
-                    <button
-                      mat-raised-button
-                      color="primary"
-                      class="m-1"
-                      (click)="
-                        updateUserStatus(
-                          element.id,
-                          'approved',
-                          element.objectId
-                        )
-                      "
-                    >
-                      Approve
-                    </button>
-                    <button
-                      mat-raised-button
-                      color="warn"
-                      class="m-1"
-                      (click)="
-                        updateUserStatus(
-                          element.id,
-                          'rejected',
-                          element.objectId
-                        )
-                      "
-                    >
-                      Reject
-                    </button>
-                  </div>
-                  <div *ngIf="element.siteRequestStatus !== 'requested'">
-                    <button disabled mat-button>
-                      {{ element.siteRequestStatus | uppercase }}
-                    </button>
-                  </div>
-                </td>
-              </ng-container>
+                <mat-cell *matCellDef="let element">
 
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
-          </div>
-        </div>
-      </mat-tab>
-      <mat-tab label="Manage Users">
-        <div class="demo-tab-content">
-          <div class="col-12">
-            <table
-              mat-table
-              [dataSource]="approvalUserList"
-              class="mat-elevation-z8"
-            >
-              <ng-container matColumnDef="firstName">
-                <th mat-header-cell *matHeaderCellDef>First name</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.firstName }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="lastName">
-                <th mat-header-cell *matHeaderCellDef>Last name</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.lastName }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="emailId">
-                <th mat-header-cell *matHeaderCellDef>EmailId</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.emailId }}
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="role">
-                <th mat-header-cell *matHeaderCellDef>Role</th>
-                <td mat-cell *matCellDef="let element">{{ element.role }}</td>
-              </ng-container>
-              <ng-container matColumnDef="study">
-                <th mat-header-cell *matHeaderCellDef>Study</th>
-                <td mat-cell *matCellDef="let element">{{ element.study }}</td>
-              </ng-container>
-              <ng-container matColumnDef="site">
-                <th mat-header-cell *matHeaderCellDef>Site</th>
-                <td mat-cell *matCellDef="let element">{{ element.site }}</td>
-              </ng-container>
 
-              <ng-container matColumnDef="action">
-                <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-                <mat-cell *matCellDef="let row">
-                  <button mat-button>Edit</button>
-                  <button mat-button>Remove</button>
+                  <button mat-raised-button color="primary" class="m-1"
+                    (click)="updateUserStatus(element.id,'approved',element.objectId)">
+                    Approve
+                  </button>
+                  <button mat-raised-button color="warn" class="m-1"
+                    (click)="updateUserStatus(element.id,'rejected',element.objectId)">
+                    Reject
+                  </button>
+
+
                 </mat-cell>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
           </div>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
-  </mat-tab>
-  <mat-tab label="Video Scrubber">
-    <div class="demo-tab-content">Video Scrubber</div>
-  </mat-tab>
-  <mat-tab label="Reports">
-    <div class="demo-tab-content">Reports</div>
-  </mat-tab>
-</mat-tab-group>
+
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <label>Manage Existing Users</label>
+            </mat-panel-title>
+            <mat-panel-description>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="col-12">
+            <table mat-table [dataSource]="getExistingUsers()" class="mat-elevation-z8">
+
+              <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef> First name </th>
+                <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+              </ng-container>
+              <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef> Last name </th>
+                <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+              </ng-container>
+              <ng-container matColumnDef="emailId">
+                <th mat-header-cell *matHeaderCellDef> EmailId </th>
+                <td mat-cell *matCellDef="let element"> {{element.emailId}} </td>
+              </ng-container>
+              <ng-container matColumnDef="role">
+                <th mat-header-cell *matHeaderCellDef> Role </th>
+                <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+              </ng-container>
+              <ng-container matColumnDef="study">
+                <th mat-header-cell *matHeaderCellDef> Study </th>
+                <td mat-cell *matCellDef="let element"> {{element.study}} </td>
+              </ng-container>
+              <ng-container matColumnDef="site">
+                <th mat-header-cell *matHeaderCellDef> Site </th>
+                <td mat-cell *matCellDef="let element"> {{element.site}} </td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef> Status </th>
+                <td mat-cell *matCellDef="let element">
+                  <button disabled mat-button>{{element.siteRequestStatus | uppercase }}</button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <mat-cell *matCellDef="let element;let i = index">
+                  <div *ngIf="selectedIndex != i">
+                    <button mat-raised-button color="primary" (click)="onRowClick(i)" class="m-1">Edit</button>
+                  </div>
+                  <div *ngIf="selectedIndex == i">
+                    <button *ngIf="element.siteRequestStatus == 'rejected'" mat-raised-button color="primary"
+                      class="m-1" (click)="updateUserStatus(element.id,'approved',element.objectId)">
+                      Approve
+                    </button>
+                    <button *ngIf="element.siteRequestStatus == 'approved'" mat-raised-button color="warn" class="m-1"
+                      (click)="updateUserStatus(element.id,'rejected',element.objectId)">
+                      Reject
+                    </button>
+                    <button mat-raised-button class="m-1" (click)="resetSelection()">
+                      Cancel
+                    </button>
+                  </div>
+                </mat-cell>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+
+
+          </div>
+        </mat-expansion-panel>
+
+      </div>
+
+    </mat-tab>
+    <!-- <mat-tab label="Video Scrubber">
+      <div class="demo-tab-content">
+        Video Scrubber
+      </div>
+    </mat-tab>
+    <mat-tab label="Reports">
+      <div class="demo-tab-content">
+        Reports
+      </div>
+    </mat-tab> -->
+  </mat-tab-group>
+</div>

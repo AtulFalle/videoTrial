@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { AngularMaterialModule } from '../angular-material/angular-material.modu
     MatFormFieldModule,
     MatSelectModule,
     MatTableModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    MatExpansionModule,
   ]
 })
 export class AdminModule { }

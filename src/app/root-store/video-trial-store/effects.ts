@@ -157,4 +157,16 @@ export class VideoTrialStoreEffects {
         );
     })
   );
+  @Effect()
+  getAllRoles = this.actions$.pipe(
+    ofType(videoTrialActions.getAllRole),
+    switchMap((action) => this.adminService.getAllRoles()),
+    switchMap((resp: any) => {
+      return of(
+        videoTrialActions.getAllRoleSuccess({
+          roles: resp.items[0],
+        })
+      );
+    })
+  );
 }
