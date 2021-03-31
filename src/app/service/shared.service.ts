@@ -1,3 +1,5 @@
+import { HttpClient } from '@angular/common/http';
+import jwt_decode from 'jwt-decode';
 import { VideoTrialStoreActions } from 'src/app/root-store/video-trial-store';
 import { FileMetadata } from './../core/models/file-upload.model';
 import { Injectable } from '@angular/core';
@@ -5,6 +7,8 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as tus from 'tus-js-client';
 import { VideoTrialStoreState } from '../root-store/video-trial-store';
+import { EmailNotify } from '../core/models/email-notify.model';
+
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +32,10 @@ export class SharedService {
     return this.currentTimeObs$.asObservable();
   }
 
-  constructor(private store$: Store<VideoTrialStoreState.State>) {}
+  constructor(
+    private store$: Store<VideoTrialStoreState.State>,
+    private http: HttpClient
+  ) {}
 
   toTimeFormat(secs: string): string {
     // tslint:disable-next-line: variable-name
@@ -74,8 +81,8 @@ export class SharedService {
       metadata: {
         name: file.name,
         contentType: file.type || 'application/octet-stream',
-        emptyMetaKey: ''
-    },
+        emptyMetaKey: '',
+      },
       onError: (error: any) => {
         console.log('Failed because: ' + error);
       },
@@ -113,8 +120,9 @@ export class SharedService {
 
   pause(file: any): void {
     // this.uploaderList[index].abort();
-    const val = this.uploaderList.find((ele) => ele.file.name === file.file.name)
-      .tus;
+    const val = this.uploaderList.find(
+      (ele) => ele.file.name === file.file.name
+    ).tus;
     val.abort();
 
     const metadata: FileMetadata = {
@@ -129,11 +137,11 @@ export class SharedService {
     );
   }
 
-
   play(file: any): void {
     // this.uploaderList[index].abort();
-    const val = this.uploaderList.find((ele) => ele.file.name === file.file.name)
-      .tus;
+    const val = this.uploaderList.find(
+      (ele) => ele.file.name === file.file.name
+    ).tus;
     val.start();
 
     const metadata: FileMetadata = {
@@ -146,5 +154,24 @@ export class SharedService {
     this.store$.dispatch(
       VideoTrialStoreActions.updateFileStatus({ file: metadata })
     );
+  }
+
+  sendEmailNotification(token: any): Observable<any> {
+    console.log(token);
+
+    const body: EmailNotify = {
+      givenName: token.given_name,
+      surname: token.family_name,
+      email: token.email ,
+      objectId: token.sub,
+      accountEnabled: false,
+      selectedRole: token.extension_selectedrole,
+      accountStatus: token.extension_accountstatus,
+      ifNoPendingRequest: token.extension_ifNoPendingRequest,
+      emailAdmin: token.extension_emailAdmin,
+    };
+
+    const url = 'https://biogenbackendapi.azurewebsites.net/saveUser';
+    return this.http.post(url, body);
   }
 }
