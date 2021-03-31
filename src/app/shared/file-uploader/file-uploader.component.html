@@ -19,7 +19,7 @@
       <div class="files-list">
         <div
           class="single-file"
-          *ngFor="let file of fileObs$ | async; let i = index"
+          *ngFor="let file of (fileObs$ | async); let i = index"
         >
           <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file" />
           <div class="info">
@@ -43,12 +43,11 @@
               [color]="file.status === 'primary' "
             ></mat-progress-bar>
           </div>
-          <button mat-button *ngIf="file.status === 'Paused'" (click)="resume(file)">
-            <mat-icon >play_arrow</mat-icon>
+          <button mat-button *ngIf="(getFileStatus(file) | async) as status" (click)="status === 'Paused' ? resume(file) : pause(file)">
+            <mat-icon *ngIf="status === 'Paused'">play_arrow</mat-icon>
+            <mat-icon *ngIf="status === 'In-Progress'">pause</mat-icon>
           </button>
-          <button mat-button *ngIf="file.status === 'In-Progress'" (click)="pause(file)">
-            <mat-icon >pause</mat-icon>
-          </button>
+
           <img
             *ngIf="file.status === 'COMPLETED'"
             src="assets/img/dnd/ic-delete-file.svg"

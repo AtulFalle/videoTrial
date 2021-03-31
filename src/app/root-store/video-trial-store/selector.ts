@@ -49,6 +49,12 @@ export const getUploadingFile = createSelector(
   (state: State) => [...state.fileUpload]
 );
 
+export const getUploadingFileByName = createSelector(
+  selectVideoState,
+  (state: State, props: {fileName: string}) =>
+    state.fileUpload.find((ele) => ele.fileName === props.fileName)
+);
+
 export const getStudyList = createSelector(selectVideoState, (state: State) =>
   state.studyList
     .filter((ele) =>

@@ -1,3 +1,4 @@
+import { FileUploadService } from './../../service/file-upload.service';
 import { FileUploadStatus } from './../../core/enum/file-upload-status.enum';
 import { SharedService } from './../../service/shared.service';
 import { FileMetadata } from './../../core/models/file-upload.model';
@@ -16,7 +17,7 @@ import {
   VideoTrialStoreSelectors,
 } from 'src/app/root-store/video-trial-store';
 import { Store } from '@ngrx/store';
-import { take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-file-uploader',
@@ -40,7 +41,8 @@ export class FileUploaderComponent implements OnInit {
   constructor(
     private store$: Store<VideoTrialStoreState.State>,
     private sharedService: SharedService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private fileUploadService: FileUploadService
   ) {}
 
   ngOnInit(): void {
@@ -103,8 +105,6 @@ export class FileUploaderComponent implements OnInit {
     this.store$.dispatch(
       VideoTrialStoreActions.addFilesToUpload({ files: metadata })
     );
-
-    // this.fileDropEl.nativeElement.value = '';
   }
 
   /**
@@ -141,79 +141,29 @@ export class FileUploaderComponent implements OnInit {
       .select(VideoTrialStoreSelectors.getUploadingFile)
       .pipe(take(1))
       .subscribe((res) => {
-        console.log(res);
-
         this.sharedService.uploadFiles(res);
       });
-
-    // .then(files=> {
-
-    // });
-    // for (const iterator of file) {
-
-    // }
   }
 
-  // private getTusObject(file: any, thus: this, index: number): any {
-  //   return new tus.Upload(file, {
-  //     // Endpoint is the upload creation URL from your tus server
-  //     // endpoint: 'http://localhost:3000/files/',
-  //     // endpoint: 'https://master.tus.io/files/',
-  //     endpoint: 'https://master.tus.io/files/',
-  //     // Retry delays will enable tus-js-client to automatically retry on errors
-  //     retryDelays: [0, 3000, 5000, 10000, 20000],
-  //     // fileReader: temp,
-  //     // Attach additional meta data about the file for the server
-  //     metadata: {
-  //       name: file.name,
-  //       type: file.type,
-  //     },
-  //     // parallelUploads: 2,
-  //     // Callback for errors which cannot be fixed using retries
-  //     onError: (error: any) => {
-  //       console.log('Failed because: ' + error);
-  //     },
-  //     // Callback for reporting upload progress
-  //     onProgress: (bytesUploaded: number, bytesTotal: number) => {
-  //       const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-  //       console.log(bytesUploaded, bytesTotal, percentage + '%');
-  //       thus.files[index].progress = percentage;
-  //       thus.files[index].percentage = percentage;
-  //       thus.files[index].isUploading = true;
-  //       thus.files[index].isCompleted = false;
-  //       thus.files[index].processing = true;
-  //     },
-  //     // Callback for once the upload is completed
-  //     onSuccess: () => {
-  //       console.log('file upload completed');
-  //       // thus.processing = false;
-  //       // thus.isCompleted = true;
-  //       thus.files[index].processing = false;
-
-  //       thus.files[index].isUploading = false;
-  //       thus.files[index].isCompleted = true;
-  //     },
-  //     chunkSize: 100 * 1024 * 1024 * 1024,
-  //   });
-  // }
-
   pause(file: any): void {
-    // this.sharedService.uploaderList[index].a/bort();
-
-    // this.store$.dispatch(Video)
-    this.sharedService.pause(file);
+    this.fileUploadService.pauseUpload(file).then((res) => {
+      console.log(res);
+    });
     return;
-    // this.uploadList[index].abort();
-    // this.files[index].isUploading = false;
-    // this.isUploading = false;
   }
 
   resume(file: any): void {
-    this.sharedService.play(file);
-    // this.sharedService.uploaderList[index].start();
+    this.fileUploadService.resumeUpload(file).then((res) => {
+      console.log(res);
+    });
     return;
-    // this.uploadList[index].start();
-    // this.isUploading = true;
-    // this.files[index].isUploading = true;
+  }
+
+  getFileStatus(file: FileMetadata): Observable<string> {
+    return this.store$
+      .select(VideoTrialStoreSelectors.getUploadingFileByName, {
+        fileName: file.fileName,
+      })
+      .pipe(map((res: FileMetadata) => res.status));
   }
 }

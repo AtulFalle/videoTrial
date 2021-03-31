@@ -1,5 +1,8 @@
 import { User } from './../../core/models/admin.model';
-import { ChunkDetails, FileMetadata } from './../../core/models/file-upload.model';
+import {
+  ChunkDetails,
+  FileMetadata,
+} from './../../core/models/file-upload.model';
 import { Video } from './../../core/models/video.model';
 import { Procedure } from './../../core/models/procedure.model';
 import { TrialVideo, Annotation } from './../../core/models/annotations.model';
@@ -47,6 +50,10 @@ export enum VideoTrialActionType {
 
   GET_ALL_USER = '[USER GET] get all user Details',
   GET_ALL_USER_SUCCESS = '[USER GET SUCCESS] get all user Details',
+
+  GET_USER_DETAILS = '[USER Get ] get user details by id',
+  GET_USER_DETAILS_SUCCESS = '[USER Get Success] get user details by id Success',
+
   UPDATE_USER_DUMMY = '[USER UPDATE DUMMY] update the user status',
   UPDATE_USER = '[USER UPDATE] update the user status',
   UPDATE_USER_SUCCESS = '[USER UPDATE SUCCESS] update the user status',
@@ -196,7 +203,7 @@ export const sendChunk = createAction(
 
 export const sendChunkSuccess = createAction(
   VideoTrialActionType.SEND_CHUNK_SUCCESS,
-  props<{ file: FileMetadata, chunkDetails: ChunkDetails }>()
+  props<{ file: FileMetadata; chunkDetails: ChunkDetails }>()
 );
 
 export const updateStatus = createAction(
@@ -222,4 +229,13 @@ export const commitBlockList = createAction(
 export const commitBlockListSuccess = createAction(
   VideoTrialActionType.COMMIT_BLOCKLIST_SUCCESS,
   props<{ file: FileMetadata }>()
+);
+
+export const getUserDetails = createAction(
+  VideoTrialActionType.GET_USER_DETAILS
+);
+
+export const getUserDetailsSuccess = createAction(
+  VideoTrialActionType.GET_USER_DETAILS_SUCCESS,
+  props<{ user: User }>()
 );

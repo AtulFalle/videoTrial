@@ -2,7 +2,7 @@ export interface Role {
     id: string;
     role: string;
     site: string;
-    siteRequestStatus: string
+    siteRequestStatus: string;
 }
 
 export interface User {
@@ -10,8 +10,8 @@ export interface User {
     surname: string;
     email: string;
     objectId: string;
-    accountEnabled: boolean,
-    selectedRole: any,
-    accountStatus: string,
-    ifNoPendingRequest: boolean
+    accountEnabled: boolean;
+    selectedRole: any;
+    accountStatus: string;
+    ifNoPendingRequest: boolean;
 }

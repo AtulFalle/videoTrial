@@ -1,7 +1,5 @@
-import { FileUploadStatus } from './../../core/enum/file-upload-status.enum';
-import { environment } from './../../../environments/environment.prod';
-import { BlobUploadResponse } from './../../core/models/file-upload.model';
 import { SharedService } from './../../service/shared.service';
+
 import { MessageBoxService } from './../../core/message-dialog-box/message-box.service';
 import { ProcedureService } from './../../core/services/procedure-service/procedure.service';
 import { of } from 'rxjs';
@@ -28,7 +26,6 @@ export class VideoTrialStoreEffects {
     private procedureService: ProcedureService,
     private messageBoxService: MessageBoxService,
     private adminService: AdminService,
-    private sharedService: SharedService
   ) {}
 
   @Effect()
@@ -158,6 +155,19 @@ export class VideoTrialStoreEffects {
             return e;
           })
         );
+    })
+  );
+
+  @Effect()
+  getUserDetails = this.actions$.pipe(
+    ofType(videoTrialActions.getUserDetails),
+    switchMap((action) => this.SharedService.getUserById()),
+    switchMap((procedures: User) => {
+      return of(
+        videoTrialActions.getAllProcedureSuccess({
+          procedures,
+        })
+      );
     })
   );
 

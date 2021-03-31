@@ -1,11 +1,16 @@
+import { jwt_decode } from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
-import { BlobUploadResponse, FileMetadata } from './../core/models/file-upload.model';
+import {
+  BlobUploadResponse,
+  FileMetadata,
+} from './../core/models/file-upload.model';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { VideoTrialStoreState } from '../root-store/video-trial-store';
 import { retry } from 'rxjs/operators';
 import { FileUploadService } from './file-upload.service';
+import { User } from '../core/models/admin.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +35,6 @@ export class SharedService {
   }
 
   constructor(
-    private store$: Store<VideoTrialStoreState.State>,
     private http: HttpClient,
     private fileUpload: FileUploadService
   ) {}
@@ -51,74 +55,20 @@ export class SharedService {
   }
 
   uploadFiles(files: FileMetadata[]): void {
-    // const thus = this;
     for (const iterator of files) {
-      of(this.fileUpload.startUploading(iterator)).subscribe(res => {
+      of(this.fileUpload.startUploading(iterator)).subscribe((res) => {
         console.log(res);
-
+        res.then((e) => {
+          console.log(e);
+        });
       });
-     //this.store$.dispatch(VideoTrialStoreActions.sendChunk({file: iterator}));
-
     }
-
   }
   startCounter(): void {
     setInterval(() => {
       console.log('this is still playing in background');
     }, 5000);
   }
-
-  // private getTusObject(file: any, thus: this, index: number): any {
-  //   return new tus.Upload(file, {
-  //     // Endpoint is the upload creation URL from your tus server
-  //     // endpoint: 'http://localhost:3000/files/',
-  //     // endpoint: 'https://master.tus.io/files/',
-  //     endpoint: 'https://localhost:44320/files/',
-  //     // Retry delays will enable tus-js-client to automatically retry on errors
-  //     retryDelays: [0, 3000, 5000, 10000, 20000],
-  //     // metadata: {
-  //     //   name: file.name,
-  //     //   type: file.type,
-  //     // },
-  //     metadata: {
-  //       name: file.name,
-  //       contentType: file.type || 'application/octet-stream',
-  //       emptyMetaKey: ''
-  //   },
-  //     onError: (error: any) => {
-  //       console.log('Failed because: ' + error);
-  //     },
-  //     // Callback for reporting upload progress
-  //     onProgress: (bytesUploaded: number, bytesTotal: number) => {
-  //       const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-  //       const metadata: FileMetadata = {
-  //         file,
-  //         status: 'IN-PROGRESS',
-  //         progress: +percentage,
-  //         fileName: file.name,
-  //         size: file.size,
-  //       };
-  //       thus.store$.dispatch(
-  //         VideoTrialStoreActions.updateFileProgress({ file: metadata })
-  //       );
-  //     },
-  //     // Callback for once the upload is completed
-  //     onSuccess: () => {
-  //       console.log('file upload completed');
-  //       const metadata: FileMetadata = {
-  //         file,
-  //         status: 'COMPLETED',
-  //         progress: 100.0,
-  //         fileName: file.name,
-  //         size: file.size,
-  //       };
-  //       thus.store$.dispatch(
-  //         VideoTrialStoreActions.updateFileProgress({ file: metadata })
-  //       );
-  //     },
-  //     chunkSize: 100 * 1024 * 1024 * 1024,
-  //   });
-  // }
 
   pause(file: any): void {
     // this.uploaderList[index].abort();
@@ -154,8 +104,9 @@ export class SharedService {
     // );
   }
 
-  appendChunk(chunk: any , file: FileMetadata): Observable<BlobUploadResponse> {
-    const url = 'https://localhost:44366/api/Values/UploadFiles/' + file.fileName;
+  appendChunk(chunk: any, file: FileMetadata): Observable<BlobUploadResponse> {
+    const url =
+      'https://localhost:44366/api/Values/UploadFiles/' + file.fileName;
     const formData = new FormData();
     formData.append('files', chunk);
     return this.http.put<BlobUploadResponse>(url, formData).pipe(retry(3));
@@ -169,6 +120,9 @@ export class SharedService {
     return this.http.post(url, body);
   }
 
-
-
+  getUserById(): Observable<User> {
+    const id = jwt_decode(sessionStorage.getItem('token')).sub || '';
+    const url = `https://biogenbackendapi.azurewebsites.net/users/${id}?objectId=${id}`;
+    return this.http.get<User>(url);
+  }
 }

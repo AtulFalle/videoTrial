@@ -130,7 +130,9 @@ const featureReducer = createReducer(
   on(videoTrialActions.updateFileProgress, (state, { file }) => {
     const files = [...state.fileUpload];
     const index = files.findIndex((ele) => ele.fileName === file.fileName);
-    files[index] = file;
+    if (files[index].status !== FileUploadStatus.PAUSED) {
+      files[index] = file;
+    }
 
     return {
       ...state,
@@ -138,18 +140,14 @@ const featureReducer = createReducer(
     };
   }),
   on(videoTrialActions.updateFileStatus, (state, { file }) => {
-    const files = [];
-    for (const iterator of state.fileUpload) {
-      const temp = { ...iterator };
-      files.push(temp);
-    }
-    const index = files.findIndex((ele) => ele.fileName === file.file.fileName);
+    const files = [...state.fileUpload];
+    const index = files.findIndex((ele) => ele.fileName === file.fileName);
     if (files[index].status !== file.status) {
-      files[index].status = file.status;
+      files[index] = file;
     }
     return {
       ...state,
-      fileUpload: files,
+      fileUpload: [...files],
     };
   }),
   on(videoTrialActions.getUserMetadata, (state) => {
@@ -281,6 +279,12 @@ const featureReducer = createReducer(
     return {
       ...state,
       fileUpload: fileList,
+    };
+  }),
+  on(videoTrialActions.getUserDetailsSuccess, (state, { user }) => {
+    return {
+      ...state,
+      currentUser: user,
     };
   })
 );
