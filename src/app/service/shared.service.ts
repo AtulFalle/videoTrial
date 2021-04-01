@@ -1,14 +1,16 @@
-import jwt_decode from 'jwt-decode';
-import { HttpClient } from '@angular/common/http';
-import {
-  BlobUploadResponse,
-  FileMetadata,
-} from './../core/models/file-upload.model';
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { retry } from 'rxjs/operators';
 import { FileUploadService } from './file-upload.service';
 import { User } from '../core/models/admin.model';
+import { HttpClient } from '@angular/common/http';
+import jwt_decode from 'jwt-decode';
+import { FileMetadata, BlobUploadResponse } from './../core/models/file-upload.model';
+import { EmailNotify } from '../core/models/email-notify.model';
+import { Store } from '@ngrx/store';
+import { VideoTrialStoreState } from '../root-store/video-trial-store';
+
 
 @Injectable({
   providedIn: 'root',
@@ -33,8 +35,9 @@ export class SharedService {
   }
 
   constructor(
-    private http: HttpClient,
-    private fileUpload: FileUploadService
+    private fileUpload: FileUploadService,
+    private store$: Store<VideoTrialStoreState.State>,
+    private http: HttpClient
   ) {}
 
   toTimeFormat(secs: string): string {
@@ -122,5 +125,24 @@ export class SharedService {
     const id: any = jwt_decode(sessionStorage.getItem('token')) || '';
     const url = `https://biogenbackendapi.azurewebsites.net/users/${id?.sub}?objectId=${id?.sub}`;
     return this.http.get<User>(url);
+  }
+
+  sendEmailNotification(token: any): Observable<any> {
+    console.log(token);
+
+    const body: EmailNotify = {
+      givenName: token.given_name,
+      surname: token.family_name,
+      email: token.email ,
+      objectId: token.sub,
+      accountEnabled: false,
+      selectedRole: token.extension_selectedrole,
+      accountStatus: token.extension_accountstatus,
+      ifNoPendingRequest: token.extension_ifNoPendingRequest,
+      emailAdmin: token.extension_emailAdmin,
+    };
+
+    const url = 'https://biogenbackendapi.azurewebsites.net/saveUser';
+    return this.http.post(url, body);
   }
 }
