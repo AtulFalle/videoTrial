@@ -83,7 +83,7 @@ export class VideoPlayerComponent implements OnInit {
         if (res) {
           this.pause();
           const player = this.videoPlayer.nativeElement as HTMLVideoElement;
-          player.load();
+          // player.load();
           this.videoStatus = false;
           player.currentTime = parseFloat(res);
           this.time = '' + player.currentTime;

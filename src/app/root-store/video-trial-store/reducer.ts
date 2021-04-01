@@ -224,7 +224,7 @@ const featureReducer = createReducer(
       Object.keys(updatedUserList[index].selectedRole).map((study) => {
         const roleObjArr: any[] = [];
         updatedUserList[index].selectedRole[study].map((roleObj: any) => {
-          if (roleObj.id == id) {
+          if (roleObj.id === id) {
             roleObjArr.push({
               id,
               role: roleObj.role,
@@ -285,6 +285,14 @@ const featureReducer = createReducer(
     return {
       ...state,
       currentUser: user,
+    };
+  }),
+  on(videoTrialActions.getAllRoleSuccess, (state, { roles }) => {
+    const parsedRoles = JSON.parse(roles);
+
+    return {
+      ...state,
+      roles: parsedRoles,
     };
   })
 );

@@ -165,7 +165,17 @@ export class VideoTrialStoreEffects {
     switchMap((procedures: User) => {
       return of(
         videoTrialActions.getAllProcedureSuccess({
-          procedures,
+          procedures}))
+        }));
+
+  @Effect()
+  getAllRoles = this.actions$.pipe(
+    ofType(videoTrialActions.getAllRole),
+    switchMap((action) => this.adminService.getAllRoles()),
+    switchMap((resp: any) => {
+      return of(
+        videoTrialActions.getAllRoleSuccess({
+          roles: resp.items[0],
         })
       );
     })

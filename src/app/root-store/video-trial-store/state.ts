@@ -19,6 +19,7 @@ export interface State {
   currentStudy: string;
   users: User[];
   currentUser: User;
+  roles: any;
 }
 
 export const initialState: State = {
@@ -75,4 +76,5 @@ export const initialState: State = {
   currentStudy: '',
   users: [],
   currentUser: null,
+  roles: {}
 };

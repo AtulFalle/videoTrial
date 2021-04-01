@@ -8,9 +8,9 @@
     <div class="user-data">
       <div class="col-12 mr-2">
         <span class="m-0 name" *ngIf="username || getUserName()"
-          >Hi, {{  getUserName() || "" }}</span
+          >Hi, {{ getUserName() || "" }}</span
         >
-        <span>{{ getUserRole() || ''}}</span>
+        <span>{{ getUserRole() || "" }}</span>
       </div>
     </div>
     <button
@@ -34,29 +34,29 @@
         List all Procedures
       </a>
       <a
-      *ngIf="canAddProcedure()"
+        *ngIf="canAddProcedure()"
         mat-list-item
         routerLink="/add-procedure"
         routerLinkActive="active-link"
       >
         Add Procedure
       </a>
+      <!-- <a
+        *ngIf="canUplaodVideo()"
+        mat-list-item
+        routerLink="/file-uploader"
+        routerLinkActive="active-link"
+      >
+        Upload Videos
+      </a> -->
       <a
-      *ngIf="canUplaodVideo()"
-      mat-list-item
-      routerLink="/file-uploader"
-      routerLinkActive="active-link"
-    >
-      Upload Videos
-    </a>
-    <a
-    *ngIf="idSuperAdmin()"
-    mat-list-item
-    routerLink="/admin-dashboard"
-    routerLinkActive="active-link"
-  >
-    Admin Dashboard
-  </a>
+        *ngIf="idSuperAdmin()"
+        mat-list-item
+        routerLink="/admin-dashboard"
+        routerLinkActive="active-link"
+      >
+        Admin Dashboard
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

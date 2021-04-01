@@ -67,6 +67,8 @@ export enum VideoTrialActionType {
 
   COMMIT_BLOCKLIST = '[string[] commit] commit the uploaded blobs',
   COMMIT_BLOCKLIST_SUCCESS = '[string] commit blob successfull',
+  GET_ALL_ROLE = '[GET ALL ROLE ] get all roles',
+  GET_ALL_ROLE_SUCCESS = '[GET ALL ROLE SUCCESS] get all roles',
 }
 
 export const uploadVideo = createAction(
@@ -238,4 +240,12 @@ export const getUserDetails = createAction(
 export const getUserDetailsSuccess = createAction(
   VideoTrialActionType.GET_USER_DETAILS_SUCCESS,
   props<{ user: User }>()
+);
+
+export const getAllRoleSuccess = createAction(
+  VideoTrialActionType.GET_ALL_ROLE,
+  props<{ roles: any }>()
+);
+export const getAllRole = createAction(
+  VideoTrialActionType.GET_ALL_ROLE_SUCCESS
 );
