@@ -118,18 +118,18 @@ export class VideoTrialStoreEffects {
         );
     })
   );
-  @Effect()
-  getAllUsers = this.actions$.pipe(
-    ofType(videoTrialActions.getAllUser),
-    switchMap((action) => this.adminService.getAllUsers()),
-    switchMap((users: User[]) => {
-      return of(
-        videoTrialActions.getAllUserSuccess({
-          users,
-        })
-      );
-    })
-  );
+  // @Effect()
+  // getAllUsers = this.actions$.pipe(
+  //   ofType(videoTrialActions.getAllUser),
+  //   switchMap((action) => this.adminService.getAllUsers()),
+  //   switchMap((users: User[]) => {
+  //     return of(
+  //       videoTrialActions.getAllUserSuccess({
+  //         users,
+  //       })
+  //     );
+  //   })
+  // );
 
   @Effect()
   updateserStatus = this.actions$.pipe(
@@ -165,6 +165,42 @@ export class VideoTrialStoreEffects {
       return of(
         videoTrialActions.getAllRoleSuccess({
           roles: resp.items[0],
+        })
+      );
+    })
+  );
+  @Effect()
+  updateUserRole = this.actions$.pipe(
+    ofType(videoTrialActions.updateUserRoles),
+    switchMap((action) => {
+      return this.adminService
+        .updateUserRole(action.emailId, action.selectedRole)
+        .pipe(
+          switchMap((res: any) => {
+            this.messageBoxService.openSuccessMessage(
+              'User roles are updated successfully'
+            );
+            return of(
+              videoTrialActions.getFilteredUser()
+            );
+          }),
+          catchError((e) => {
+            this.messageBoxService.openErrorMessage(
+              'Something went wrong. Please Try Again.'
+            );
+            return e;
+          })
+        );
+    })
+  );
+  @Effect()
+  getFilteredUsers = this.actions$.pipe(
+    ofType(videoTrialActions.getFilteredUser),
+    switchMap((action) => this.adminService.getFilteredUsers()),
+    switchMap((users: User[]) => {
+      return of(
+        videoTrialActions.getFilteredUserSuccess({
+          users,
         })
       );
     })

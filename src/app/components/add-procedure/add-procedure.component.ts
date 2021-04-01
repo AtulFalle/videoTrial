@@ -49,12 +49,6 @@ export class AddProcedureComponent implements OnInit {
    this.studyList = this.store$.select(VideoTrialStoreSelectors.getStudyList);
    this.roleList = this.store$.select(VideoTrialStoreSelectors.getSiteList);
    this.store$.select(VideoTrialStoreSelectors.getSiteList).subscribe(res => {
-     console.log('inside subscribe componant');
-
-     console.log(res);
-
-   })
-   this.store$.select(VideoTrialStoreSelectors.getSiteList).subscribe(res => {
      console.log(res);
 
    });

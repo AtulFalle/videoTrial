@@ -254,6 +254,20 @@ const featureReducer = createReducer(
     roles: parsedRoles,
   };
 }),
+on(videoTrialActions.getFilteredUserSuccess, (state, { users }) => {
+  const updatedUserList: User[] = [];
+  for (const iterator of users) {
+    const temp = { ...iterator };
+    updatedUserList.push(temp);
+  }
+  updatedUserList.map((item) => {
+    item.selectedRole = JSON.parse(item.selectedRole);
+  });
+  return {
+    ...state,
+    users: updatedUserList,
+  };
+}),
   
 );
 

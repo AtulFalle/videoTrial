@@ -16,21 +16,13 @@ export class AdminService {
     const url = `${baseUrl}updateAccountStatusById?objectId=${objectId}`;
     return this.http.patch<any[]>(url,selectedRole);
   }
-  // getAllUsers(): Observable<any[]> {
-  //   const url = `${baseUrl}filterUsersByAccountStatus?reqStatus=false`;
-  //   return this.http.get<any[]>(url);
-  // }
+  getAllUsers(): Observable<any[]> {
+    const url = `${baseUrl}filterUsersByAccountStatus?reqStatus=false`;
+    return this.http.get<any[]>(url);
+  }
   getAllRoles(): Observable<any[]> {
     const url = `${baseUrl}roles`;
     return this.http.post<any[]>(url,{});
-  }
-  updateUserRole(emailId: string, selectedRole: any): Observable<any[]> {
-    const url = `${baseUrl}updateUserRole?emailId=${emailId}`;
-    return this.http.put<any[]>(url,selectedRole);
-  }
-  getFilteredUsers(): Observable<any[]> {
-    const url = `${baseUrl}filterRequestedAccounts?reqStatus=false`;
-    return this.http.get<any[]>(url);
   }
 
 }

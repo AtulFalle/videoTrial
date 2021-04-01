@@ -65,6 +65,10 @@ import {
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { NotAuthorizedComponent } from './authentication/not-authorized/not-authorized.component'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
+import { NgIdleModule } from '@ng-idle/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const isIE =
   window.navigator.userAgent.indexOf('MSIE ') > -1 ||
@@ -135,6 +139,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     LoginComponent,
     FileUploaderComponent,
     NotAuthorizedComponent,
+    AlertDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -169,7 +174,11 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
       logOnly: !environment.production,
     }),
     AngularMaterialModule,
-    NgIdleKeepaliveModule.forRoot()
+    NgIdleKeepaliveModule.forRoot(),
+    NgIdleModule.forRoot(),
+    MatIconModule,
+    MatDialogModule,
+    NgbModule
   ],
   providers: [
     MatNativeDateModule,
