@@ -13,8 +13,8 @@ import {
   VideoTrialStoreActions,
   VideoTrialStoreState,
 } from '../root-store/video-trial-store';
-import { Observable } from 'rxjs';
-import { retry, take } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -39,13 +39,11 @@ export class FileUploadService {
     file: FileMetadata,
     blockList: any[]
   ): Promise<any> {
-
     for (
       let offset = offsetValue;
       offset < file.size;
       offset += environment.CHUNK_SIZE
     ) {
-
       const tempFile = await this.getFileFromStore(file);
 
       if (tempFile.status === FileUploadStatus.PAUSED) {
@@ -53,6 +51,11 @@ export class FileUploadService {
       }
       const chunk = file.file.slice(offset, offset + environment.CHUNK_SIZE);
       const id = await this.uploadChunk(chunk, file);
+
+      if (!id) {
+        const pause = await this.pauseUpload(file);
+        return;
+      }
       blockList.push(id.blockId);
       const updatedFile = { ...file };
       const progress = ((offset / file.size) * 100).toFixed(2);
@@ -93,7 +96,7 @@ export class FileUploadService {
   }
 
   uploadChunk(chunk: any, file: FileMetadata): Promise<BlobUploadResponse> {
-    return this.appendChunk(chunk, file).toPromise();
+    return this.appendChunk(chunk, file).toPromise().catch(e => null);
   }
 
   commitFile(blockList: string[], file: FileMetadata): Promise<any> {
@@ -105,7 +108,13 @@ export class FileUploadService {
       'https://localhost:44366/api/Values/UploadFiles/' + file.fileName;
     const formData = new FormData();
     formData.append('files', chunk);
-    return this.http.put<BlobUploadResponse>(url, formData).pipe(retry(3));
+    return this.http.put<BlobUploadResponse>(url, formData).pipe(
+      catchError((e: any) => {
+        console.log('Tried ' + url + ' Got ' + e);
+        return throwError(null);
+      }),
+      retry(3)
+    );
   }
 
   commitChunk(fileIdList: string[], file: any): Observable<any> {
@@ -123,7 +132,7 @@ export class FileUploadService {
     this.store$.dispatch(
       VideoTrialStoreActions.updateFileStatus({ file: tempFile })
     );
-    const blockList = tempFile.chunkDetails.map(ele => ele.blockId);
+    const blockList = tempFile.chunkDetails.map((ele) => ele.blockId);
     const offset = tempFile.lastChunk;
 
     const res = await this.uploadChunks(offset, tempFile, blockList);

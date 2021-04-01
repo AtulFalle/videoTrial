@@ -5,7 +5,11 @@ import { Router } from '@angular/router';
 import { ProcedureService } from 'src/app/core/services/procedure-service/procedure.service';
 import jwt_decode from 'jwt-decode';
 import { Store } from '@ngrx/store';
-import { VideoTrialStoreState, VideoTrialStoreActions, VideoTrialStoreSelectors } from 'src/app/root-store/video-trial-store';
+import {
+  VideoTrialStoreState,
+  VideoTrialStoreActions,
+  VideoTrialStoreSelectors,
+} from 'src/app/root-store/video-trial-store';
 import { Site } from 'src/app/core/models/user-roles.model';
 
 @Component({
@@ -38,34 +42,35 @@ export class AddProcedureComponent implements OnInit {
     private fb: FormBuilder,
     private procedureService: ProcedureService,
     private router: Router,
-    private store$: Store<VideoTrialStoreState.State>,
-
+    private store$: Store<VideoTrialStoreState.State>
   ) {}
 
   processing = false;
 
   ngOnInit(): void {
-   this.store$.dispatch( VideoTrialStoreActions.getUserMetadata());
-   this.studyList = this.store$.select(VideoTrialStoreSelectors.getStudyList);
-   this.roleList = this.store$.select(VideoTrialStoreSelectors.getSiteList);
-   this.store$.select(VideoTrialStoreSelectors.getSiteList).subscribe(res => {
-     console.log('inside subscribe componant');
+   // this.store$.dispatch(VideoTrialStoreActions.getUserMetadata());
+    this.store$.dispatch(VideoTrialStoreActions.getUserDetails());
+    this.studyList = this.store$.select(VideoTrialStoreSelectors.getStudyList);
+    this.roleList = this.store$.select(VideoTrialStoreSelectors.getSiteList);
+    this.store$
+      .select(VideoTrialStoreSelectors.getSiteList)
+      .subscribe((res) => {
+        console.log('inside subscribe componant');
 
-     console.log(res);
-
-   })
-   this.store$.select(VideoTrialStoreSelectors.getSiteList).subscribe(res => {
-     console.log(res);
-
-   });
-
+        console.log(res);
+      });
+    this.store$
+      .select(VideoTrialStoreSelectors.getSiteList)
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 
   studyUpdate(e: any) {
     console.log(e);
-    this.store$.dispatch( VideoTrialStoreActions.updateSelectedStudy({study: e.value}));
-
-
+    this.store$.dispatch(
+      VideoTrialStoreActions.updateSelectedStudy({ study: e.value })
+    );
   }
 
   /**

@@ -1,13 +1,11 @@
-import { jwt_decode } from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
 import {
   BlobUploadResponse,
   FileMetadata,
 } from './../core/models/file-upload.model';
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { VideoTrialStoreState } from '../root-store/video-trial-store';
 import { retry } from 'rxjs/operators';
 import { FileUploadService } from './file-upload.service';
 import { User } from '../core/models/admin.model';
@@ -121,8 +119,8 @@ export class SharedService {
   }
 
   getUserById(): Observable<User> {
-    const id = jwt_decode(sessionStorage.getItem('token')).sub || '';
-    const url = `https://biogenbackendapi.azurewebsites.net/users/${id}?objectId=${id}`;
+    const id: any = jwt_decode(sessionStorage.getItem('token')) || '';
+    const url = `https://biogenbackendapi.azurewebsites.net/users/${id?.sub}?objectId=${id?.sub}`;
     return this.http.get<User>(url);
   }
 }

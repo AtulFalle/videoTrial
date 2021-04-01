@@ -40,7 +40,7 @@
               *ngIf="file.status !== 'COMPLETED'"
               mode="determinate"
               [value]="file?.progress"
-              [color]="file.status === 'primary' "
+              [color]="file.status === 'In-Progress' ? 'primary' : 'accent' "
             ></mat-progress-bar>
           </div>
           <button mat-button *ngIf="(getFileStatus(file) | async) as status" (click)="status === 'Paused' ? resume(file) : pause(file)">

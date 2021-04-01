@@ -51,7 +51,7 @@ export const getUploadingFile = createSelector(
 
 export const getUploadingFileByName = createSelector(
   selectVideoState,
-  (state: State, props: {fileName: string}) =>
+  (state: State, props: { fileName: string }) =>
     state.fileUpload.find((ele) => ele.fileName === props.fileName)
 );
 
@@ -63,16 +63,17 @@ export const getStudyList = createSelector(selectVideoState, (state: State) =>
     .map((res) => res.name)
 );
 
-export const getSiteList = createSelector(selectVideoState, (state: State) =>{
- const a = state.studyList
+export const getSiteList = createSelector(selectVideoState, (state: State) => {
+  const a = state.studyList
     .filter((e) => e.name === state.currentStudy)
     .map((iter) => iter.site)
-    .map((ele) => ele.filter((e) => e.role === 'Admin' && e.siteRequestStatus === 'approved'))
-    console.log(a);
-    return a[0];
-
-}
-);
+    .map((ele) =>
+      ele.filter(
+        (e) => e.role === 'Admin' && e.siteRequestStatus === 'approved'
+      )
+    );
+  return a[0];
+});
 
 export const getAllUsers = createSelector(
   selectVideoState,

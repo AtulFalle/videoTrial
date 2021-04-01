@@ -26,6 +26,7 @@ export class VideoTrialStoreEffects {
     private procedureService: ProcedureService,
     private messageBoxService: MessageBoxService,
     private adminService: AdminService,
+    private sharedService: SharedService
   ) {}
 
   @Effect()
@@ -161,12 +162,11 @@ export class VideoTrialStoreEffects {
   @Effect()
   getUserDetails = this.actions$.pipe(
     ofType(videoTrialActions.getUserDetails),
-    switchMap((action) => this.SharedService.getUserById()),
-    switchMap((procedures: User) => {
-      return of(
-        videoTrialActions.getAllProcedureSuccess({
-          procedures}))
-        }));
+    switchMap(() => this.sharedService.getUserById()),
+    switchMap((user: User) => {
+      return of(videoTrialActions.getUserDetailsSuccess({ user }));
+    })
+  );
 
   @Effect()
   getAllRoles = this.actions$.pipe(

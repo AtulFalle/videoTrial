@@ -43,6 +43,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.store$.dispatch(VideoTrialStoreActions.getUserDetails());
     this.procedureID = this.actRoute.snapshot.params.id;
     this.store$.dispatch(
       VideoTrialStoreActions.getProcedure({ procedureID: this.procedureID })
