@@ -1,8 +1,9 @@
-<div class="col-12 parent">
-  <h1>401 - UnAuthorized</h1>
-  <p>
-   {{msg}}
+<div class="container">
+  <div class="col-12 mt-5">
+    <h3>
+      {{ msg }}
+    </h3>
+    <p>Logging you out in  <b> {{ time >= 0 ? time : 0 }} Seconds </b></p>
 
-  </p>
-  <p><b> Logging you out in {{ time >=0 ? time : '0' }} Seconds </b></p>
+  </div>
 </div>

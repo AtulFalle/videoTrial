@@ -1,0 +1,52 @@
+.admin-container{
+    padding: 5px 10px;
+    .dropdown-cntainer {
+        padding: 10px 25px;
+        .dropdown-input {
+            padding-left: 20px;
+        }
+    }
+}
+.table{
+    width: 100%;
+   }
+.mat-column-action {
+    padding-left: 0px;
+}
+.mat-column-status {
+    
+    padding-left: 0px!important;
+    
+}
+table {
+    width: 100%;
+  }
+  
+  tr.example-detail-row {
+    height: 0;
+  }
+  
+  tr.example-element-row:not(.example-expanded-row):hover {
+    background: #f5f5f5;
+  }
+  
+  tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+  
+  .example-element-row td {
+    border-bottom-width: 0;
+  }
+  
+  .example-element-detail {
+    overflow: hidden;
+    display: flex;
+  }
+  .add-role-container {
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    min-height: 200px;
+   
+  }

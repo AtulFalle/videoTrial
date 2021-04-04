@@ -1,16 +1,17 @@
-
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { retry } from 'rxjs/operators';
+import { filter, map, retry } from 'rxjs/operators';
 import { FileUploadService } from './file-upload.service';
 import { User } from '../core/models/admin.model';
 import { HttpClient } from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
-import { FileMetadata, BlobUploadResponse } from './../core/models/file-upload.model';
+import {
+  FileMetadata,
+  BlobUploadResponse,
+} from './../core/models/file-upload.model';
 import { EmailNotify } from '../core/models/email-notify.model';
 import { Store } from '@ngrx/store';
 import { VideoTrialStoreState } from '../root-store/video-trial-store';
-
 
 @Injectable({
   providedIn: 'root',
@@ -121,10 +122,10 @@ export class SharedService {
     return this.http.post(url, body);
   }
 
-  getUserById(): Observable<User> {
+  getUserById(): Observable<User[]> {
     const id: any = jwt_decode(sessionStorage.getItem('token')) || '';
-    const url = `https://biogenbackendapi.azurewebsites.net/users/${id?.sub}?objectId=${id?.sub}`;
-    return this.http.get<User>(url);
+    const url = `https://biogenbackendapi.azurewebsites.net/filterRequestedAccounts?reqStatus=false`;
+    return this.http.get<User[]>(url);
   }
 
   sendEmailNotification(token: any): Observable<any> {
@@ -133,7 +134,7 @@ export class SharedService {
     const body: EmailNotify = {
       givenName: token.given_name,
       surname: token.family_name,
-      email: token.email ,
+      email: token.email,
       objectId: token.sub,
       accountEnabled: false,
       selectedRole: token.extension_selectedrole,

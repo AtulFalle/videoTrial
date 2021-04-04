@@ -83,3 +83,13 @@ export const getAllRoles = createSelector(
   selectVideoState,
   (state: State) => state.roles
 );
+export const getFilteredUser = createSelector(
+  selectVideoState,
+  (state: State) => state.users
+);
+
+
+export const getUserDetails = createSelector(
+  selectVideoState,
+  (state: State) => state.currentUser
+)

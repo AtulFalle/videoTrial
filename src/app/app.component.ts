@@ -1,3 +1,4 @@
+import { VideoTrialStoreSelectors } from 'src/app/root-store/video-trial-store';
 import { Router } from '@angular/router';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
@@ -19,6 +20,11 @@ import { b2cPolicies } from './b2c-config';
 import jwt_decode from 'jwt-decode';
 import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
 import { Keepalive } from '@ng-idle/keepalive';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+import { VideoTrialStoreState } from './root-store/video-trial-store';
+import { Store } from '@ngrx/store';
+import { User } from './core/models/admin.model';
 
 interface IdTokenClaims extends AuthenticationResult {
   idTokenClaims: {
@@ -40,12 +46,20 @@ export class AppComponent implements OnInit {
   userRole = '';
   idleState: string;
   lastPing: Date;
+  timedOut = false;
+  isUploading = false;
+  dialogRef: MatDialogRef<AlertDialogComponent>;
+  userDetails: User = null;
 
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private authService: MsalService,
     private msalBroadcastService: MsalBroadcastService,
-    private router: Router
+    private idle: Idle,
+    private keepalive: Keepalive,
+    private router: Router,
+    private dialog: MatDialog,
+    private store$: Store<VideoTrialStoreState.State>
   ) {
     // this.authService.handleRedirectObservable().subscribe((res) => {
     //   console.log(res);
@@ -79,9 +93,19 @@ export class AppComponent implements OnInit {
   // }
 
   ngOnInit(): void {
+
+    this.store$.select(VideoTrialStoreSelectors.getUserDetails).subscribe(res=> {
+      this.userDetails = {...res};
+      this.getUserRole(res);
+    });
     localStorage.clear();
     this.isIframe = window !== window.parent && !window.opener;
-
+    this.startSessionIdle();
+    if (sessionStorage.getItem('token')) {
+      this.reset();
+    } else {
+      this.idle.stop();
+    }
     this.msalBroadcastService.inProgress$
       .pipe(
         filter(
@@ -111,7 +135,7 @@ export class AppComponent implements OnInit {
         const getApproval: any = jwt_decode(payload.idToken);
         if (getApproval.extension_accountstatus !== 'Active') {
           if (getApproval.extension_accountstatus === 'superuser') {
-            this.router.navigate(['admin-dashboard']);
+            this.router.navigate(['admin-user']);
           } else {
             this.router.navigate(['not-authorized']);
           }
@@ -122,8 +146,77 @@ export class AppComponent implements OnInit {
         return result;
       });
   }
+  ngDoCheck() {
+    if (this.isUploading && this.idle.isRunning()) {
+      this.idle.stop();
+    } else if (
+      !this.isUploading &&
+      !this.idle.isRunning() &&
+      sessionStorage.getItem('token')
+    ) {
+      this.reset();
+    }
+  }
+
+  startSessionIdle() {
+    this.idle.setIdle(6000);
+    // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
+    this.idle.setTimeout(10);
+    // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
+    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+
+    this.idle.onIdleEnd.subscribe(() => {
+      this.dialogRef.componentInstance.onConfirmClick();
+    });
+    this.idle.onTimeout.subscribe(() => {
+      this.idleState = '';
+      this.idleState = 'Session timeout .Kindly login again.';
+      this.timedOut = true;
+      if (sessionStorage.getItem('token')) {
+        this.logout();
+      }
+    });
+    this.idle.onIdleStart.subscribe(() => {
+      this.idleState = '';
+    });
+    this.idle.onTimeoutWarning.subscribe((countdown: any) => {
+      this.idleState = 'Your session will end in ' + countdown + ' seconds!';
+      if (this.dialogRef && this.dialogRef.componentInstance) {
+        this.dialogRef.componentInstance.updateMessage({
+          message: this.idleState,
+        });
+      }
+
+      if (this.dialog.openDialogs.length == 0) {
+        this.openAlertDialog();
+      }
+    });
+
+    // sets the ping interval to 15 seconds
+    this.keepalive.interval(15);
+
+    this.keepalive.onPing.subscribe(() => (this.lastPing = new Date()));
+
+    this.reset();
+  }
+  reset() {
+    this.idle.watch();
+    this.idleState = '';
+    this.timedOut = false;
+  }
+  openAlertDialog() {
+    this.dialogRef = this.dialog.open(AlertDialogComponent, {
+      data: {
+        message: this.idleState,
+        buttonText: {
+          cancel: 'Ok',
+        },
+      },
+    });
+  }
 
   logout(): void {
+    this.idle.stop();
     const endSessionRequest: EndSessionRequest = {
       authority: b2cPolicies.authorities.signUpSignIn.authority,
     };
@@ -143,22 +236,15 @@ export class AppComponent implements OnInit {
     }
   }
 
-  getUserRole(): string {
+  getUserRole(user: User): string {
     try {
-      const token: any = jwt_decode(sessionStorage.getItem('token'));
-      const roleData = JSON.parse(token.extension_selectedrole);
+      // const token: any = jwt_decode(sessionStorage.getItem('token'));
+      const roleData = JSON.parse(user.selectedRole);
       const userRoles = [];
       for (const iterator of Object.keys(roleData)) {
         for (const iter of roleData[iterator]) {
-          if(iter.siteRequestStatus === 'approved') {
-            userRoles.push(iter.role);
-          }
+          userRoles.push(iter.role);
         }
-      }
-
-      if (token.extension_accountstatus === 'superuser') {
-        this.userRole = 'admin';
-        return ' Super Admin';
       }
       if (userRoles.find((e) => e === 'Admin')) {
         this.userRole = 'admin';
@@ -187,7 +273,8 @@ export class AppComponent implements OnInit {
 
   canAddProcedure(): boolean {
     if (
-      this.userRole.toLowerCase() === 'admin'
+      this.userRole.toLowerCase() === 'admin' ||
+      this.userRole.toLowerCase() === 'viewer'
     ) {
       return true;
     }
@@ -198,8 +285,7 @@ export class AppComponent implements OnInit {
     const token: any = jwt_decode(sessionStorage.getItem('token'));
     if (token.extension_accountstatus === 'superuser') {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }

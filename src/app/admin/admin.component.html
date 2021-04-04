@@ -27,8 +27,6 @@
           </div>
         </div>
 
-
-
         <mat-expansion-panel [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -121,15 +119,48 @@
               </ng-container>
               <ng-container matColumnDef="role">
                 <th mat-header-cell *matHeaderCellDef> Role </th>
-                <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+                <td mat-cell *matCellDef="let element; let i = index"> 
+                  <span *ngIf="selectedIndex != i">{{element.role}}</span>
+                  <div *ngIf="selectedIndex == i">
+                    <mat-form-field >
+                      <mat-select [(value)]="selectedUserRole">
+                        <mat-option *ngFor="let role of userRoles.Role" [value]="role">
+                          {{role}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </td>
               </ng-container>
               <ng-container matColumnDef="study">
                 <th mat-header-cell *matHeaderCellDef> Study </th>
-                <td mat-cell *matCellDef="let element"> {{element.study}} </td>
+                <td mat-cell *matCellDef="let element;let i = index">
+                  <span *ngIf="selectedIndex != i"> {{element.study}}</span>
+                  <div *ngIf="selectedIndex == i">
+                    <mat-form-field >
+                      <mat-select [(value)]="selectedUserSudy" (selectionChange)="onUserStudySelect()">
+                        <mat-option *ngFor="let study of getUserStudies()" [value]="study.value">
+                          {{study.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </td>
               </ng-container>
               <ng-container matColumnDef="site">
                 <th mat-header-cell *matHeaderCellDef> Site </th>
-                <td mat-cell *matCellDef="let element"> {{element.site}} </td>
+                <td mat-cell *matCellDef="let element;let i = index">
+                  <span *ngIf="selectedIndex != i">{{element.site}}</span>
+                  <div *ngIf="selectedIndex == i">
+                    <mat-form-field >
+                      <mat-select [(value)]="selectedUserSite">
+                        <mat-option *ngFor="let site of getUserSites()" [value]="site.value">
+                          {{site.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </td>
               </ng-container>
               <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef> Status </th>
@@ -141,35 +172,33 @@
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <mat-cell *matCellDef="let element;let i = index">
                   <div *ngIf="selectedIndex != i">
-                    <button mat-raised-button color="primary" (click)="onRowClick(i)" class="m-1">Edit</button>
+                    <button mat-raised-button color="primary" (click)="onRowClick(i, element)" class="m-1">Edit</button>
+                    <button *ngIf="element.siteRequestStatus == 'rejected'" mat-raised-button color="primary"
+                    class="m-1" (click)="updateUserStatus(element.id,'approved',element.objectId)">
+                    Approve
+                  </button>
+                  <button *ngIf="element.siteRequestStatus == 'approved'" mat-raised-button color="warn" class="m-1"
+                    (click)="updateUserStatus(element.id,'rejected',element.objectId)">
+                    Reject
+                  </button>
                   </div>
                   <div *ngIf="selectedIndex == i">
-                    <button *ngIf="element.siteRequestStatus == 'rejected'" mat-raised-button color="primary"
-                      class="m-1" (click)="updateUserStatus(element.id,'approved',element.objectId)">
-                      Approve
-                    </button>
-                    <button *ngIf="element.siteRequestStatus == 'approved'" mat-raised-button color="warn" class="m-1"
-                      (click)="updateUserStatus(element.id,'rejected',element.objectId)">
-                      Reject
-                    </button>
-                    <button mat-raised-button class="m-1" (click)="resetSelection()">
-                      Cancel
-                    </button>
+                    <button  mat-raised-button color="primary" class="m-1"
+                    (click)="updateUser(element.id,element.objectId)">
+                    Update
+                  </button>
+                  <button mat-raised-button class="m-1" (click)="resetSelection()">
+                    Cancel
+                  </button>
                   </div>
                 </mat-cell>
               </ng-container>
-
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
-
-
-
           </div>
         </mat-expansion-panel>
-
       </div>
-
     </mat-tab>
     <!-- <mat-tab label="Video Scrubber">
       <div class="demo-tab-content">

@@ -51,6 +51,8 @@ export class ProceduresListComponent implements OnInit {
   procedures$: Observable<Procedure[]>;
 
   ngOnInit(): void {
+    this.store$.dispatch(VideoTrialStoreActions.getUserDetails());
+
     this.store$.dispatch(VideoTrialStoreActions.getAllProcedures());
     this.isLoadingProcedures$ = this.store$.select(
       VideoTrialStoreSelectors.isLoadingProcedures

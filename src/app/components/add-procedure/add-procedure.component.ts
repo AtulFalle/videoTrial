@@ -10,7 +10,6 @@ import {
   VideoTrialStoreActions,
   VideoTrialStoreSelectors,
 } from 'src/app/root-store/video-trial-store';
-import { Site } from 'src/app/core/models/user-roles.model';
 
 @Component({
   selector: 'app-add-procedure',

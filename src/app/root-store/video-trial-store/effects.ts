@@ -1,23 +1,22 @@
+import  jwt_decode  from 'jwt-decode';
+import { User } from 'src/app/core/models/admin.model';
+import { DeleteAnnotation } from 'src/app/core/models/annotations.model';
+import { Procedure } from 'src/app/core/models/procedure.model';
+import { AdminService } from 'src/app/admin/admin.service';
 import { SharedService } from './../../service/shared.service';
 
 import { MessageBoxService } from './../../core/message-dialog-box/message-box.service';
 import { ProcedureService } from './../../core/services/procedure-service/procedure.service';
 import { of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import {
   catchError,
-  concatMap,
-  map,
   switchMap,
-  mergeMap,
 } from 'rxjs/operators';
 
 import * as videoTrialActions from './actions';
-import { Procedure } from 'src/app/core/models/procedure.model';
-import { DeleteAnnotation } from 'src/app/core/models/annotations.model';
-import { AdminService } from 'src/app/admin/admin.service';
-import { User } from 'src/app/core/models/admin.model';
+
 
 @Injectable()
 export class VideoTrialStoreEffects {
@@ -121,18 +120,18 @@ export class VideoTrialStoreEffects {
         );
     })
   );
-  @Effect()
-  getAllUsers = this.actions$.pipe(
-    ofType(videoTrialActions.getAllUser),
-    switchMap((action) => this.adminService.getAllUsers()),
-    switchMap((users: User[]) => {
-      return of(
-        videoTrialActions.getAllUserSuccess({
-          users,
-        })
-      );
-    })
-  );
+  // @Effect()
+  // getAllUsers = this.actions$.pipe(
+  //   ofType(videoTrialActions.getAllUser),
+  //   switchMap((action) => this.adminService.getAllUsers()),
+  //   switchMap((users: User[]) => {
+  //     return of(
+  //       videoTrialActions.getAllUserSuccess({
+  //         users,
+  //       })
+  //     );
+  //   })
+  // );
 
   @Effect()
   updateserStatus = this.actions$.pipe(
@@ -163,8 +162,14 @@ export class VideoTrialStoreEffects {
   getUserDetails = this.actions$.pipe(
     ofType(videoTrialActions.getUserDetails),
     switchMap(() => this.sharedService.getUserById()),
-    switchMap((user: User) => {
-      return of(videoTrialActions.getUserDetailsSuccess({ user }));
+    switchMap((user: User[]) => {
+
+      const id: any = jwt_decode(sessionStorage.getItem('token')) || '';
+
+      console.log(user);
+
+      const currentUser = user.find( ele => ele.objectId === id.sub);
+      return of(videoTrialActions.getUserDetailsSuccess({ user: currentUser }));
     })
   );
 
@@ -308,4 +313,40 @@ export class VideoTrialStoreEffects {
   //     );
   //   })
   // );
+  @Effect()
+  updateUserRole = this.actions$.pipe(
+    ofType(videoTrialActions.updateUserRoles),
+    switchMap((action) => {
+      return this.adminService
+        .updateUserRole(action.emailId, action.selectedRole)
+        .pipe(
+          switchMap((res: any) => {
+            this.messageBoxService.openSuccessMessage(
+              'User roles are updated successfully'
+            );
+            return of(
+              videoTrialActions.getFilteredUser()
+            );
+          }),
+          catchError((e) => {
+            this.messageBoxService.openErrorMessage(
+              'Something went wrong. Please Try Again.'
+            );
+            return e;
+          })
+        );
+    })
+  );
+  @Effect()
+  getFilteredUsers = this.actions$.pipe(
+    ofType(videoTrialActions.getFilteredUser),
+    switchMap((action) => this.adminService.getFilteredUsers()),
+    switchMap((users: User[]) => {
+      return of(
+        videoTrialActions.getFilteredUserSuccess({
+          users,
+        })
+      );
+    })
+  );
 }

@@ -20,7 +20,7 @@ export class NotAuthorizedComponent implements OnInit {
   ngOnInit(): void {
     const token: any = jwt_decode(sessionStorage.getItem('token'));
     if (token.extension_accountstatus === 'Requested') {
-      this.msg = 'Your request is not yet approved';
+      this.msg = 'Your sign up request is not yet approved by Admin';
       if (token.extension_emailAdmin === 'false') {
         this.sharedService.sendEmailNotification(token).subscribe((res) => {
           console.log(res);
@@ -29,7 +29,7 @@ export class NotAuthorizedComponent implements OnInit {
       }
       this.setTimer();
     } else if (token.extension_accountstatus === 'Rejected') {
-      this.msg = 'Your request is Rejected by Admin';
+      this.msg = 'Your sign up request is rejected by Admin';
       this.setTimer();
     }
     sessionStorage.clear();

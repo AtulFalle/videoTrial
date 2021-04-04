@@ -43,14 +43,14 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.store$.dispatch(VideoTrialStoreActions.getUserDetails());
     this.procedureID = this.actRoute.snapshot.params.id;
     this.store$.dispatch(
       VideoTrialStoreActions.getProcedure({ procedureID: this.procedureID })
-    );
-    this.store$.select(VideoTrialStoreSelectors.isLoading).subscribe((res) => {
-      this.isLoading = res;
-    });
+      );
+      this.store$.select(VideoTrialStoreSelectors.isLoading).subscribe((res) => {
+        this.isLoading = res;
+      });
+    this.store$.dispatch(VideoTrialStoreActions.getUserDetails());
     this.procedure = this.store$.select(VideoTrialStoreSelectors.getProcedure);
     this.videoSub$ = this.store$.select(
       VideoTrialStoreSelectors.getCurrentVideo

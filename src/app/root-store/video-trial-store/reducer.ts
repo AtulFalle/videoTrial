@@ -285,29 +285,31 @@ const featureReducer = createReducer(
     const userRoles: UserMetadata[] = [];
 
     const roleList = JSON.parse(user.selectedRole);
-    for (const iterator of Object.keys(roleList)) {
-      const temp: UserMetadata = {
-        name: iterator,
-        site: roleList[iterator].map((ele: any) => {
-          const tempSite: Site = {
-            name: ele.site,
-            role: ele.role,
-            siteRequestStatus: ele.siteRequestStatus,
-          };
-          return tempSite;
-        }),
+    try {
+      for (const iterator of Object.keys(roleList)) {
+        const temp: UserMetadata = {
+          name: iterator,
+          site: roleList[iterator].map((ele: any) => {
+            const tempSite: Site = {
+              name: ele.site,
+              role: ele.role,
+              siteRequestStatus: ele.siteRequestStatus,
+            };
+            return tempSite;
+          }),
+        };
+        userRoles.push(temp);
+      }
+      return {
+        ...state,
+        studyList: userRoles,
+        currentStudy: userRoles[0].name,
+        currentUser: user,
       };
-      userRoles.push(temp);
+    } catch (e) {
+      return { ...state };
     }
-    return {
-      ...state,
-      studyList: userRoles,
-      currentStudy: userRoles[0].name,
-    };
-    // return {
-    //   ...state,
-    //   currentUser: user,
-    // };
+
   }),
   on(videoTrialActions.getAllRoleSuccess, (state, { roles }) => {
     const parsedRoles = JSON.parse(roles);
@@ -315,6 +317,20 @@ const featureReducer = createReducer(
     return {
       ...state,
       roles: parsedRoles,
+    };
+  }),
+  on(videoTrialActions.getFilteredUserSuccess, (state, { users }) => {
+    const updatedUserList: User[] = [];
+    for (const iterator of users) {
+      const temp = { ...iterator };
+      updatedUserList.push(temp);
+    }
+    updatedUserList.map((item) => {
+      item.selectedRole = JSON.parse(item.selectedRole);
+    });
+    return {
+      ...state,
+      users: updatedUserList,
     };
   })
 );

@@ -69,6 +69,9 @@ export enum VideoTrialActionType {
   COMMIT_BLOCKLIST_SUCCESS = '[string] commit blob successfull',
   GET_ALL_ROLE = '[GET ALL ROLE ] get all roles',
   GET_ALL_ROLE_SUCCESS = '[GET ALL ROLE SUCCESS] get all roles',
+  UPDATE_USER_ROLE = '[UPDATE USER ROLE ] update user role',
+  GET_FILTERED_USER = '[USER GET] get all user Details',
+  GET_FILTERED_USER_SUCCESS = '[USER GET SUCCESS] get all user Details',
 }
 
 export const uploadVideo = createAction(
@@ -249,3 +252,12 @@ export const getAllRoleSuccess = createAction(
 export const getAllRole = createAction(
   VideoTrialActionType.GET_ALL_ROLE_SUCCESS
 );
+export const updateUserRoles = createAction(
+  VideoTrialActionType.UPDATE_USER_ROLE,
+  props<{emailId: string; selectedRole: any }>()
+);
+export const getFilteredUserSuccess = createAction(
+  VideoTrialActionType.GET_FILTERED_USER_SUCCESS,
+  props<{ users: User[] }>()
+);
+export const getFilteredUser = createAction(VideoTrialActionType.GET_FILTERED_USER);

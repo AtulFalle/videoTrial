@@ -35,25 +35,27 @@ export class AdminComponent implements OnInit {
   approvalUserList: UserApproval[] = [];
   existingUserList: UserApproval[] = [];
   userList: User[] = [];
-  roles: any;
+  userRoles: any;
   selectedSudy: string = 'All';
   selectedSite: string = 'All';
   selectedIndex: number = -1;
+  selectedUserSudy: string = '';
+  selectedUserSite: string = '';
+  selectedUserRole: string = '';
+  filteredSitesUser: any[] = [];
   constructor(
     private store$: Store<VideoTrialStoreState.State>,
   ) { }
 
   ngOnInit(): void {
-    this.store$.dispatch(VideoTrialStoreActions.getAllUser());
+   // this.store$.dispatch(VideoTrialStoreActions.getAllUser());
     this.store$.dispatch(VideoTrialStoreActions.getAllRole());
     this.store$.select(VideoTrialStoreSelectors.getAllRoles).subscribe((roles) => {
 
-      this.roles = roles;
+      this.userRoles = roles;
       if (roles.Studies) {
-        console.log(roles.Studies);
         this.studies = [{ value: 'All', viewValue: 'All' }];
         this.sites = [{ value: 'All', study: "All", viewValue: 'All' } ];
-        console.log(Object.keys(roles.Studies));
         Object.keys(roles.Studies).map(study => {
           this.studies.push({ value: study, viewValue: study });
           roles.Studies[study].map((site: any) => {
@@ -68,7 +70,6 @@ export class AdminComponent implements OnInit {
       this.approvalUserList = [];
       this.existingUserList = [];
       this.userList = res;
-      console.log(this.userList);
       res.map(user => {
         if (user.selectedRole) {
           Object.keys(user.selectedRole).map(study => {
@@ -159,10 +160,82 @@ export class AdminComponent implements OnInit {
       return this.existingUserList.filter(user=> user.study == this.selectedSudy && user.site == this.selectedSite)
     }
   }
-  onRowClick = (index: number) => {
+  onRowClick = (index: number, selectedRow: any) => {
     this.selectedIndex = index;
+    this.selectedUserSite = selectedRow.site;
+    this.selectedUserSudy = selectedRow.study;
+    this.selectedUserRole = selectedRow.role;
   }
   resetSelection = () => {
     this.selectedIndex = -1;
+  }
+  getUserStudies = () => {
+    return this.studies.filter(study => study.value != 'All')
+  } 
+  getUserSites = () => {
+    let allUserRequests: UserApproval[] = [...this.approvalUserList, ...this.existingUserList];
+    let selectedRequest = this.existingUserList[this.selectedIndex];
+    let filteredArr = allUserRequests.filter(userRequest=> userRequest.emailId == selectedRequest.emailId && userRequest.site != selectedRequest.site  );
+    let filteredSites = this.sites.filter(site=> 
+      {
+        if(filteredArr.find(ele=> ele.site == site.value)){
+          return null;
+        } else {
+          return site;
+        }
+       
+      });
+    console.log(filteredSites);
+    this.filteredSitesUser = filteredArr;
+    if (this.selectedUserSudy == '') {
+      return filteredSites.filter(site => site.value != 'All')
+    } else {
+      return filteredSites.filter(site => site.value != 'All' && site.study == this.selectedUserSudy)
+    }
+  }
+  onUserStudySelect = () => {
+    let filteredSites = this.sites.filter(site => site.value != 'All' && site.study == this.selectedUserSudy);
+    console.log(filteredSites);
+    this.selectedUserSite = filteredSites.length > 0 ? filteredSites[0].value : '' ;
+  }
+  updateUser(id: string, objectId: string) {
+    this.selectedIndex = -1;
+    const index = this.userList.findIndex((ele) => ele.objectId === objectId);
+    let tempSelectedRole: any = {};
+    if (this.userList[index].selectedRole) {
+
+      Object.keys(this.userList[index].selectedRole).map(study => {
+        let roleObjArr: any[] = [];
+        if ( this.userList[index].selectedRole[study]) {
+        this.userList[index].selectedRole[study].map((roleObj: any) => {
+          if (roleObj.id != id) {
+            roleObjArr.push({
+              id: roleObj.id,
+              role: roleObj.role,
+              site: roleObj.site,
+              siteRequestStatus: roleObj.siteRequestStatus
+            });
+          } 
+        })
+      }
+        tempSelectedRole[study] = roleObjArr;
+      });
+      let newSite = {
+        id: this.selectedUserSudy+'site-id-'+(Math.random()*100).toFixed(3),
+        role: this.selectedUserRole,
+        site: this.selectedUserSite,
+        siteRequestStatus: 'approved'
+      }
+      if (tempSelectedRole[this.selectedUserSudy]) {
+        tempSelectedRole[this.selectedUserSudy].push(newSite);
+      } else {
+        tempSelectedRole[this.selectedUserSudy] = [newSite]
+      }
+    }
+    console.log(tempSelectedRole);
+    this.store$.dispatch(
+      VideoTrialStoreActions.updateUserStatusAdmin({ objectId: objectId, selectedRole: tempSelectedRole })
+    );
+
   }
 }
