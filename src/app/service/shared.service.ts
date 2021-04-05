@@ -124,7 +124,7 @@ export class SharedService {
 
   getUserById(): Observable<User[]> {
     const id: any = jwt_decode(sessionStorage.getItem('token')) || '';
-    const url = `https://biogenbackendapi.azurewebsites.net/filterRequestedAccounts?reqStatus=false`;
+    const url = `https://biogenbackendapi.azurewebsites.net/filterUsersByAccountStatus?reqStatus=true`;
     return this.http.get<User[]>(url);
   }
 

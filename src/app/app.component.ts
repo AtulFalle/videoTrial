@@ -100,7 +100,7 @@ export class AppComponent implements OnInit {
     });
     localStorage.clear();
     this.isIframe = window !== window.parent && !window.opener;
-    this.startSessionIdle();
+   this.startSessionIdle();
     if (sessionStorage.getItem('token')) {
       this.reset();
     } else {

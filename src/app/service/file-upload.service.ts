@@ -1,4 +1,4 @@
-import { VideoTrialStoreSelectors } from 'src/app/root-store/video-trial-store';
+import { VideoTrialStoreActions, VideoTrialStoreSelectors, VideoTrialStoreState } from 'src/app/root-store/video-trial-store';
 import { FileUploadStatus } from './../core/enum/file-upload-status.enum';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
@@ -9,10 +9,7 @@ import {
 } from './../core/models/file-upload.model';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  VideoTrialStoreActions,
-  VideoTrialStoreState,
-} from '../root-store/video-trial-store';
+
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry, take } from 'rxjs/operators';
 
