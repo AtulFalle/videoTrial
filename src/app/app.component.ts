@@ -246,6 +246,7 @@ export class AppComponent implements OnInit {
           userRoles.push(iter.role);
         }
       }
+
       if (userRoles.find((e) => e === 'Admin')) {
         this.userRole = 'admin';
         return this.userRole;
@@ -264,7 +265,9 @@ export class AppComponent implements OnInit {
   canUplaodVideo(): boolean {
     if (
       this.userRole.toLowerCase() === 'admin' ||
-      this.userRole.toLowerCase() === 'uploader'
+      this.userRole.toLowerCase() === 'uploader' ||
+      this.userRole.toLowerCase() === 'super user'
+
     ) {
       return true;
     }
@@ -274,7 +277,8 @@ export class AppComponent implements OnInit {
   canAddProcedure(): boolean {
     if (
       this.userRole.toLowerCase() === 'admin' ||
-      this.userRole.toLowerCase() === 'viewer'
+      this.userRole.toLowerCase() === 'viewer' ||
+      this.userRole.toLowerCase() === 'super user'
     ) {
       return true;
     }
@@ -284,6 +288,8 @@ export class AppComponent implements OnInit {
   idSuperAdmin(): boolean {
     const token: any = jwt_decode(sessionStorage.getItem('token'));
     if (token.extension_accountstatus === 'superuser') {
+
+      this.userRole = 'super user';
       return true;
     } else {
       return false;

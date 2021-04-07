@@ -22,7 +22,7 @@ export class MsalBrowserService {
     body.set('client_id', 'a39f9378-d595-42ad-b773-422b79502a9c');
     body.set('grant_type', 'refresh_token');
     body.set('refresh_token', this.getSecrete());
-   return  this.http.post(url, body);
+    return this.http.post(url, body);
 
   }
 

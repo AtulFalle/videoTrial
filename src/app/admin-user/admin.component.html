@@ -59,14 +59,7 @@
                   <div [@detailExpand]="element == assignedUser ? 'expanded' : 'collapsed'">
                     <div *ngIf="element == assignedUser">
                       <div class="row">
-                        <mat-form-field class="col-2">
-                          <mat-label>Role</mat-label>
-                          <mat-select [(value)]="assignedRole">
-                            <mat-option *ngFor="let role of userRoles.Role" [value]="role">
-                              {{role}}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
+
                         <mat-form-field class="col-2">
                           <mat-label>Study</mat-label>
                           <mat-select [(value)]="assignedSudy" (selectionChange)="onStudySelect()">
@@ -84,14 +77,22 @@
                             </mat-option>
                           </mat-select>
                         </mat-form-field>
+                        <mat-form-field class="col-2">
+                          <mat-label>Role</mat-label>
+                          <mat-select [(value)]="assignedRole">
+                            <mat-option *ngFor="let role of userRoles.Role" [value]="role">
+                              {{role}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
 
-                        <button mat-raised-button class="m-1" (click)="onClickAddRole()">
+                        <button mat-raised-button class="m-1"  [disabled]="assignedRole == '' || assignedSite == '' || assignedSudy == ''  "  (click)="onClickAddRole()">
                           Add
                         </button>
                         <button mat-raised-button class="m-1" (click)="cancelAssign()">
                           Cancel
                         </button>
-                        <button mat-raised-button class="m-1" (click)="assignRoles()">
+                        <button mat-raised-button class="m-1" [disabled]="assignedSitesList.length == 0 " (click)="assignRoles()">
                           Save
                         </button>
 
@@ -100,17 +101,19 @@
                         <div class="col-4">
                           <table>
                             <tr>
-                              <th>Id</th>
+                              <!-- <th>Id</th> -->
                               <th>Role</th>
                               <th>Study</th>
                               <th>Site</th>
+                              <th>Action</th>
 
                             </tr>
                             <tr *ngFor="let sites of assignedSitesList">
-                              <td>{{sites.id}}</td>
+                              <!-- <td>{{sites.id}}</td> -->
                               <td>{{sites.role}}</td>
                               <td>{{sites.study}}</td>
                               <td>{{sites.site}}</td>
+                              <td><button mat-raised-button  (click) ="removeSiteAssignedSites(sites.id)" >Remove</button></td>
                             </tr>
                           </table>
                         </div>
@@ -157,14 +160,7 @@
             </div>
             <div class="row">
 
-              <mat-form-field class="col-2">
-                <mat-label>Role</mat-label>
-                <mat-select [disabled]="userNewRole == ''" [(value)]="newRole">
-                  <mat-option *ngFor="let role of userRoles.Role" [value]="role">
-                    {{role}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+
               <mat-form-field class="col-2">
                 <mat-label>Study</mat-label>
                 <mat-select [(value)]="newRoleSudy" [disabled]="userNewRole == ''" >
@@ -182,32 +178,39 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
+              <mat-form-field class="col-2">
+                <mat-label>Role</mat-label>
+                <mat-select [disabled]="userNewRole == ''" [(value)]="newRole">
+                  <mat-option *ngFor="let role of userRoles.Role" [value]="role">
+                    {{role}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
 
-              <button mat-raised-button class="m-1" (click)="onClickAddNewRole()">
+              <button  [disabled]="newRole == '' || newRoleSite == '' || newRoleSudy == ''  " mat-raised-button class="m-1" (click)="onClickAddNewRole()">
                 Add
               </button>
-              <button mat-raised-button class="m-1">
-                Cancel
-              </button>
-              <button mat-raised-button color="primary" class="m-1" (click)="addNewRoles()" >
-                Add New Role
+              <button [disabled]="newRoleSitesList.length == 0" mat-raised-button color="primary" class="m-1" (click)="addNewRoles()" >
+                Save
               </button>
             </div>
             <div class="row">
               <div class="col-4">
                 <table>
                   <tr>
-                    <th>Id</th>
+                    <!-- <th>Id</th> -->
                     <th>Role</th>
                     <th>Study</th>
                     <th>Site</th>
+                    <th>Action</th>
 
                   </tr>
                   <tr *ngFor="let sites of newRoleSitesList">
-                    <td>{{sites.id}}</td>
+                    <!-- <td>{{sites.id}}</td> -->
                     <td>{{sites.role}}</td>
                     <td>{{sites.study}}</td>
                     <td>{{sites.site}}</td>
+                    <td><button mat-raised-button  (click) ="removeSiteFromNewRole(sites.id)" >Remove</button></td>
                   </tr>
                 </table>
               </div>
@@ -322,7 +325,8 @@
                       Approve
                     </button>
                     <button *ngIf="element.siteRequestStatus == 'approved'" mat-raised-button color="warn" class="m-1"
-                      (click)="updateUserStatus(element.id,'rejected',element.objectId)">
+                      (click)="updateUserStatus
+                      (element.id,'rejected',element.objectId)">
                       Reject
                     </button>
                   </div>
