@@ -59,7 +59,7 @@
                   <div [@detailExpand]="element == assignedUser ? 'expanded' : 'collapsed'">
                     <div *ngIf="element == assignedUser">
                       <div class="row">
-
+          
                         <mat-form-field class="col-2">
                           <mat-label>Study</mat-label>
                           <mat-select [(value)]="assignedSudy" (selectionChange)="onStudySelect()">
@@ -97,11 +97,13 @@
                         </button>
 
                       </div>
+                      <div *ngIf="errorMsgAssignSite !==''" class="row error-message">
+                        {{errorMsgAssignSite}}
+                      </div>
                       <div class="row">
                         <div class="col-4">
                           <table>
                             <tr>
-                              <!-- <th>Id</th> -->
                               <th>Role</th>
                               <th>Study</th>
                               <th>Site</th>
@@ -109,7 +111,6 @@
 
                             </tr>
                             <tr *ngFor="let sites of assignedSitesList">
-                              <!-- <td>{{sites.id}}</td> -->
                               <td>{{sites.role}}</td>
                               <td>{{sites.study}}</td>
                               <td>{{sites.site}}</td>
@@ -141,7 +142,7 @@
               <label>Add New Role</label>
             </mat-panel-title>
             <mat-panel-description>
-
+            
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div class="add-role-container">
@@ -155,12 +156,12 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-
+             
 
             </div>
             <div class="row">
 
-
+        
               <mat-form-field class="col-2">
                 <mat-label>Study</mat-label>
                 <mat-select [(value)]="newRoleSudy" [disabled]="userNewRole == ''" >
@@ -194,11 +195,13 @@
                 Save
               </button>
             </div>
+            <div *ngIf="errorMsgNewRole !==''" class="row error-message">
+              {{errorMsgNewRole}}
+            </div>
             <div class="row">
               <div class="col-4">
                 <table>
                   <tr>
-                    <!-- <th>Id</th> -->
                     <th>Role</th>
                     <th>Study</th>
                     <th>Site</th>
@@ -206,7 +209,6 @@
 
                   </tr>
                   <tr *ngFor="let sites of newRoleSitesList">
-                    <!-- <td>{{sites.id}}</td> -->
                     <td>{{sites.role}}</td>
                     <td>{{sites.study}}</td>
                     <td>{{sites.site}}</td>
@@ -325,8 +327,7 @@
                       Approve
                     </button>
                     <button *ngIf="element.siteRequestStatus == 'approved'" mat-raised-button color="warn" class="m-1"
-                      (click)="updateUserStatus
-                      (element.id,'rejected',element.objectId)">
+                      (click)="updateUserStatus(element.id,'rejected',element.objectId)">
                       Reject
                     </button>
                   </div>

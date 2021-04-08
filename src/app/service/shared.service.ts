@@ -66,6 +66,17 @@ export class SharedService {
       });
     }
   }
+
+  resumeAllFileUpload(files: FileMetadata[]): void {
+    for (const iterator of files) {
+      of(this.fileUpload.resumeUpload(iterator)).subscribe((res) => {
+        console.log(res);
+        res.then((e) => {
+          console.log(e);
+        });
+      });
+    }
+  }
   startCounter(): void {
     setInterval(() => {
       console.log('this is still playing in background');

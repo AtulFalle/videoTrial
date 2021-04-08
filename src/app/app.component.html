@@ -61,5 +61,13 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet></router-outlet>
+    
   </mat-sidenav-content>
 </mat-sidenav-container>
+<div *ngIf="isOffline" class="error-offline-wrapper">
+  <div class=" error-offline-align">
+    <div class="error-offline">
+      <div>You are offline. Please check your internet connection.</div>
+    </div>
+  </div>
+</div>

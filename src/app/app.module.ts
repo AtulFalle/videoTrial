@@ -68,6 +68,7 @@ import { NotAuthorizedComponent } from './authentication/not-authorized/not-auth
 import { NgIdleModule } from '@ng-idle/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+
 // import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const isIE =
@@ -139,7 +140,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     LoginComponent,
     FileUploaderComponent,
     NotAuthorizedComponent,
-    AlertDialogComponent
+    AlertDialogComponent,
+ 
   ],
   imports: [
     BrowserModule,

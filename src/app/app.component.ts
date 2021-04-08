@@ -49,7 +49,10 @@ export class AppComponent implements OnInit {
   timedOut = false;
   isUploading = false;
   dialogRef: MatDialogRef<AlertDialogComponent>;
+  oflineDialogRef: MatDialogRef<AlertDialogComponent>;
+  resumeUploadDialogRef: MatDialogRef<AlertDialogComponent>;
   userDetails: User = null;
+  isOffline: boolean = false;
 
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
@@ -60,52 +63,44 @@ export class AppComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private store$: Store<VideoTrialStoreState.State>
-  ) {
-    // this.authService.handleRedirectObservable().subscribe((res) => {
-    //   console.log(res);
-    // });
-    // sets an idle timeout of 5 seconds, for testing purposes.
-    // idle.setIdle(5);
-    // // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
-    // idle.setTimeout(5);
-    // // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
-    // idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-    // idle.onIdleEnd.subscribe(() => (this.idleState = 'No longer idle.'));
-    // idle.onTimeout.subscribe(() => {
-    //   this.idleState = 'Timed out!';
-    //   //  this.timedOut = true;
-    //   this.logout();
-    // });
-    // idle.onIdleStart.subscribe(() => (this.idleState = 'You\'ve gone idle!'));
-    // idle.onTimeoutWarning.subscribe(
-    //   (countdown: string) =>
-    //     (this.idleState = 'You will time out in ' + countdown + ' seconds!')
-    // );
-    // // sets the ping interval to 15 seconds
-    // keepalive.interval(15);
-    // keepalive.onPing.subscribe(() => (this.lastPing = new Date()));
-    // this.reset();
-  }
-
-  // reset(): void {
-  //   this.idle.watch();
-  //   this.idleState = 'Started.';
-  // }
+  ) { }
 
   ngOnInit(): void {
-
-    this.store$.select(VideoTrialStoreSelectors.getUserDetails).subscribe(res=> {
-      this.userDetails = {...res};
-      this.getUserRole(res);
-    });
+    this.checkConnection();
+    this.store$
+      .select(VideoTrialStoreSelectors.getUserDetails)
+      .subscribe((res) => {
+        this.userDetails = { ...res };
+        this.getUserRole(res);
+      });
     localStorage.clear();
     this.isIframe = window !== window.parent && !window.opener;
-   this.startSessionIdle();
+    this.startSessionIdle();
     if (sessionStorage.getItem('token')) {
       this.reset();
     } else {
       this.idle.stop();
     }
+    this.store$
+      .select(VideoTrialStoreSelectors.getUploadingFile)
+      .subscribe((res) => {
+        let notCompleted = false;
+        if (res.length > 0) {
+          for (let i = 0; i < res.length; i++) {
+            if (res[i].status !== 'COMPLETED') {
+              notCompleted = true;
+              break;
+            }
+          }
+          if (notCompleted) {
+            this.isUploading = true;
+          } else {
+            this.isUploading = false;
+          }
+        } else {
+          this.isUploading = false;
+        }
+      });
     this.msalBroadcastService.inProgress$
       .pipe(
         filter(
@@ -159,14 +154,14 @@ export class AppComponent implements OnInit {
   }
 
   startSessionIdle() {
-    this.idle.setIdle(6000);
+    this.idle.setIdle(15);
     // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
     this.idle.setTimeout(10);
     // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     this.idle.onIdleEnd.subscribe(() => {
-      this.dialogRef.componentInstance.onConfirmClick();
+      this.dialogRef.componentInstance.closeDialog();
     });
     this.idle.onTimeout.subscribe(() => {
       this.idleState = '';
@@ -194,9 +189,7 @@ export class AppComponent implements OnInit {
 
     // sets the ping interval to 15 seconds
     this.keepalive.interval(15);
-
     this.keepalive.onPing.subscribe(() => (this.lastPing = new Date()));
-
     this.reset();
   }
   reset() {
@@ -246,7 +239,6 @@ export class AppComponent implements OnInit {
           userRoles.push(iter.role);
         }
       }
-
       if (userRoles.find((e) => e === 'Admin')) {
         this.userRole = 'admin';
         return this.userRole;
@@ -267,7 +259,6 @@ export class AppComponent implements OnInit {
       this.userRole.toLowerCase() === 'admin' ||
       this.userRole.toLowerCase() === 'uploader' ||
       this.userRole.toLowerCase() === 'super user'
-
     ) {
       return true;
     }
@@ -288,11 +279,40 @@ export class AppComponent implements OnInit {
   idSuperAdmin(): boolean {
     const token: any = jwt_decode(sessionStorage.getItem('token'));
     if (token.extension_accountstatus === 'superuser') {
-
       this.userRole = 'super user';
       return true;
     } else {
       return false;
     }
+  }
+  checkConnection = () => {
+    let timer = setInterval(() => {
+      if (!window.navigator.onLine) {
+        this.idle.stop();
+        if (!this.isOffline) {
+          this.isOffline = true;
+        }
+      } else {
+        if (this.isOffline) {
+          this.isOffline = false;
+          this.reset();
+          if (this.isUploading) {
+            this.openResumeUploadDialog();
+          }
+        }
+      }
+      // clearInterval(this.timer);
+    }, 1000);
+  };
+  openResumeUploadDialog() {
+    this.resumeUploadDialogRef = this.dialog.open(AlertDialogComponent, {
+      data: {
+        message: 'Do you want to resume upload ?',
+        buttonText: {
+          cancel: 'No',
+          ok: 'Yes',
+        },
+      },
+    });
   }
 }
