@@ -120,18 +120,7 @@ export class VideoTrialStoreEffects {
         );
     })
   );
-  // @Effect()
-  // getAllUsers = this.actions$.pipe(
-  //   ofType(videoTrialActions.getAllUser),
-  //   switchMap((action) => this.adminService.getAllUsers()),
-  //   switchMap((users: User[]) => {
-  //     return of(
-  //       videoTrialActions.getAllUserSuccess({
-  //         users,
-  //       })
-  //     );
-  //   })
-  // );
+
 
   @Effect()
   updateserStatus = this.actions$.pipe(
@@ -186,133 +175,7 @@ export class VideoTrialStoreEffects {
     })
   );
 
-  // chunk upload effects
 
-  // @Effect()
-  // sendChunk = this.actions$.pipe(
-  //   ofType(videoTrialActions.sendChunk),
-  //   switchMap((action) =>
-  //     this.sharedService.appendChunk(action.file).pipe(
-  //       map((res) => {
-  //         return {
-  //           blob: res,
-  //           action,
-  //         };
-  //       })
-  //     )
-  //   ),
-  //   switchMap((res: { blob: BlobUploadResponse; action: any }) => {
-  //     if (res.action.file.status === FileUploadStatus.IN_PROGRESS) {
-  //       return of(
-  //         videoTrialActions.sendChunkSuccess({
-  //           file: res.action.file,
-  //           chunkDetails: {
-  //             blockId: res.blob.blockId,
-  //             chunkEnd: res.action.file.lastChunk + environment.CHUNK_SIZE,
-  //           },
-  //         })
-  //       );
-  //     } else {
-  //       return of(
-  //         videoTrialActions.updateStatus({
-  //           file: res.action.file,
-  //           status: res.action.file.status,
-  //         })
-  //       );
-  //     }
-  //   })
-  // );
-
-  // @Effect()
-  // sendChunkSuccess = this.actions$.pipe(
-  //   ofType(videoTrialActions.sendChunkSuccess),
-  //   switchMap((action) =>
-  //     this.sharedService.appendChunk(action.file).pipe(
-  //       map((res) => {
-  //         return {
-  //           blob: res,
-  //           action,
-  //         };
-  //       })
-  //     )
-  //   ),
-  //   switchMap((res: { blob: BlobUploadResponse; action: any }) => {
-  //     if (res.action.file.status === FileUploadStatus.IN_PROGRESS) {
-  //       const chunkSize = res.action.file.lastChunk + environment.CHUNK_SIZE;
-  //       if (chunkSize > res.action.file.size) {
-  //         return of(
-  //           videoTrialActions.updateStatus({
-  //             file: res.action.file,
-  //             status: FileUploadStatus.CHUNK_COMPLETED,
-  //           })
-  //         );
-  //       }
-  //       return of(
-  //         videoTrialActions.sendChunkSuccess({
-  //           file: res.action.file,
-  //           chunkDetails: {
-  //             blockId: res.blob.blockId,
-  //             chunkEnd: res.action.file.lastChunk + environment.CHUNK_SIZE,
-  //           },
-  //         })
-  //       );
-  //     } else {
-  //       return of(
-  //         videoTrialActions.updateStatus({
-  //           file: res.action.file,
-  //           status: res.action.file.status,
-  //         })
-  //       );
-  //     }
-  //   })
-  // );
-
-  // @Effect()
-  // sendChunkSuccess = this.actions$.pipe(
-  //   ofType(videoTrialActions.sendChunkSuccess),
-  //   switchMap((action) => {
-  //     return this.sharedService.appendChunk(action.file).pipe(
-  //       switchMap((res: BlobUploadResponse) => {
-  //         if (action.file.status === FileUploadStatus.IN_PROGRESS) {
-  //           const chunkSize = action.file.lastChunk + environment.CHUNK_SIZE;
-
-  //           if (chunkSize > action.file.size) {
-  //             return of(
-  //               videoTrialActions.updateStatus({
-  //                 file: action.file,
-  //                 status: FileUploadStatus.CHUNK_COMPLETED,
-  //               })
-  //             );
-  //           }
-  //           return of(
-  //             videoTrialActions.sendChunkSuccess({
-  //               file: action.file,
-  //               chunkDetails: {
-  //                 blockId: res.blockId,
-  //                 chunkEnd: action.file.lastChunk + environment.CHUNK_SIZE,
-  //               },
-  //             })
-  //           );
-  //         } else {
-  //           return of(
-  //             videoTrialActions.updateStatus({
-  //               file: action.file,
-  //               status: action.file.status,
-  //             })
-  //           );
-  //         }
-  //       }),
-  //       catchError((e) => {
-  //         return of(
-  //           videoTrialActions.updateStatus({
-  //             file: action.file,
-  //             status: FileUploadStatus.ERROR,
-  //           })
-  //         );
-  //       })
-  //     );
-  //   })
-  // );
   @Effect()
   updateUserRole = this.actions$.pipe(
     ofType(videoTrialActions.updateUserRoles),
