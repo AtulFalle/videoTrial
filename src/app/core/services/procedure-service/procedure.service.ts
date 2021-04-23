@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Annotation, DeleteAnnotation } from '../../models/annotations.model';
+import jwt_decode from 'jwt-decode';
+import { User } from '../../models/admin.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,18 +16,20 @@ export class ProcedureService {
    *
    * @param procedureId : procedure id
    */
-  getProcedure(procedureId: string): Observable<Procedure> {
+  getProcedure(procedureId: string, user: User): Observable<Procedure> {
     const url = `/procedure/${procedureId}`;
     return this.http.get<Procedure>(url);
   }
 
   /**
-   *
    * @returns procedures: array of all procedure
    */
-  getAllProcedures(): Observable<Procedure[]> {
+  getAllProcedures(user: User): Observable<Procedure[]> {
     const url = `/procedure`;
-    return this.http.get<Procedure[]>(url);
+
+    const studyList = Object.keys(JSON.parse(user.selectedRole));
+
+    return this.http.put<Procedure[]>(url, studyList);
   }
 
   /**

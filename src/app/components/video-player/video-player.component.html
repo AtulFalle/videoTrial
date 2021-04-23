@@ -1,50 +1,42 @@
-<div class="container mt-2" *ngIf="isDataLoaded">
-  <div class="video">
+<div class="container mt-2">
+  <div class="video" #videoParent (keydown.B)="checkKeyUp($event)">
     <video
-    controlsList="download"
       crossorigin="anonymous"
       #videoPlayer
-      src="{{ url }}"
       height="400"
-      *ngIf="!isRefreshing"
+      class="azuremediaplayer amp-default-skin amp-big-play-centered"
       (timeupdate)="getCurrentTime($event)"
       (loadeddata)="getCurrentTime($event)"
-    >
-    </video>
+    ></video>
     <div class="row controls p-0">
       <div class="col-5 justify-center" (dblclick)="backward(10)">
         <div class="row-inverse w-auto">
-
           <mat-icon class="m-3 video-controls text-right" (click)="backward(10)"
-          >replay_10</mat-icon
+            >replay_10</mat-icon
           >
         </div>
       </div>
       <div class="col-2 justify-center">
-
         <div class="row justify-center">
-
-        <mat-icon
-          class="m-3 video-controls"
-          *ngIf="!videoStatus"
-          (click)="play()"
-        >
-          play_arrow</mat-icon
-        >
-        <mat-icon
-          class="m-3 video-controls"
-          *ngIf="videoStatus"
-          (click)="pause()"
-          >pause</mat-icon
-        >
-      </div>
-
+          <mat-icon
+            class="m-3 video-controls"
+            *ngIf="!videoStatus"
+            (click)="play()"
+          >
+            play_arrow</mat-icon
+          >
+          <mat-icon
+            class="m-3 video-controls"
+            *ngIf="videoStatus"
+            (click)="pause()"
+            >pause</mat-icon
+          >
+        </div>
       </div>
       <div class="col-5 justify-center" (dblclick)="forward(10)">
         <div class="row">
-
           <mat-icon class="m-3 video-controls text-left" (click)="forward(10)"
-          >forward_10</mat-icon
+            >forward_10</mat-icon
           >
         </div>
       </div>
@@ -58,6 +50,7 @@
         [value]="getProgressValue(time)"
         (input)="timelineDragged($event)"
       ></mat-slider>
+
       <div class="markerList">
         <div
           *ngFor="let marker of annotationMarkerList"
@@ -67,25 +60,208 @@
           [style.left]="calculateMargin(marker.videoPlayerTime)"
         ></div>
       </div>
-      <div class="time">
-        {{ getFotmattedTime(time) }}/ {{ getFotmattedTime(duration) }}
+      <div class="time row w-auto">
+        <div class="col-2 mt-1">
+          {{ getFotmattedTime(time) }}/ {{ getFotmattedTime(duration) }}
+        </div>
+        <div class="col-8"></div>
+        <div class="col-1 text-align-end extra-icon">
+          <mat-icon
+            (click)="addAnnotation()"
+            matTooltip="add annotation"
+            class="float-right mx-1 pointer"
+            >post_add</mat-icon
+          >
+        </div>
+        <div class="col-1 text-align-end extra-icon">
+          <mat-icon
+            *ngIf="!isFullScreen"
+            (click)="toggleFullscreen(false)"
+            matTooltip="View Fullscreen"
+            class="float-right mx-1 pointer"
+            >fullscreen</mat-icon
+          >
+          <mat-icon
+            *ngIf="isFullScreen"
+            (click)="toggleFullscreen(true)"
+            matTooltip="Exit Fullscreen"
+            class="float-right mx-1 pointer"
+            >fullscreen_exit</mat-icon
+          >
+        </div>
       </div>
     </div>
-    <div class="subtitle-container" *ngIf="isSubtitle.show && showSubtitles">
+    <div class="annotation-container m-2 p-2" *ngIf="showAnnoFlag">
+      <div class="col-12">
+        <div class="row-inverse">
+          <mat-chip-list>
+            <mat-chip color="primary">{{ getFotmattedTime(time) }}</mat-chip>
+          </mat-chip-list>
+        </div>
+        <div class="row">
+          <mat-form-field class="example-full-width w-100">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              placeholder="Add Annotation Description"
+              [(ngModel)]="comments"
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="5"
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <div class="row-inverse">
+          <button
+            color="primary"
+            mat-raised-button
+            (click)="showAnnoFlag = false; saveAnnotation()"
+          >
+            Save
+          </button>
+          <button
+            color="secondary"
+            mat-raised-button
+            (click)="showAnnoFlag = false"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="subtitle-container" *ngIf="isSubtitle?.show && showSubtitles">
       <div class="row">
-        <div class="col-12">
-          <p class="m-0">{{isSubtitle.comment}}</p>
+        <div class="col-12" *ngIf="!showEditComment">
+          <!-- -->
+          <div class="row">
+            <div class="col-10">
+              <p class="m-0">{{ isSubtitle?.comment }}</p>
+            </div>
+            <div class="col-2 ml-2">
+              <mat-icon (click)="editComment(isSubtitle?.comment)"
+                >create</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+        <div
+          class="col-12 update-comment-container p-1"
+          *ngIf="showEditComment"
+        >
+          <div class="row-inverse">
+            <mat-chip-list>
+              <mat-chip color="primary">{{ isSubtitle?.time }}</mat-chip>
+            </mat-chip-list>
+          </div>
+          <div class="row">
+            <mat-form-field class="example-full-width w-100">
+              <mat-label>Description</mat-label>
+              <textarea
+                matInput
+                name="comment"
+                [(ngModel)]="updateComment"
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="5"
+                #message="ngModel"
+              ></textarea>
+            </mat-form-field>
+          </div>
+          <div class="row-inverse">
+            <button
+              color="primary"
+              mat-raised-button
+              (click)="
+                showEditComment = false;
+                updateAnnotation(isSubtitle?.videoPlayerTime, isSubtitle?.time)
+              "
+            >
+              Save
+            </button>
+            <button
+              color="secondary"
+              mat-raised-button
+              (click)="showEditComment = false"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>
     <div class="row subtitle-btn-container">
-      <mat-icon class="subtitle-btn p-1" *ngIf="showSubtitles" (click)="toggleSubtitles(false)">closed_caption</mat-icon>
-      <mat-icon class="subtitle-btn p-1" *ngIf="!showSubtitles" (click)="toggleSubtitles(true)">closed_caption_disabled</mat-icon>
+      <mat-icon
+        class="subtitle-btn p-1"
+        *ngIf="showSubtitles"
+        (click)="toggleSubtitles(false)"
+        >closed_caption</mat-icon
+      >
+      <mat-icon
+        class="subtitle-btn p-1"
+        *ngIf="!showSubtitles"
+        (click)="toggleSubtitles(true)"
+        >closed_caption_disabled</mat-icon
+      >
     </div>
   </div>
-  <div class="row m-2 align-end border-bottom p-1 w-auto">
-    <div class="align-end label">
-      Quality : <span class="bold-2"> 480P 720P RAW</span>
+
+  <div class="row align-end border-bottom w-100 mt-1">
+    <div class="col-2"></div>
+
+    <div class="col-4">
+      <div class="row">
+        <div class="col-2 mt-1">
+          <mat-icon
+            *ngIf="currentVolume !== 0"
+            class="subtitle-btn p-1"
+            (click)="toggleMuteStatus(true)"
+            >volume_up</mat-icon
+          >
+          <mat-icon
+            *ngIf="currentVolume === 0"
+            class="subtitle-btn p-1"
+            (click)="toggleMuteStatus(false)"
+            >volume_off</mat-icon
+          >
+        </div>
+        <div class="col-9">
+          <mat-slider
+            min="0"
+            max="100"
+            step="1"
+            class="slider"
+            [thumbLabel]="true"
+            [value]="currentVolume"
+            (input)="volumeUpdated($event)"
+          ></mat-slider>
+        </div>
+      </div>
+    </div>
+    <div class="col-5">
+      <div class="row">
+        <div class="align-end label mt-2 mr-2">Quality :</div>
+        <mat-form-field class="resolution-select">
+          <mat-select
+            [(value)]="selectedResolution"
+            (selectionChange)="updateResolution($event)"
+            panelClass="select-invert"
+          >
+            <mat-option value="-1" selected
+              >Auto
+              {{
+                currentBitrate ? "( " + currentBitrate + " )" : ""
+              }}</mat-option
+            >
+            <mat-option *ngFor="let item of videoResolution" [value]="item"
+              >{{ item.resolution }}P - ({{
+                getBitrate(item.bitrate.toString())
+              }})</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
   </div>
 </div>

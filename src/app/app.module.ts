@@ -40,6 +40,7 @@ import { DragDropDirective } from './directive/drag-drop.directive';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AddProcedureComponent } from './components/add-procedure/add-procedure.component';
 import { ProceduresListComponent } from './components/procedures-list/procedures-list.component';
+import { AzureMediaPlayerComponent } from './shared/components/azure-media-player/azure-media-player.component';
 import { UnscrubbedVideoComponent } from './components/unscrubbed-video/unscrubbed-video.component';
 import { LoginComponent } from './components/login/login.component';
 import {
@@ -136,6 +137,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     ProcedureDetailsComponent,
     AddProcedureComponent,
     ProceduresListComponent,
+    AzureMediaPlayerComponent,
     UnscrubbedVideoComponent,
     LoginComponent,
     FileUploaderComponent,
@@ -147,6 +149,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),

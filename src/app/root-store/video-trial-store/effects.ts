@@ -13,9 +13,12 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import {
   catchError,
   switchMap,
+  withLatestFrom,
 } from 'rxjs/operators';
 
 import * as videoTrialActions from './actions';
+import { Store } from '@ngrx/store';
+import { VideoTrialStoreSelectors, VideoTrialStoreState } from '.';
 
 
 @Injectable()
@@ -25,13 +28,14 @@ export class VideoTrialStoreEffects {
     private procedureService: ProcedureService,
     private messageBoxService: MessageBoxService,
     private adminService: AdminService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private store$: Store<VideoTrialStoreState.State>
   ) {}
 
   @Effect()
   getAllProcedures = this.actions$.pipe(
     ofType(videoTrialActions.getAllProcedures),
-    switchMap((action) => this.procedureService.getAllProcedures()),
+    switchMap((action) => this.procedureService.getAllProcedures(action.user)),
     switchMap((procedures: Procedure[]) => {
       return of(
         videoTrialActions.getAllProcedureSuccess({
@@ -44,8 +48,9 @@ export class VideoTrialStoreEffects {
   @Effect()
   getMeatadataInformation = this.actions$.pipe(
     ofType(videoTrialActions.getProcedure),
-    switchMap((action) =>
-      this.procedureService.getProcedure(action.procedureID)
+    withLatestFrom( this.store$.select(VideoTrialStoreSelectors.getUserDetails)),
+    switchMap(([action, userDetails]) =>
+      this.procedureService.getProcedure(action.procedureID, userDetails)
     ),
     switchMap((procedure: Procedure) => {
       return of(

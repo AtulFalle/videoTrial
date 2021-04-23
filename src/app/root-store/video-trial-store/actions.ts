@@ -21,6 +21,7 @@ export enum VideoTrialActionType {
   DELETE_ANNOTATION = '[video annotation remove] remove annotation by id',
   DELETE_ANNOTATION_SUCCESS = '[video annotation delete success] annotation removed successfully',
   ADD_ANNOTATION_SUCCESS = '[video annotation add success] vido annotation added successfully',
+  EDIT_ANNOTATION = '[Video Annotation Edit] edit specific annotation by ID',
 
   // update video values actions
   UPDATE_CURRENT_TIME = '[video current time] update current time of video',
@@ -74,6 +75,10 @@ export enum VideoTrialActionType {
   GET_FILTERED_USER_SUCCESS = '[USER GET SUCCESS] get all user Details',
 }
 
+export const editAnnotation = createAction(
+  VideoTrialActionType.EDIT_ANNOTATION,
+  props<{ annotation: Annotation, videoId: string }>()
+);
 export const uploadVideo = createAction(
   VideoTrialActionType.UPLOAD_VIDEO,
   props<{ video: TrialVideo }>()
@@ -136,7 +141,8 @@ export const getProcedureSuccess = createAction(
 );
 
 export const getAllProcedures = createAction(
-  VideoTrialActionType.GET_ALL_PROCEDURE
+  VideoTrialActionType.GET_ALL_PROCEDURE,
+  props<{user: User}>()
 );
 
 export const getAllProcedureSuccess = createAction(
