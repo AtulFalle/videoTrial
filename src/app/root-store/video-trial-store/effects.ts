@@ -1,3 +1,4 @@
+import { QuestionnaireService } from './../../dynamic-questionnaire-form/dynamic-questionnaire.service';
 import  jwt_decode  from 'jwt-decode';
 import { User } from 'src/app/core/models/admin.model';
 import { DeleteAnnotation } from 'src/app/core/models/annotations.model';
@@ -13,12 +14,9 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import {
   catchError,
   switchMap,
-  withLatestFrom,
 } from 'rxjs/operators';
 
 import * as videoTrialActions from './actions';
-import { Store } from '@ngrx/store';
-import { VideoTrialStoreSelectors, VideoTrialStoreState } from '.';
 
 
 @Injectable()
@@ -29,13 +27,13 @@ export class VideoTrialStoreEffects {
     private messageBoxService: MessageBoxService,
     private adminService: AdminService,
     private sharedService: SharedService,
-    private store$: Store<VideoTrialStoreState.State>
+    private questionnaireService: QuestionnaireService
   ) {}
 
   @Effect()
   getAllProcedures = this.actions$.pipe(
     ofType(videoTrialActions.getAllProcedures),
-    switchMap((action) => this.procedureService.getAllProcedures(action.user)),
+    switchMap((action) => this.procedureService.getAllProcedures()),
     switchMap((procedures: Procedure[]) => {
       return of(
         videoTrialActions.getAllProcedureSuccess({
@@ -48,9 +46,8 @@ export class VideoTrialStoreEffects {
   @Effect()
   getMeatadataInformation = this.actions$.pipe(
     ofType(videoTrialActions.getProcedure),
-    withLatestFrom( this.store$.select(VideoTrialStoreSelectors.getUserDetails)),
-    switchMap(([action, userDetails]) =>
-      this.procedureService.getProcedure(action.procedureID, userDetails)
+    switchMap((action) =>
+      this.procedureService.getProcedure(action.procedureID)
     ),
     switchMap((procedure: Procedure) => {
       return of(
@@ -125,7 +122,18 @@ export class VideoTrialStoreEffects {
         );
     })
   );
-
+  // @Effect()
+  // getAllUsers = this.actions$.pipe(
+  //   ofType(videoTrialActions.getAllUser),
+  //   switchMap((action) => this.adminService.getAllUsers()),
+  //   switchMap((users: User[]) => {
+  //     return of(
+  //       videoTrialActions.getAllUserSuccess({
+  //         users,
+  //       })
+  //     );
+  //   })
+  // );
 
   @Effect()
   updateserStatus = this.actions$.pipe(
@@ -180,7 +188,133 @@ export class VideoTrialStoreEffects {
     })
   );
 
+  // chunk upload effects
 
+  // @Effect()
+  // sendChunk = this.actions$.pipe(
+  //   ofType(videoTrialActions.sendChunk),
+  //   switchMap((action) =>
+  //     this.sharedService.appendChunk(action.file).pipe(
+  //       map((res) => {
+  //         return {
+  //           blob: res,
+  //           action,
+  //         };
+  //       })
+  //     )
+  //   ),
+  //   switchMap((res: { blob: BlobUploadResponse; action: any }) => {
+  //     if (res.action.file.status === FileUploadStatus.IN_PROGRESS) {
+  //       return of(
+  //         videoTrialActions.sendChunkSuccess({
+  //           file: res.action.file,
+  //           chunkDetails: {
+  //             blockId: res.blob.blockId,
+  //             chunkEnd: res.action.file.lastChunk + environment.CHUNK_SIZE,
+  //           },
+  //         })
+  //       );
+  //     } else {
+  //       return of(
+  //         videoTrialActions.updateStatus({
+  //           file: res.action.file,
+  //           status: res.action.file.status,
+  //         })
+  //       );
+  //     }
+  //   })
+  // );
+
+  // @Effect()
+  // sendChunkSuccess = this.actions$.pipe(
+  //   ofType(videoTrialActions.sendChunkSuccess),
+  //   switchMap((action) =>
+  //     this.sharedService.appendChunk(action.file).pipe(
+  //       map((res) => {
+  //         return {
+  //           blob: res,
+  //           action,
+  //         };
+  //       })
+  //     )
+  //   ),
+  //   switchMap((res: { blob: BlobUploadResponse; action: any }) => {
+  //     if (res.action.file.status === FileUploadStatus.IN_PROGRESS) {
+  //       const chunkSize = res.action.file.lastChunk + environment.CHUNK_SIZE;
+  //       if (chunkSize > res.action.file.size) {
+  //         return of(
+  //           videoTrialActions.updateStatus({
+  //             file: res.action.file,
+  //             status: FileUploadStatus.CHUNK_COMPLETED,
+  //           })
+  //         );
+  //       }
+  //       return of(
+  //         videoTrialActions.sendChunkSuccess({
+  //           file: res.action.file,
+  //           chunkDetails: {
+  //             blockId: res.blob.blockId,
+  //             chunkEnd: res.action.file.lastChunk + environment.CHUNK_SIZE,
+  //           },
+  //         })
+  //       );
+  //     } else {
+  //       return of(
+  //         videoTrialActions.updateStatus({
+  //           file: res.action.file,
+  //           status: res.action.file.status,
+  //         })
+  //       );
+  //     }
+  //   })
+  // );
+
+  // @Effect()
+  // sendChunkSuccess = this.actions$.pipe(
+  //   ofType(videoTrialActions.sendChunkSuccess),
+  //   switchMap((action) => {
+  //     return this.sharedService.appendChunk(action.file).pipe(
+  //       switchMap((res: BlobUploadResponse) => {
+  //         if (action.file.status === FileUploadStatus.IN_PROGRESS) {
+  //           const chunkSize = action.file.lastChunk + environment.CHUNK_SIZE;
+
+  //           if (chunkSize > action.file.size) {
+  //             return of(
+  //               videoTrialActions.updateStatus({
+  //                 file: action.file,
+  //                 status: FileUploadStatus.CHUNK_COMPLETED,
+  //               })
+  //             );
+  //           }
+  //           return of(
+  //             videoTrialActions.sendChunkSuccess({
+  //               file: action.file,
+  //               chunkDetails: {
+  //                 blockId: res.blockId,
+  //                 chunkEnd: action.file.lastChunk + environment.CHUNK_SIZE,
+  //               },
+  //             })
+  //           );
+  //         } else {
+  //           return of(
+  //             videoTrialActions.updateStatus({
+  //               file: action.file,
+  //               status: action.file.status,
+  //             })
+  //           );
+  //         }
+  //       }),
+  //       catchError((e) => {
+  //         return of(
+  //           videoTrialActions.updateStatus({
+  //             file: action.file,
+  //             status: FileUploadStatus.ERROR,
+  //           })
+  //         );
+  //       })
+  //     );
+  //   })
+  // );
   @Effect()
   updateUserRole = this.actions$.pipe(
     ofType(videoTrialActions.updateUserRoles),
@@ -213,6 +347,18 @@ export class VideoTrialStoreEffects {
       return of(
         videoTrialActions.getFilteredUserSuccess({
           users,
+        })
+      );
+    })
+  );
+  @Effect()
+  getAllQuestions = this.actions$.pipe(
+    ofType(videoTrialActions.getAllQuestions),
+    switchMap((action) => this.questionnaireService.getAllQuestions()),
+    switchMap((resp: any) => {
+      return of(
+        videoTrialActions.getAllQuestionsSuccess({
+          questions: resp.items[0],
         })
       );
     })

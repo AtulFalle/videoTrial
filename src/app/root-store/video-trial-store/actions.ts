@@ -21,7 +21,6 @@ export enum VideoTrialActionType {
   DELETE_ANNOTATION = '[video annotation remove] remove annotation by id',
   DELETE_ANNOTATION_SUCCESS = '[video annotation delete success] annotation removed successfully',
   ADD_ANNOTATION_SUCCESS = '[video annotation add success] vido annotation added successfully',
-  EDIT_ANNOTATION = '[Video Annotation Edit] edit specific annotation by ID',
 
   // update video values actions
   UPDATE_CURRENT_TIME = '[video current time] update current time of video',
@@ -65,7 +64,6 @@ export enum VideoTrialActionType {
   UPDATE_STATUS = '[ string ] update status of file',
   PAUSE_UPLOAD = '[FileMetadata Pause] pause file upload',
   RESUME_UPLOAD = '[FileMEtadata Resume] resume sending the file',
-  UPDATE_URL = '[FileMetadata Update url ] update the file user by Storage blob url',
 
   COMMIT_BLOCKLIST = '[string[] commit] commit the uploaded blobs',
   COMMIT_BLOCKLIST_SUCCESS = '[string] commit blob successfull',
@@ -74,12 +72,10 @@ export enum VideoTrialActionType {
   UPDATE_USER_ROLE = '[UPDATE USER ROLE ] update user role',
   GET_FILTERED_USER = '[USER GET] get all user Details',
   GET_FILTERED_USER_SUCCESS = '[USER GET SUCCESS] get all user Details',
+  GET_ALL_QUESTION = '[GET ALL QUESTION ] get all questions',
+  GET_ALL_QUESTION_SUCCESS = '[GET ALL QUESTION SUCCESS] get all questions',
 }
 
-export const editAnnotation = createAction(
-  VideoTrialActionType.EDIT_ANNOTATION,
-  props<{ annotation: Annotation; videoId: string }>()
-);
 export const uploadVideo = createAction(
   VideoTrialActionType.UPLOAD_VIDEO,
   props<{ video: TrialVideo }>()
@@ -142,8 +138,7 @@ export const getProcedureSuccess = createAction(
 );
 
 export const getAllProcedures = createAction(
-  VideoTrialActionType.GET_ALL_PROCEDURE,
-  props<{ user: User }>()
+  VideoTrialActionType.GET_ALL_PROCEDURE
 );
 
 export const getAllProcedureSuccess = createAction(
@@ -261,17 +256,17 @@ export const getAllRole = createAction(
 );
 export const updateUserRoles = createAction(
   VideoTrialActionType.UPDATE_USER_ROLE,
-  props<{ emailId: string; selectedRole: any }>()
+  props<{emailId: string; selectedRole: any }>()
 );
 export const getFilteredUserSuccess = createAction(
   VideoTrialActionType.GET_FILTERED_USER_SUCCESS,
   props<{ users: User[] }>()
 );
-
-export const updateVideoUrl = createAction(
-  VideoTrialActionType.UPDATE_URL,
-  props<{ fileName: string; url: string }>()
+export const getFilteredUser = createAction(VideoTrialActionType.GET_FILTERED_USER);
+export const getAllQuestionsSuccess = createAction(
+  VideoTrialActionType.GET_ALL_QUESTION_SUCCESS,
+  props<{ questions: any }>()
 );
-export const getFilteredUser = createAction(
-  VideoTrialActionType.GET_FILTERED_USER
+export const getAllQuestions = createAction(
+  VideoTrialActionType.GET_ALL_QUESTION
 );

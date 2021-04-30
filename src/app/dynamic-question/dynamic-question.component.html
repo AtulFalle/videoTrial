@@ -1,0 +1,41 @@
+<div *ngIf="userRole == question.authorizedUser" class="questionnaire-container">
+    <div class="question-block" [formGroup]="form">
+        <label [attr.for]="question.key"><strong> {{question.order}}: {{question.label}}</strong></label>
+
+        <div [ngSwitch]="question.controlType">
+
+            <div class="row">
+                <input *ngSwitchCase="'textbox'" [formControlName]="question.key" [id]="question.key"
+                    [type]="question.type">
+
+            </div>
+            <div class="row" *ngSwitchCase="'dropdown'">
+                <!-- <select [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key">
+                <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
+            </select> -->
+                <mat-form-field class="col-6">
+
+                    <mat-select>
+                        <mat-option *ngFor="let opt of question.options" [value]="opt.key">
+                            {{opt.value}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div *ngSwitchCase="'textarea'" class="row">
+                <textarea [formControlName]="question.key" [id]="question.key" ></textarea>
+            </div>
+            <div *ngSwitchCase="'checkbox'" class="row">
+                <span *ngFor="let opt of question.options">
+                    <input [id]="opt.key" type="checkbox"><label>{{opt.value}}</label>
+                </span>
+            </div>
+            <div *ngSwitchCase="'radio'" class="row">
+                <span *ngFor="let opt of question.options">
+                    <input [id]="opt.key" [name]="opt.name" type="radio"><label>{{opt.value}}</label>
+                </span>
+            </div>
+        </div>
+
+    </div>
+</div>

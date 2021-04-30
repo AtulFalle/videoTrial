@@ -8,8 +8,3 @@ export interface Site {
   role: string;
   siteRequestStatus: string;
 }
-
-export interface ProcedureAccess {
-  site: string;
-  study: string;
-}

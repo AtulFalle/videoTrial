@@ -36,26 +36,20 @@
       </div>
     </div>
     <div class="col-4 m-1">
-      <mat-form-field appearance="fill">
-        <mat-label>Time</mat-label>
-
+      <mat-form-field>
         <input
           matInput
           placeholder="Time"
           name="time"
-          required
           [(ngModel)]="currentTime"
         />
       </mat-form-field>
     </div>
     <div class="col-4 m-1">
-      <mat-form-field appearance="fill">
-        <mat-label>Description</mat-label>
-
+      <mat-form-field>
         <input
           #comment
           matInput
-          required
           placeholder="Description"
           name="comments"
           [(ngModel)]="comments"
@@ -91,7 +85,7 @@
             mat-icon-button
             color="primary"
             aria-label="Add"
-            matTooltip="jump to the annotation"
+            matTooltip="jump"
             (click)="jumpToAnnotaion(item)"
           >
             <mat-icon class="mat-icon skip">play_arrow</mat-icon>
@@ -102,7 +96,7 @@
             mat-icon-button
             color="danger"
             aria-label="Add"
-            matTooltip="delete the annotation"
+            matTooltip="delete"
             (click)="deleteAnnotation(item.id)"
           >
           <mat-icon class="mat-icon delete">delete</mat-icon>

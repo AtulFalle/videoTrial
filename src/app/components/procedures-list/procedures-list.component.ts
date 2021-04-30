@@ -53,18 +53,12 @@ export class ProceduresListComponent implements OnInit {
   ngOnInit(): void {
     this.store$.dispatch(VideoTrialStoreActions.getUserDetails());
 
-    this.store$
-      .select(VideoTrialStoreSelectors.getUserDetails)
-      .subscribe((user) => {
-        if (user) {
-          this.store$.dispatch(VideoTrialStoreActions.getAllProcedures({user}));
-          this.isLoadingProcedures$ = this.store$.select(
-            VideoTrialStoreSelectors.isLoadingProcedures
-          );
-          this.procedures$ = this.store$.select(
-            VideoTrialStoreSelectors.getProcedures
-          );
-        }
-      });
+    this.store$.dispatch(VideoTrialStoreActions.getAllProcedures());
+    this.isLoadingProcedures$ = this.store$.select(
+      VideoTrialStoreSelectors.isLoadingProcedures
+    );
+    this.procedures$ = this.store$.select(
+      VideoTrialStoreSelectors.getProcedures
+    );
   }
 }

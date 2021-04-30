@@ -40,7 +40,6 @@ import { DragDropDirective } from './directive/drag-drop.directive';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AddProcedureComponent } from './components/add-procedure/add-procedure.component';
 import { ProceduresListComponent } from './components/procedures-list/procedures-list.component';
-import { AzureMediaPlayerComponent } from './shared/components/azure-media-player/azure-media-player.component';
 import { UnscrubbedVideoComponent } from './components/unscrubbed-video/unscrubbed-video.component';
 import { LoginComponent } from './components/login/login.component';
 import {
@@ -69,6 +68,10 @@ import { NotAuthorizedComponent } from './authentication/not-authorized/not-auth
 import { NgIdleModule } from '@ng-idle/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+import { DynamicQuestionComponent } from './dynamic-question/dynamic-question.component';
+import { DynamicQuestionnaireFormComponent } from './dynamic-questionnaire-form/dynamic-questionnaire-form.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { QuestionnaireService } from './dynamic-questionnaire-form/dynamic-questionnaire.service';
 
 // import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -137,20 +140,19 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     ProcedureDetailsComponent,
     AddProcedureComponent,
     ProceduresListComponent,
-    AzureMediaPlayerComponent,
     UnscrubbedVideoComponent,
     LoginComponent,
     FileUploaderComponent,
     NotAuthorizedComponent,
     AlertDialogComponent,
+    DynamicQuestionComponent,
+    DynamicQuestionnaireFormComponent,
  
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
@@ -184,6 +186,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     NgIdleModule.forRoot(),
     MatIconModule,
     MatDialogModule,
+    MatPaginatorModule
     // NgbModule
   ],
   providers: [
@@ -213,6 +216,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     MsalService,
     MsalGuard,
     MsalBroadcastService,
+    QuestionnaireService
   ],
   bootstrap: [AppComponent],
 })

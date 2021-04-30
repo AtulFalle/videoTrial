@@ -93,3 +93,7 @@ export const getUserDetails = createSelector(
   selectVideoState,
   (state: State) => state.currentUser
 )
+export const getAllQuestions = createSelector(
+  selectVideoState,
+  (state: State) => state.questionList
+)

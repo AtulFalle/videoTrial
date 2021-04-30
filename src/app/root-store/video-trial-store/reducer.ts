@@ -47,45 +47,6 @@ const featureReducer = createReducer(
       };
     }
   ),
-  on(videoTrialActions.editAnnotation, (state, { annotation, videoId }) => {
-    const tempProcedure = { ...state.procedure };
-    const temp = [...tempProcedure.video];
-    const annotations = [];
-    let currentVideo = { ...state.currentVideo };
-    for (const iterator of temp) {
-      if (iterator.videoId === videoId) {
-        const findIndex = iterator.annotations.findIndex(
-          (ele) => ele.time === annotation.time
-        );
-
-        const tempAnno = [...iterator.annotations];
-        if (findIndex > -1) {
-          tempAnno[findIndex] = annotation;
-        }
-
-        const videoObject: Video = {
-          name: iterator.name,
-          originalName: iterator.originalName,
-          videoId: iterator.videoId,
-          annotations: tempAnno,
-        };
-        currentVideo = videoObject;
-        const index = temp.indexOf(iterator);
-        temp[index] = videoObject;
-      }
-    }
-    tempProcedure.video = temp;
-
-    console.log(temp);
-    return {
-      ...state,
-      isLoading: false,
-      error: null,
-      video: temp,
-      currentVideo,
-      procedure: tempProcedure,
-    };
-  }),
   on(
     videoTrialActions.deleteAnnotationSuccess,
     (state, { procedureId, videoId, id }) => {
@@ -348,6 +309,7 @@ const featureReducer = createReducer(
     } catch (e) {
       return { ...state };
     }
+
   }),
   on(videoTrialActions.getAllRoleSuccess, (state, { roles }) => {
     const parsedRoles = JSON.parse(roles);
@@ -371,7 +333,14 @@ const featureReducer = createReducer(
       users: updatedUserList,
     };
   }),
+  on(videoTrialActions.getAllQuestionsSuccess, (state, { questions }) => {
+    const parsedQuestions = JSON.parse(questions);
 
+    return {
+      ...state,
+      questionList: parsedQuestions,
+    };
+  }),
 );
 
 // tslint:disable-next-line: typedef

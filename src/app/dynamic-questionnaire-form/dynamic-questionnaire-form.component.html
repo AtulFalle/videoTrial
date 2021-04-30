@@ -1,0 +1,28 @@
+<div class="dynamic-questionnaire" >
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+
+    <div *ngFor="let question of getQuestions()" class="form-row">
+      <app-dynamic-question [userRole]="userRole" [question]="question" [form]="form"></app-dynamic-question>
+    </div>
+
+    <div class="form-row">
+      <button  mat-raised-button class="reset-btn " type="reset" (click)="resetForm()">Reset</button>
+      <button  mat-raised-button class="submit-btn " color="primary" type="submit" [disabled]="!form.valid">Save</button>
+    </div>
+  </form>
+<div class="container">
+  <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+    (page)="pageEvent = $event">
+  </mat-paginator>
+
+  <!-- <div *ngIf="pageEvent">
+    <h5>Page Change Event Properties</h5>
+    <div>List length: {{pageEvent.length}}</div>
+    <div>Page size: {{pageEvent.pageSize}}</div>
+    <div>Page index: {{pageEvent.pageIndex}}</div>
+  </div> -->
+  <div *ngIf="payLoad" class="form-row">
+    <strong>Saved the following values</strong><br>{{payLoad}}
+  </div>
+</div>
+</div>

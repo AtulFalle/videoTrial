@@ -20,6 +20,7 @@ export interface State {
   users: User[];
   currentUser: User;
   roles: any;
+  questionList: any[];
 }
 
 export const initialState: State = {
@@ -76,5 +77,6 @@ export const initialState: State = {
   currentStudy: '',
   users: [],
   currentUser: null,
-  roles: {}
+  roles: {},
+  questionList:[]
 };

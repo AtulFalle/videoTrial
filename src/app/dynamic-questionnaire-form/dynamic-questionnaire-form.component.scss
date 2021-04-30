@@ -1,0 +1,15 @@
+.dynamic-questionnaire{
+    .container {
+    display: flex;
+    justify-content: center;
+    }
+    .form-row{
+       .reset-btn {
+           margin-left: 20px;
+       }
+       .submit-btn{
+           margin-left: 20px;
+           padding: 0px 5px;
+       }
+    }
+}

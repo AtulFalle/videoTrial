@@ -18,7 +18,6 @@ import {
 } from 'src/app/root-store/video-trial-store';
 import { Store } from '@ngrx/store';
 import { map, take } from 'rxjs/operators';
-import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-file-uploader',
@@ -86,12 +85,11 @@ export class FileUploaderComponent implements OnInit {
     for (const item of files) {
       console.log(item);
 
-      const name = uuidv4() + '_' + item?.name;
       const temp: FileMetadata = {
         file: item,
         status: FileUploadStatus.IN_PROGRESS,
         progress: 0,
-        fileName: name,
+        fileName: item?.name,
         size: item?.size,
         blobId: [],
         chunkDetails: [],
@@ -169,5 +167,3 @@ export class FileUploaderComponent implements OnInit {
       .pipe(map((res: FileMetadata) => res.status));
   }
 }
-
-

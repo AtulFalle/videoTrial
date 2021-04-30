@@ -154,9 +154,9 @@ export class AppComponent implements OnInit {
   }
 
   startSessionIdle() {
-    this.idle.setIdle(1500);
+    this.idle.setIdle(6000);
     // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
-    this.idle.setTimeout(1000);
+    this.idle.setTimeout(10);
     // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 

@@ -74,7 +74,6 @@ export class FileUploadService {
     const updatedFile = { ...file };
     updatedFile.progress = 100.0;
     updatedFile.lastChunk = file.size;
-    updatedFile.url = a.metadata;
     updatedFile.status = FileUploadStatus.UPLOADED;
     this.store$.dispatch(
       VideoTrialStoreActions.updateFileProgress({ file: updatedFile })
@@ -103,7 +102,7 @@ export class FileUploadService {
 
   appendChunk(chunk: any, file: FileMetadata): Observable<BlobUploadResponse> {
     const url =
-      'https://azureblobupload.azurewebsites.net/api/Values/UploadFiles/' + file.fileName;
+      'https://localhost:44366/api/Values/UploadFiles/' + file.fileName;
     const formData = new FormData();
     formData.append('files', chunk);
     return this.http.put<BlobUploadResponse>(url, formData).pipe(
@@ -117,7 +116,7 @@ export class FileUploadService {
 
   commitChunk(fileIdList: string[], file: any): Observable<any> {
     const url =
-      'https://azureblobupload.azurewebsites.net/api/Values/commitFile/' + file.fileName;
+      'https://localhost:44366/api/Values/commitFile/' + file.fileName;
     const body = {
       idList: fileIdList,
     };

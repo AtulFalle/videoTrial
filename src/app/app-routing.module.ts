@@ -10,6 +10,7 @@ import { ProceduresListComponent } from './components/procedures-list/procedures
 import { MsalGuard } from '@azure/msal-angular';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
 import { AuthRoleGuard } from './core/guard/auth-role.guard';
+import { DynamicQuestionnaireFormComponent } from './dynamic-questionnaire-form/dynamic-questionnaire-form.component';
 
 const routes: Routes = [
   {
@@ -59,6 +60,10 @@ const routes: Routes = [
   {
     path: 'admin-user',
     loadChildren: () => import('./admin-user/admin.module').then(m => m.AdminModule)
+  },
+  {
+    path: 'questionnaire',
+    component: DynamicQuestionnaireFormComponent
   },
   {
     path: '**',
