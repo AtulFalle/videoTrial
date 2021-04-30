@@ -1,4 +1,4 @@
-<div *ngIf="userRole == question.authorizedUser" class="questionnaire-container">
+<div  class="questionnaire-container">
     <div class="question-block" [formGroup]="form">
         <label [attr.for]="question.key"><strong> {{question.order}}: {{question.label}}</strong></label>
 
@@ -10,9 +10,7 @@
 
             </div>
             <div class="row" *ngSwitchCase="'dropdown'">
-                <!-- <select [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key">
-                <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
-            </select> -->
+
                 <mat-form-field class="col-6">
 
                     <mat-select>

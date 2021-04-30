@@ -26,12 +26,12 @@ export class DynamicQuestionnaireFormComponent implements OnInit {
     private store$: Store<VideoTrialStoreState.State>,) { }
 
   ngOnInit() {
-    // this.store$.dispatch(VideoTrialStoreActions.getAllQuestions());
-    // this.store$.select(VideoTrialStoreSelectors.getAllQuestions).subscribe((res) => {
-    //   console.log(res);
-    //   this.questions = res;
-    //   this.form = this.toFormGroup(this.questions);
-    // });
+    this.store$.dispatch(VideoTrialStoreActions.getAllQuestions());
+    this.store$.select(VideoTrialStoreSelectors.getAllQuestions).subscribe((res) => {
+      console.log(res);
+      this.questions = res;
+      this.form = this.toFormGroup(this.questions);
+    });
     try {
       const token: any = jwt_decode(sessionStorage.getItem('token'));
       const roleData = JSON.parse(token.extension_selectedrole);
@@ -75,6 +75,9 @@ export class DynamicQuestionnaireFormComponent implements OnInit {
   }
 
   getQuestions =() => {
+    console.log(    this.questions
+      );
+
     if(this.pageEvent){
       return  this.questions.filter(item=> item.order > this.pageEvent.pageIndex * this.pageEvent.pageSize && item.order <= (this.pageEvent.pageIndex + 1) * this.pageEvent.pageSize)
     } else {
