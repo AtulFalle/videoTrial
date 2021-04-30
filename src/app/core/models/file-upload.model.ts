@@ -11,6 +11,7 @@ export interface FileMetadata {
   blobId: string[];
   lastChunk?: number;
   chunkDetails: ChunkDetails[];
+  url?: string;
 }
 
 export interface BlobUploadResponse {

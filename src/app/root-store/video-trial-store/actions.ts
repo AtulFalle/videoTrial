@@ -65,6 +65,7 @@ export enum VideoTrialActionType {
   UPDATE_STATUS = '[ string ] update status of file',
   PAUSE_UPLOAD = '[FileMetadata Pause] pause file upload',
   RESUME_UPLOAD = '[FileMEtadata Resume] resume sending the file',
+  UPDATE_URL = '[FileMetadata Update url ] update the file user by Storage blob url',
 
   COMMIT_BLOCKLIST = '[string[] commit] commit the uploaded blobs',
   COMMIT_BLOCKLIST_SUCCESS = '[string] commit blob successfull',
@@ -77,7 +78,7 @@ export enum VideoTrialActionType {
 
 export const editAnnotation = createAction(
   VideoTrialActionType.EDIT_ANNOTATION,
-  props<{ annotation: Annotation, videoId: string }>()
+  props<{ annotation: Annotation; videoId: string }>()
 );
 export const uploadVideo = createAction(
   VideoTrialActionType.UPLOAD_VIDEO,
@@ -142,7 +143,7 @@ export const getProcedureSuccess = createAction(
 
 export const getAllProcedures = createAction(
   VideoTrialActionType.GET_ALL_PROCEDURE,
-  props<{user: User}>()
+  props<{ user: User }>()
 );
 
 export const getAllProcedureSuccess = createAction(
@@ -260,10 +261,17 @@ export const getAllRole = createAction(
 );
 export const updateUserRoles = createAction(
   VideoTrialActionType.UPDATE_USER_ROLE,
-  props<{emailId: string; selectedRole: any }>()
+  props<{ emailId: string; selectedRole: any }>()
 );
 export const getFilteredUserSuccess = createAction(
   VideoTrialActionType.GET_FILTERED_USER_SUCCESS,
   props<{ users: User[] }>()
 );
-export const getFilteredUser = createAction(VideoTrialActionType.GET_FILTERED_USER);
+
+export const updateVideoUrl = createAction(
+  VideoTrialActionType.UPDATE_URL,
+  props<{ fileName: string; url: string }>()
+);
+export const getFilteredUser = createAction(
+  VideoTrialActionType.GET_FILTERED_USER
+);

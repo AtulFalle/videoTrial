@@ -60,7 +60,7 @@ export class ProcedureService {
   }
 
   createProcedure(formData: any): Observable<any> {
-    const url = `/procedure`;
+    const url = `/procedure/add-procedure`;
     let headers = new HttpHeaders();
     //this is the important step. You need to set content type as null
     headers.set('Content-Type', null);

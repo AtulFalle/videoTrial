@@ -35,9 +35,8 @@
               "includePaths": ["src/sass"]
             },
             "scripts": [
-              "src/assets/js/ams.js",
-              "src/styles.scss"
-            ]
+              "src/assets/js/ams.js"
+                  ]
 
           },
           "configurations": {

@@ -10,6 +10,11 @@ import {
   VideoTrialStoreActions,
   VideoTrialStoreSelectors,
 } from 'src/app/root-store/video-trial-store';
+import { FileMetadata } from 'src/app/core/models/file-upload.model';
+import { Procedure } from 'src/app/core/models/procedure.model';
+import { take } from 'rxjs/operators';
+import { Video } from 'src/app/core/models/video.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-add-procedure',
@@ -47,7 +52,7 @@ export class AddProcedureComponent implements OnInit {
   processing = false;
 
   ngOnInit(): void {
-   // this.store$.dispatch(VideoTrialStoreActions.getUserMetadata());
+    // this.store$.dispatch(VideoTrialStoreActions.getUserMetadata());
     this.store$.dispatch(VideoTrialStoreActions.getUserDetails());
     this.studyList = this.store$.select(VideoTrialStoreSelectors.getStudyList);
     this.roleList = this.store$.select(VideoTrialStoreSelectors.getSiteList);
@@ -145,17 +150,61 @@ export class AddProcedureComponent implements OnInit {
     this.files.splice(index, 1);
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.procedureForm.invalid) {
-      return false;
+      return;
     }
-    const formData = this.toFormData(this.procedureForm.value, this.files);
-    return this.procedureService
-      .createProcedure(formData)
-      .subscribe((procedure) => this.router.navigate(['procedures-list']));
+
+    this.store$
+      .select(VideoTrialStoreSelectors.getUploadingFile)
+      .pipe(take(1))
+      .subscribe((metadataList: FileMetadata[]) => {
+        const videoUrl = [];
+        for (const iterator of metadataList) {
+          videoUrl.push({ url: iterator.url, name: iterator.fileName});
+        }
+        const procedure: Procedure = this.createProcedureDto(
+          this.procedureForm.value,
+          videoUrl
+        );
+       // const formData = this.toFormData(this.procedureForm.value, videoUrl);
+        return this.procedureService
+          .createProcedure(procedure)
+          .subscribe((procedure) => this.router.navigate(['procedures-list']));
+      }, e=> {
+        console.log(e);
+
+      });
+  }
+  createProcedureDto(value: any, videoUrl: {url: string; name: string}[]): Procedure {
+    const videoList: Video[] = [];
+    for (const iterator of videoUrl) {
+
+      const temp: Video = {
+        videoId: uuidv4(),
+        name: iterator.name,
+        amsUrl: iterator.url,
+        annotations: []
+      }
+      videoList.push(temp);
+    }
+
+    const procedure: any = {
+      patientId: value.patientId,
+      procedureDate: value.procedureDate.toISOString(),
+      patientDob: value.patientDob.toISOString(),
+      study: value.study,
+      site: value.site,
+      procedureType: value.procedureType,
+      conductingSurgeon: value.conductingSurgeon,
+      surgicalDeviceLiaison: value.surgicalDeviceLiaison,
+      video: videoList,
+    };
+
+    return procedure;
   }
 
-  toFormData(formValue: any, videos: any[]) {
+  toFormData(formValue: any, videos: string[]) {
     const formData = new FormData();
     const formValueCopy = { ...formValue };
     formValueCopy.procedureDate = formValueCopy.procedureDate.toISOString();
@@ -166,7 +215,7 @@ export class AddProcedureComponent implements OnInit {
       formData.append(key, value);
     }
     videos.forEach((video) => {
-      formData.append('videos', video, video.name);
+      formData.append('videos', video);
     });
     return formData;
   }

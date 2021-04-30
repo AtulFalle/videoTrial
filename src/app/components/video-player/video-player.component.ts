@@ -21,7 +21,6 @@ import {
   VideoTrialStoreActions,
   VideoTrialStoreState,
 } from 'src/app/root-store/video-trial-store';
-declare var amp: any;
 @Component({
   selector: 'app-video-player',
   templateUrl: './video-player.component.html',
@@ -89,7 +88,7 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.loadVideoPlayer(this.DUMMY_URL);
+    //this.loadVideoPlayer(this.DUMMY_URL);
   }
 
   private loadVideoPlayer(url: string): void {
@@ -103,7 +102,7 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
     this.myPlayer = amp(this.videoPlayer.nativeElement, myOptions);
     this.myPlayer.src([
       {
-        src: this.DUMMY_URL,
+        src: url,
         type: 'application/vnd.ms-sstr+xml',
       },
     ]);
@@ -153,6 +152,7 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit {
       this.isDataLoaded = true;
       this.isSubtitle = null;
       this.isSubtitle = this.showSubtitle(this.time, this.annotationMarkerList);
+      this.loadVideoPlayer(res.amsUrl);
     });
     this.subscription = this.sharedService.jumpToAnnotationTime.subscribe(
       (res) => {

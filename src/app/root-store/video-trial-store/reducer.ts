@@ -58,7 +58,7 @@ const featureReducer = createReducer(
           (ele) => ele.time === annotation.time
         );
 
-        const tempAnno = [ ...iterator.annotations ];
+        const tempAnno = [...iterator.annotations];
         if (findIndex > -1) {
           tempAnno[findIndex] = annotation;
         }
@@ -348,7 +348,6 @@ const featureReducer = createReducer(
     } catch (e) {
       return { ...state };
     }
-
   }),
   on(videoTrialActions.getAllRoleSuccess, (state, { roles }) => {
     const parsedRoles = JSON.parse(roles);
@@ -371,7 +370,8 @@ const featureReducer = createReducer(
       ...state,
       users: updatedUserList,
     };
-  })
+  }),
+
 );
 
 // tslint:disable-next-line: typedef
